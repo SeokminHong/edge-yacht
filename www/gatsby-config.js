@@ -7,6 +7,7 @@ module.exports = {
     'gatsby-plugin-emotion',
     'gatsby-plugin-image',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-react-helmet',
     'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-source-filesystem',

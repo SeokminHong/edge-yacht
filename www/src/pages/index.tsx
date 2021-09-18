@@ -1,12 +1,13 @@
 import { Canvas } from '@react-three/fiber';
 import styled from '@emotion/styled';
 
-import Box from '../fiber/Box';
+import SEO from '~components/SEO';
+import Box from '~fibers/Box';
 
 const IndexPage = () => {
   return (
     <>
-      <title>Home Page</title>
+      <SEO title="Home Page" />
       <CanvasWrapper>
         <Canvas>
           <ambientLight />

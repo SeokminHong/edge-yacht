@@ -18,15 +18,18 @@
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@react-three/fiber": "^7.0.7",
+    "@types/react-helmet": "^6.1.2",
     "@types/three": "^0.131.1",
     "gatsby": "^4.0.0-zz-next.1",
     "gatsby-plugin-emotion": "^7.0.0-zz-next.1",
     "gatsby-plugin-image": "^2.0.0-zz-next.1",
+    "gatsby-plugin-react-helmet": "^5.0.0-zz-next.1",
     "gatsby-plugin-sharp": "^4.0.0-zz-next.1",
     "gatsby-source-filesystem": "^4.0.0-zz-next.1",
     "gatsby-transformer-sharp": "^4.0.0-zz-next.1",
     "react": "^18.0.0-alpha-bc9bb87c2-20210917",
     "react-dom": "^18.0.0-alpha-bc9bb87c2-20210917",
+    "react-helmet": "^6.1.0",
     "three": "^0.132.2"
   },
   "devDependencies": {

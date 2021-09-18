@@ -7,7 +7,10 @@
     /* Modules */
     "module": "commonjs",
     "baseUrl": "./",
-    "paths": {},
+    "paths": {
+      "~components/*": ["src/components/*"],
+      "~fibers/*": ["src/fibers/*"]
+    },
 
     /* Interop Constraints */
     "esModuleInterop": true,

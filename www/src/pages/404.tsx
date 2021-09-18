@@ -1,10 +1,12 @@
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 
+import SEO from '~components/SEO';
+
 const NotFoundPage = () => {
   return (
     <Main>
-      <title>Not found</title>
+      <SEO title="404: Not found" />
       <Heading>Page not found</Heading>
       <Paragraph>
         Sorry{' '}
