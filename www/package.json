@@ -1,0 +1,33 @@
+{
+  "name": "edge-yahtzee",
+  "version": "1.0.0",
+  "private": true,
+  "description": "edge-yahtzee",
+  "author": "Seokmin Hong",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby build && gatsby serve",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "gatsby": "^4.0.0-zz-next.1",
+    "gatsby-plugin-emotion": "^7.0.0-zz-next.1",
+    "gatsby-plugin-image": "^2.0.0-zz-next.1",
+    "gatsby-plugin-sharp": "^4.0.0-zz-next.1",
+    "gatsby-source-filesystem": "^4.0.0-zz-next.1",
+    "gatsby-transformer-sharp": "^4.0.0-zz-next.1",
+    "react": "^18.0.0-alpha-bc9bb87c2-20210917",
+    "react-dom": "^18.0.0-alpha-bc9bb87c2-20210917"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.3"
+  }
+}
