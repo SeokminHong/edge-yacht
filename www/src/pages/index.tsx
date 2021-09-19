@@ -8,7 +8,7 @@ const IndexPage = () => {
   return (
     <>
       <SEO title="Home Page" />
-      <div data-i18n-key="">Hello</div>
+      <div data-i18n-key="index-greet">Hello</div>
       <CanvasWrapper>
         <Canvas>
           <ambientLight />
