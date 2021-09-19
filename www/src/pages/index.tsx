@@ -1,13 +1,28 @@
+import { useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import styled from '@emotion/styled';
 
 import SEO from '~components/SEO';
+import LocaleContext from '~contexts/LocaleContext';
 import Box from '~fibers/Box';
+import { locales, isLocale } from '~utils/locale';
 
 const IndexPage = () => {
+  const { locale, setLocale } = useContext(LocaleContext);
+
   return (
     <>
       <SEO title="Home Page" />
+      <select
+        onChange={(e) => isLocale(e.target.value) && setLocale(e.target.value)}
+        value={locale}
+      >
+        {locales.map((l) => (
+          <option key={l} value={l}>
+            {l}
+          </option>
+        ))}
+      </select>
       <div data-i18n-key="index-greet">Hello</div>
       <CanvasWrapper>
         <Canvas>

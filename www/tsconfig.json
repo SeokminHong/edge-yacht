@@ -9,7 +9,9 @@
     "baseUrl": "./",
     "paths": {
       "~components/*": ["src/components/*"],
-      "~fibers/*": ["src/fibers/*"]
+      "~contexts/*": ["src/contexts/*"],
+      "~fibers/*": ["src/fibers/*"],
+      "~utils/*": ["src/utils/*"]
     },
 
     /* Interop Constraints */
