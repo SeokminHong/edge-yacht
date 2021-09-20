@@ -1,12 +1,18 @@
-import * as THREE from 'three';
-import { useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useState } from 'react';
+import { Triplet, useBox } from '@react-three/cannon';
 
-const Box = (props: JSX.IntrinsicElements['mesh']) => {
-  const ref = useRef<THREE.Mesh>(null!);
+type BoxProps = JSX.IntrinsicElements['mesh'] & {
+  size?: Triplet;
+};
+
+const Box = ({ size = [4, 4, 4], ...props }: BoxProps) => {
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  useFrame(() => (ref.current.rotation.x += 0.01));
+  const [ref, api] = useBox(() => ({
+    mass: 1,
+    args: size,
+    position: props.position as Triplet,
+  }));
   return (
     <mesh
       {...props}
@@ -16,7 +22,7 @@ const Box = (props: JSX.IntrinsicElements['mesh']) => {
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
     >
-      <boxGeometry args={[1, 1, 1]} />
+      <boxGeometry args={size} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
     </mesh>
   );

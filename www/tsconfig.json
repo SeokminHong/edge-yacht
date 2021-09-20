@@ -3,6 +3,7 @@
     /* Language and Environment */
     "target": "ES2020",
     "jsx": "react-jsx",
+    "resolveJsonModule": true,
 
     /* Modules */
     "module": "commonjs",
