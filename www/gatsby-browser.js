@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Root from './src/components/Root';
-import Layout from './src/components/Layout';
+import Page from './src/components/Page';
 
 /** @type {import('gatsby').GatsbyBrowser['wrapRootElement']}*/
 export const wrapRootElement = ({ element }) => {
@@ -9,5 +9,5 @@ export const wrapRootElement = ({ element }) => {
 
 /** @type {import('gatsby').GatsbyBrowser['wrapPageElement']}*/
 export const wrapPageElement = ({ element, props }) => {
-  return <Layout {...props}>{element}</Layout>;
+  return <Page {...props}>{element}</Page>;
 };

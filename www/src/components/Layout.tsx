@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 
 interface Props {
@@ -9,7 +8,6 @@ interface Props {
 const Layout = ({ children }: Props) => {
   return (
     <Wrapper>
-      <Global styles={globalStyles} />
       <Content>{children}</Content>
       <Footer>
         Built with Gatsby
@@ -22,18 +20,9 @@ const Layout = ({ children }: Props) => {
   );
 };
 
-const globalStyles = css`
-  html,
-  body,
-  #___gatsby,
-  #gatsby-focus-wrapper {
-    height: 100%;
-    margin: 0;
-  }
-`;
-
 const Wrapper = styled.div`
   height: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
 `;

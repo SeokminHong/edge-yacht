@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import niceColors from 'nice-color-palettes';
 
+import Layout from '~components/Layout';
 import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
 import Box from '~fibers/Box';
@@ -17,16 +18,6 @@ const IndexPage = () => {
   return (
     <>
       <SEO title="Home Page" />
-      <select
-        onChange={(e) => isLocale(e.target.value) && setLocale(e.target.value)}
-        value={locale}
-      >
-        {locales.map((l) => (
-          <option key={l} value={l}>
-            {l}
-          </option>
-        ))}
-      </select>
       <CanvasWrapper>
         <Canvas
           mode="concurrent"
@@ -78,6 +69,20 @@ const IndexPage = () => {
           </Physics>
         </Canvas>
       </CanvasWrapper>
+      <Layout>
+        <select
+          onChange={(e) =>
+            isLocale(e.target.value) && setLocale(e.target.value)
+          }
+          value={locale}
+        >
+          {locales.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
+      </Layout>
     </>
   );
 };
