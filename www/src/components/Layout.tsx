@@ -25,6 +25,11 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  pointer-events: none;
+
+  * select {
+    pointer-events: auto;
+  }
 `;
 
 const Content = styled.div`
@@ -32,6 +37,7 @@ const Content = styled.div`
 `;
 
 const Footer = styled.footer`
+  color: #cfcfcf;
   margin: 0 32px;
   padding: 8px 0;
 `;

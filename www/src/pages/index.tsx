@@ -6,10 +6,10 @@ import niceColors from 'nice-color-palettes';
 import Layout from '~components/Layout';
 import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
-import Box from '~fibers/Box';
-import CanvasWrapper from '~fibers/CanvasWrapper';
-import Cup from '~fibers/Cup';
-import Plane from '~fibers/Plane';
+import Box from '~meshes/Box';
+import CanvasWrapper from '~meshes/CanvasWrapper';
+import Cup from '~meshes/Cup';
+import Plane from '~meshes/Plane';
 import { locales, isLocale } from '~utils/locale';
 
 const IndexPage = () => {
