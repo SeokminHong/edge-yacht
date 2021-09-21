@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import styled from '@emotion/styled';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import niceColors from 'nice-color-palettes';
@@ -7,6 +6,8 @@ import niceColors from 'nice-color-palettes';
 import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
 import Box from '~fibers/Box';
+import CanvasWrapper from '~fibers/CanvasWrapper';
+import Cup from '~fibers/Cup';
 import Plane from '~fibers/Plane';
 import { locales, isLocale } from '~utils/locale';
 
@@ -73,15 +74,12 @@ const IndexPage = () => {
             <Box position={[0, 0, 4]} />
             <Box position={[4, 4, 4]} />
             <Box position={[-4, -4, 4]} />
+            <Cup />
           </Physics>
         </Canvas>
       </CanvasWrapper>
     </>
   );
 };
-
-const CanvasWrapper = styled.div`
-  height: 300px;
-`;
 
 export default IndexPage;
