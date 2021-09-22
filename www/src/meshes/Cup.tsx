@@ -1,7 +1,7 @@
+import type { BufferGeometry, Material } from 'three';
 import { useLoader } from '@react-three/fiber';
-import { useEffect } from 'react';
-import type { BufferGeometry, Material, Object3D } from 'three';
 import { GLTFLoader, GLTF } from 'three-stdlib/loaders/GLTFLoader';
+import { useTrimesh } from '@react-three/cannon';
 
 interface CupGLTF extends GLTF {
   materials: {
@@ -14,13 +14,21 @@ interface CupGLTF extends GLTF {
 
 const Cup = () => {
   const { nodes, materials } = useLoader(GLTFLoader, 'cup.glb') as CupGLTF;
+  const geometry = nodes.Cup.geometry;
+  const vertices = geometry.attributes.position.array;
+  const indices = geometry.index!.array;
+  const [ref, api] = useTrimesh(() => ({
+    mass: 1,
+    args: [vertices, indices],
+    position: [0, 0, 32],
+  }));
   return (
     <mesh
+      ref={ref}
       castShadow
       receiveShadow
       material={materials.Cup}
       geometry={nodes.Cup.geometry}
-      position={[6, 6, 6]}
     />
   );
 };

@@ -12,6 +12,7 @@ const Box = ({ size = [4, 4, 4], ...props }: BoxProps) => {
     mass: 1,
     args: size,
     position: props.position as Triplet,
+    rotation: [Math.PI / 4, Math.PI / 4, 0],
   }));
   return (
     <mesh
