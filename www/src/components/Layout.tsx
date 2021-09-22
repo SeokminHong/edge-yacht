@@ -27,8 +27,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   pointer-events: none;
 
-  * select {
-    pointer-events: auto;
+  * {
+    select,
+    button,
+    input {
+      pointer-events: auto;
+    }
   }
 `;
 

@@ -1,6 +1,6 @@
 import type { BufferGeometry, Material } from 'three';
-import { useLoader } from '@react-three/fiber';
 import { GLTFLoader, GLTF } from 'three-stdlib/loaders/GLTFLoader';
+import { useLoader } from '@react-three/fiber';
 import { useTrimesh } from '@react-three/cannon';
 
 interface CupGLTF extends GLTF {
