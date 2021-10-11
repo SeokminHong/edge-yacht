@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 
 import GameContext from '~contexts/GameContext';
+import { PlayerIndex } from '~utils/player';
 import { Score } from '~utils/score';
 
-export const usePlayer = (id: 1 | 2) => {
+export const usePlayer = (id: PlayerIndex) => {
   const { players, setPlayers } = useContext(GameContext);
   return {
     player: players[id],

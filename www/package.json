@@ -1,8 +1,8 @@
 {
-  "name": "edge-yahtzee",
+  "name": "edge-yacht",
   "version": "1.0.0",
   "private": true,
-  "description": "edge-yahtzee",
+  "description": "Yacht game on the edge",
   "author": "Seokmin Hong",
   "keywords": [
     "gatsby"
