@@ -8,12 +8,11 @@ export const UPPER_SECTION = [
 ] as const;
 
 export const LOWER_SECTION = [
-  'Three of a Kind',
   'Four of a Kind',
   'Full House',
   'Small Straight',
   'Large Straight',
-  'Yahtzee',
+  'Yacht',
   'Chance',
 ] as const;
 
@@ -47,18 +46,6 @@ export const scoreFunctions: {
   Fours: (dice: number[]) => calcScoreFor(dice, 4),
   Fives: (dice: number[]) => calcScoreFor(dice, 5),
   Sixes: (dice: number[]) => calcScoreFor(dice, 6),
-  'Three of a Kind': (dice: number[]) => {
-    const counts = dice.reduce(
-      (acc, d) => ({ ...acc, [d]: (acc[d] ?? 0) + 1 }),
-      {} as { [d: number]: number }
-    );
-    const maxCount = Math.max(...Object.values(counts));
-    if (maxCount > 3) {
-      return dice.reduce((acc, count) => acc + count * count, 0);
-    } else {
-      return 0;
-    }
-  },
   'Four of a Kind': (dice: number[]) => {
     const counts = getCounts(dice);
     const maxCount = Math.max(...Object.values(counts));
@@ -99,7 +86,7 @@ export const scoreFunctions: {
       return 0;
     }
   },
-  Yahtzee: (dice: number[]) => {
+  Yacht: (dice: number[]) => {
     const counts = getCounts(dice);
     const maxCount = Math.max(...Object.values(counts));
     if (maxCount === 5) {
