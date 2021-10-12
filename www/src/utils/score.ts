@@ -28,6 +28,10 @@ const calcScoreFor = (dice: number[], value: number) => {
   const count = dice.filter((d) => d === value).length;
   return count * value;
 };
+
+const calcSum = (dice: number[]) =>
+  dice.reduce((acc, count) => acc + count * count, 0);
+
 const getCounts = (dice: number[]) => {
   return dice.reduce(
     (acc, d) => ({ ...acc, [d]: (acc[d] ?? 0) + 1 }),
@@ -50,8 +54,8 @@ export const scoreFunctions: {
   'Four of a Kind': (dice: number[]) => {
     const counts = getCounts(dice);
     const maxCount = Math.max(...Object.values(counts));
-    if (maxCount > 4) {
-      return dice.reduce((acc, count) => acc + count * count, 0);
+    if (maxCount >= 4) {
+      return calcSum(dice);
     } else {
       return 0;
     }
@@ -62,7 +66,7 @@ export const scoreFunctions: {
       Object.values(counts).some((count) => count === 3) &&
       Object.values(counts).some((count) => count === 2)
     ) {
-      return 25;
+      return calcSum(dice);
     } else {
       return 0;
     }
