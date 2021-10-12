@@ -2,12 +2,13 @@
   "name": "worker-typescript-template",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
-  "main": "dist/worker.js",
+  "module": "dist/worker.mjs",
   "scripts": {
-    "build": "webpack",
+    "build": "rollup -c",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "test": "jest --config jestconfig.json --verbose"
+    "test": "jest --config jestconfig.json --verbose",
+    "postinstall": "patch-package"
   },
   "author": "author",
   "license": "MIT OR Apache-2.0",
@@ -20,20 +21,23 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
-    "@types/jest": "^27.0.2",
-    "@types/service-worker-mock": "^2.0.1",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@rollup/plugin-typescript": "^8.2.5",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-typescript": "^3.0.0",
-    "jest": "^27.0.1",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.3.0",
-    "service-worker-mock": "^2.0.5",
-    "ts-jest": "^27.0.1",
-    "ts-loader": "^9.2.2",
-    "typescript": "^4.3.2",
-    "webpack": "^5.38.1",
-    "webpack-cli": "^4.7.0"
+    "rollup": "^2.58.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "shared": "file:../../shared",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "nanoid": "^3.1.29"
   }
 }

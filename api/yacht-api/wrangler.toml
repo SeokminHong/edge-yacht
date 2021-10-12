@@ -8,4 +8,14 @@ workers_dev = true
 [build]
 command = "npm install && npm run build"
 [build.upload]
-format = "service-worker"
+format = "modules"
+main = "./worker.mjs"
+
+[durable_objects]
+bindings = [
+    { name = "yachtGame", class_name = "YachtGame" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["YachtGame"]
