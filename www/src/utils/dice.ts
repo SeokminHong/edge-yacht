@@ -1,11 +1,7 @@
-export type Dice = {
-  value: number;
-  saved: boolean;
-};
+export type DiceNumber = 1 | 2 | 3 | 4 | 5 | 6;
 
-export const rollDice = () => Math.floor(Math.random() * 6) + 1;
+export type Dice = DiceNumber | null;
 
-export const defaultDice: Dice = {
-  value: 1,
-  saved: false,
-};
+export const rollDice = () => (Math.floor(Math.random() * 6) + 1) as DiceNumber;
+
+export const defaultDice: Dice = null;

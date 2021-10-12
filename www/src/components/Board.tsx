@@ -6,45 +6,44 @@ import { Dice, rollDice } from '~utils/dice';
 const Board = () => {
   const { dices, setDices } = useContext(GameContext);
   const rollDices = () => {
-    const newDices = dices.map((d) => {
-      const { saved } = d;
-      if (!saved) {
-        return {
-          value: rollDice(),
-          saved,
-        };
-      }
-      return d;
-    });
+    const newDices = dices.pending.map(() => rollDice());
+    setDices({ ...dices, pending: newDices });
+  };
+  const SaveDice = (index: number) => {
+    const newDices = {
+      pending: dices.pending.filter((_, i) => i !== index),
+      saved: [...dices.saved, dices.pending[index]],
+    };
     setDices(newDices);
   };
-  const handleSave = (index: number, save: boolean) => {
-    const v = Object.values<Dice>({
-      ...dices,
-      [index]: {
-        value: dices[index].value,
-        saved: save,
-      },
-    });
-    setDices(v);
+  const UnsaveDice = (index: number) => {
+    const newDices = {
+      pending: [...dices.pending, dices.saved[index]],
+      saved: dices.saved.filter((_, i) => i !== index),
+    };
+    setDices(newDices);
   };
 
   return (
     <div>
-      <button onClick={rollDices}>Roll</button>
-      {dices.map((d, idx) => {
-        const { value } = d;
+      {dices.pending.map((d, idx) => {
         return (
-          <div key={idx}>
-            {value}
-            <input
-              type="checkbox"
-              defaultChecked={d.saved}
-              onChange={(e) => handleSave(idx, e.target.checked)}
-            ></input>
+          <div key={`dice-${idx}`}>
+            {d}
+            <button onClick={() => SaveDice(idx)}>Save</button>
           </div>
         );
       })}
+      <hr />
+      {dices.saved.map((d, idx) => {
+        return (
+          <div key={`saved-${idx}`}>
+            {d}
+            <button onClick={() => UnsaveDice(idx)}>Unsave</button>
+          </div>
+        );
+      })}
+      <button onClick={rollDices}>Roll</button>
     </div>
   );
 };
