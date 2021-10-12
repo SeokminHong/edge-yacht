@@ -8,26 +8,30 @@ export const UPPER_SECTION = [
 ] as const;
 
 export const LOWER_SECTION = [
+  'Chance',
   'Four of a Kind',
   'Full House',
   'Small Straight',
   'Large Straight',
   'Yacht',
-  'Chance',
 ] as const;
 
 type UpperSection = typeof UPPER_SECTION[number];
 type LowerSection = typeof LOWER_SECTION[number];
-export type Score = { [K in UpperSection]: number } & {
-  [K in LowerSection]: number;
+export type Score = { [K in UpperSection]: number | null } & {
+  [K in LowerSection]: number | null;
 } & {
-  Bonus: number;
+  Bonus: number | null;
 };
 
 const calcScoreFor = (dice: number[], value: number) => {
   const count = dice.filter((d) => d === value).length;
   return count * value;
 };
+
+const calcSum = (dice: number[]) =>
+  dice.reduce((acc, count) => acc + count * count, 0);
+
 const getCounts = (dice: number[]) => {
   return dice.reduce(
     (acc, d) => ({ ...acc, [d]: (acc[d] ?? 0) + 1 }),
@@ -46,11 +50,12 @@ export const scoreFunctions: {
   Fours: (dice: number[]) => calcScoreFor(dice, 4),
   Fives: (dice: number[]) => calcScoreFor(dice, 5),
   Sixes: (dice: number[]) => calcScoreFor(dice, 6),
+  Chance: (dice: number[]) => dice.reduce((acc, d) => acc + d, 0),
   'Four of a Kind': (dice: number[]) => {
     const counts = getCounts(dice);
     const maxCount = Math.max(...Object.values(counts));
-    if (maxCount > 4) {
-      return dice.reduce((acc, count) => acc + count * count, 0);
+    if (maxCount >= 4) {
+      return calcSum(dice);
     } else {
       return 0;
     }
@@ -61,7 +66,7 @@ export const scoreFunctions: {
       Object.values(counts).some((count) => count === 3) &&
       Object.values(counts).some((count) => count === 2)
     ) {
-      return 25;
+      return calcSum(dice);
     } else {
       return 0;
     }
@@ -95,5 +100,4 @@ export const scoreFunctions: {
       return 0;
     }
   },
-  Chance: (dice: number[]) => dice.reduce((acc, d) => acc + d, 0),
 };

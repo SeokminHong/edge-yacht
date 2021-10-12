@@ -5,10 +5,12 @@ interface Props {
   children: ReactNode;
 }
 
-const Page = ({ children }: Props) => [
-  <Global styles={globalStyles} />,
-  children,
-];
+const Page = ({ children }: Props) => (
+  <>
+    <Global styles={globalStyles} />
+    {children}
+  </>
+);
 
 const globalStyles = css`
   html,
