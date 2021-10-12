@@ -2,13 +2,21 @@ import styled from '@emotion/styled';
 
 import { GameProvider } from '~contexts/GameContext';
 import Board from '~components/Board';
+import ScoreCard from '~components/ScoreCard';
 
 const GamePage = () => {
   return (
     <GameProvider>
-      <Board />
+      <Wrapper>
+        <ScoreCard />
+        <Board />
+      </Wrapper>
     </GameProvider>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+`;
 
 export default GamePage;

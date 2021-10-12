@@ -11,6 +11,7 @@
     "paths": {
       "~components/*": ["src/components/*"],
       "~contexts/*": ["src/contexts/*"],
+      "~hooks/*": ["src/hooks/*"],
       "~meshes/*": ["src/meshes/*"],
       "~utils/*": ["src/utils/*"]
     },

@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { defaultDice, Dice } from '~utils/dice';
 
-import { Player, PlayerIndex, ZERO_SCORE } from '~utils/player';
+import { Player, PlayerIndex, EMPTY_SCORE } from '~utils/player';
 
 const GameContext = createContext<{
   players: Player[];
@@ -24,11 +24,11 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [players, setPlayers] = useState<Player[]>([
     {
       id: 1,
-      score: ZERO_SCORE,
+      score: EMPTY_SCORE,
     },
     {
       id: 2,
-      score: ZERO_SCORE,
+      score: EMPTY_SCORE,
     },
   ]);
   const [turn, setTurn] = useState<PlayerIndex>(1);

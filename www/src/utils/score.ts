@@ -8,20 +8,20 @@ export const UPPER_SECTION = [
 ] as const;
 
 export const LOWER_SECTION = [
+  'Chance',
   'Four of a Kind',
   'Full House',
   'Small Straight',
   'Large Straight',
   'Yacht',
-  'Chance',
 ] as const;
 
 type UpperSection = typeof UPPER_SECTION[number];
 type LowerSection = typeof LOWER_SECTION[number];
-export type Score = { [K in UpperSection]: number } & {
-  [K in LowerSection]: number;
+export type Score = { [K in UpperSection]: number | null } & {
+  [K in LowerSection]: number | null;
 } & {
-  Bonus: number;
+  Bonus: number | null;
 };
 
 const calcScoreFor = (dice: number[], value: number) => {
@@ -46,6 +46,7 @@ export const scoreFunctions: {
   Fours: (dice: number[]) => calcScoreFor(dice, 4),
   Fives: (dice: number[]) => calcScoreFor(dice, 5),
   Sixes: (dice: number[]) => calcScoreFor(dice, 6),
+  Chance: (dice: number[]) => dice.reduce((acc, d) => acc + d, 0),
   'Four of a Kind': (dice: number[]) => {
     const counts = getCounts(dice);
     const maxCount = Math.max(...Object.values(counts));
@@ -95,5 +96,4 @@ export const scoreFunctions: {
       return 0;
     }
   },
-  Chance: (dice: number[]) => dice.reduce((acc, d) => acc + d, 0),
 };
