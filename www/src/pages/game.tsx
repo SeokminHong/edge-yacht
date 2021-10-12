@@ -17,6 +17,9 @@ const GamePage = () => {
 
 const Wrapper = styled.div`
   display: flex;
+  & > * {
+    margin: 1rem;
+  }
 `;
 
 export default GamePage;

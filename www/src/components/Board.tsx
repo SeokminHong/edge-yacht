@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import GameContext from '~contexts/GameContext';
-import { Dice, rollDice } from '~utils/dice';
+import { rollDice } from '~utils/dice';
 
 const Board = () => {
   const { dices, setDices } = useContext(GameContext);

@@ -29,8 +29,7 @@ const calcScoreFor = (dice: number[], value: number) => {
   return count * value;
 };
 
-const calcSum = (dice: number[]) =>
-  dice.reduce((acc, count) => acc + count * count, 0);
+const calcSum = (dice: number[]) => dice.reduce((acc, count) => acc + count, 0);
 
 const getCounts = (dice: number[]) => {
   return dice.reduce(
