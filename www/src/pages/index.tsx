@@ -11,6 +11,7 @@ import CanvasWrapper from '~meshes/CanvasWrapper';
 import Cup from '~meshes/Cup';
 import Plane from '~meshes/Plane';
 import { locales, isLocale } from '~utils/locale';
+import { navigate } from 'gatsby-link';
 
 const IndexPage = () => {
   const { locale, setLocale } = useContext(LocaleContext);
@@ -70,6 +71,18 @@ const IndexPage = () => {
         </Canvas>
       </CanvasWrapper>
       <Layout>
+        <button
+          onClick={async () => {
+            fetch(`https://yacht-api.seokmin.workers.dev/create`)
+              .then((res) => res.json())
+              .then((body) => {
+                console.log(body);
+                return navigate(`/waiting?id=${body.id}`);
+              });
+          }}
+        >
+          Create
+        </button>
         <select
           onChange={(e) =>
             isLocale(e.target.value) && setLocale(e.target.value)

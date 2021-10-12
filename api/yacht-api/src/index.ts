@@ -24,7 +24,12 @@ export default {
 async function handleCreate(request: Request, env: Env): Promise<Response> {
   const id = env.yachtGame.newUniqueId();
   await env.yachtGame.get(id).fetch(request);
-  return new Response(JSON.stringify({ id: id.toString() }), { status: 200 });
+  return new Response(JSON.stringify({ id: id.toString() }), {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
 }
 
 async function handleJoin(request: Request, env: Env): Promise<Response> {
