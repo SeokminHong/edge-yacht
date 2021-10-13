@@ -42,26 +42,24 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     saved: [],
   });
   const joinSession = async (url: string) => {
-    const res = await fetch(url, {
-      headers: {
-        Upgrade: 'websocket',
-      },
-    });
-    if (!res.ok || !res.webSocket) {
-      alert(`Cannot establish session: ${res.body}`);
-      return false;
-    }
-    const ws = res.webSocket;
+    const ws = new WebSocket(url);
     ws.onclose = (e) => {
       if (e.code === 1006) {
         alert(`ws closed abruptly: ${e.reason}`);
       }
     };
     ws.addEventListener('message', (msg) => {
-      const data = JSON.parse(msg.data);
-      if (data.type === 'start') {
-        console.log(data.payload.playerIndex);
-        //setPlayerIndex(data.payload.playerIndex);
+      const { type, payload } = JSON.parse(msg.data);
+      switch (type) {
+        case 'error': {
+          console.log(payload.message);
+          ws.close();
+        }
+        case 'start': {
+          console.log(payload.playerIndex);
+          //setPlayerIndex(data.payload.playerIndex);
+          break;
+        }
       }
     });
     setWebsocket(ws);

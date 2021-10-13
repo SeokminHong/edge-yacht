@@ -8,7 +8,7 @@ const Waiting = ({ location }: PageProps) => {
   const { joinSession } = useContext(GameContext);
   useEffect(() => {
     joinSession(
-      `https://yacht-api.seokmin.workers.dev/join${location.search}`
+      `wss://yacht-api.seokmin.workers.dev/join${location.search}`
     ).then((success) => {
       console.log(success ? `success` : `failed`);
     });
@@ -16,8 +16,8 @@ const Waiting = ({ location }: PageProps) => {
 
   return (
     <Layout>
-      Share link:
-      {`localhost:8000/waiting${location.search}`}
+      <div>Share link:</div>
+      <div>{`localhost:8000/waiting${location.search}`}</div>
     </Layout>
   );
 };

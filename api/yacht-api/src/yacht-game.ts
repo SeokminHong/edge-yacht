@@ -9,6 +9,20 @@ type StorageTypes = {
 
 const getOpponent = (index: PlayerIndex) => (index === 1 ? 2 : 1);
 
+async function handleErrors(request: Request, func: () => Promise<Response>) {
+  return await func().catch((err) => {
+    if (request.headers.get('Upgrade') == 'websocket') {
+      const [client, server] = Object.values(new WebSocketPair());
+      server.accept();
+      server.send(JSON.stringify({ error: err.stack }));
+      server.close(1011, 'Uncaught exception during session setup');
+      return new Response(null, { status: 101, webSocket: client });
+    } else {
+      return new Response(err.stack, { status: 500 });
+    }
+  });
+}
+
 export class YachtGame implements DurableObject {
   state: DurableObjectState;
   env: Env;
@@ -45,18 +59,20 @@ export class YachtGame implements DurableObject {
   }
 
   fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    switch (url.pathname) {
-      case '/create': {
-        return this.handleCreate();
+    return handleErrors(request, async () => {
+      const url = new URL(request.url);
+      switch (url.pathname) {
+        case '/create': {
+          return this.handleCreate();
+        }
+        case '/join': {
+          return this.handleJoin(request);
+        }
+        default: {
+          return (async () => new Response())();
+        }
       }
-      case '/join': {
-        return this.handleJoin(request);
-      }
-      default: {
-        return (async () => new Response())();
-      }
-    }
+    });
   }
 
   async handleCreate(): Promise<Response> {
@@ -94,10 +110,10 @@ export class YachtGame implements DurableObject {
 
     if (this.sessions.player1 && this.sessions.player2) {
       this.sessions.player1.send(
-        JSON.stringify({ type: 'start', payload: { playerIndex } })
+        JSON.stringify({ type: 'start', payload: { playerIndex: 1 } })
       );
       this.sessions.player2.send(
-        JSON.stringify({ type: 'start', payload: { playerIndex } })
+        JSON.stringify({ type: 'start', payload: { playerIndex: 2 } })
       );
     }
 
