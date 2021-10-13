@@ -63,10 +63,14 @@ export class YachtGame implements DurableObject {
   }
 
   async handleJoin(request: Request): Promise<Response> {
+    const cors = {
+      'Access-Control-Allow-Origin': '*',
+    };
     if (request.headers.get('Upgrade') !== 'websocket') {
       return new Response('Upgrade header is not websocket', {
         status: 400,
         statusText: 'Bad Request',
+        headers: cors,
       });
     }
 
@@ -74,6 +78,7 @@ export class YachtGame implements DurableObject {
       return new Response('Game is full', {
         status: 403,
         statusText: 'Forbidden',
+        headers: cors,
       });
     }
 
@@ -98,7 +103,11 @@ export class YachtGame implements DurableObject {
     }
 
     await this.handleSession(server, ip, playerIndex);
-    return new Response(null, { status: 101, webSocket: client });
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+      headers: cors,
+    });
   }
 
   async handleSession(

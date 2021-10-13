@@ -7,7 +7,11 @@ import GameContext from '~contexts/GameContext';
 const Waiting = ({ location }: PageProps) => {
   const { joinSession } = useContext(GameContext);
   useEffect(() => {
-    joinSession(`wss://yacht-api.seokmin.workers.dev/join${location.search}`);
+    joinSession(
+      `https://yacht-api.seokmin.workers.dev/join${location.search}`
+    ).then((success) => {
+      console.log(success ? `success` : `failed`);
+    });
   }, [location]);
 
   return (

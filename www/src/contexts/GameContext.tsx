@@ -6,7 +6,7 @@ import { Player, EMPTY_SCORE } from '~utils/player';
 type Dices = { pending: Dice[]; saved: Dice[] };
 
 const GameContext = createContext<{
-  joinSession: (url: string) => void;
+  joinSession: (url: string) => Promise<boolean>;
   players: Player[];
   setPlayers: (_: Player[]) => void;
   turn: PlayerIndex;
@@ -14,7 +14,7 @@ const GameContext = createContext<{
   dices: Dices;
   setDices: (_: Dices) => void;
 }>({
-  joinSession: () => {},
+  joinSession: async () => false,
   players: [],
   setPlayers: () => {},
   turn: 1,
@@ -41,8 +41,17 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     pending: Array(5).fill(defaultDice),
     saved: [],
   });
-  const joinSession = (url: string) => {
-    const ws = new WebSocket(url);
+  const joinSession = async (url: string) => {
+    const res = await fetch(url, {
+      headers: {
+        Upgrade: 'websocket',
+      },
+    });
+    if (!res.ok || !res.webSocket) {
+      alert(`Cannot establish session: ${res.body}`);
+      return false;
+    }
+    const ws = res.webSocket;
     ws.onclose = (e) => {
       if (e.code === 1006) {
         alert(`ws closed abruptly: ${e.reason}`);
@@ -56,6 +65,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
     setWebsocket(ws);
+    return true;
   };
 
   return (
