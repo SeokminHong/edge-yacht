@@ -10,11 +10,13 @@ type StorageTypes = {
 const getOpponent = (index: PlayerIndex) => (index === 1 ? 2 : 1);
 
 async function handleErrors(request: Request, func: () => Promise<Response>) {
-  return await func().catch((err) => {
-    if (request.headers.get('Upgrade') == 'websocket') {
+  return await func().catch((err: Error) => {
+    if (request.headers.get('Upgrade') === 'websocket') {
       const [client, server] = Object.values(new WebSocketPair());
       server.accept();
-      server.send(JSON.stringify({ error: err.stack }));
+      server.send(
+        JSON.stringify({ type: 'error', payload: { message: err.message } })
+      );
       server.close(1011, 'Uncaught exception during session setup');
       return new Response(null, { status: 101, webSocket: client });
     } else {
@@ -82,19 +84,11 @@ export class YachtGame implements DurableObject {
 
   async handleJoin(request: Request): Promise<Response> {
     if (request.headers.get('Upgrade') !== 'websocket') {
-      return new Response('Upgrade header is not websocket', {
-        status: 400,
-        statusText: 'Bad Request',
-        headers: cors,
-      });
+      throw Error('Upgrade header is not websocket');
     }
 
     if (this.sessions.player1 && this.sessions.player2) {
-      return new Response('Game is full', {
-        status: 403,
-        statusText: 'Forbidden',
-        headers: cors,
-      });
+      throw Error('Game is full');
     }
 
     const ip = request.headers.get('CF-Connecting-IP');
