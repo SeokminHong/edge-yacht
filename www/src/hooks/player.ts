@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import GameContext from '~contexts/GameContext';
-import { Player, PlayerIndex } from '~utils/player';
+import { Player } from '~utils/player';
 import { Score } from '~utils/score';
 
 export const usePlayer = (id: PlayerIndex) => {

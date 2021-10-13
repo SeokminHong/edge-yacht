@@ -1,17 +1,26 @@
 // eslint-disable-next-line
-interface Env {}
+type Env = {};
 
 type StorageTypes = {
-  waitingState: WaitingState;
+  //waitingState: WaitingState;
 };
+
+const getOpponent = (index: PlayerIndex) => (index === 1 ? 2 : 1);
 
 export class YachtGame implements DurableObject {
   state: DurableObjectState;
   env: Env;
+  createAt: number;
+  sessions: {
+    player1?: WebSocket;
+    player2?: WebSocket;
+  };
 
   constructor(state: DurableObjectState, env: Env) {
     this.state = state;
     this.env = env;
+    this.createAt = 0;
+    this.sessions = {};
   }
 
   async get<T extends keyof StorageTypes>(
@@ -49,11 +58,7 @@ export class YachtGame implements DurableObject {
   }
 
   async handleCreate(): Promise<Response> {
-    this.put('waitingState', {
-      players: 0,
-      createdAt: Date.now(),
-      randomIndex: null,
-    });
+    this.createAt = Date.now();
     return new Response();
   }
 
@@ -65,78 +70,54 @@ export class YachtGame implements DurableObject {
       });
     }
 
-    const waitingState = await this.get('waitingState');
-    if (typeof waitingState === 'undefined') {
-      this.delete('waitingState');
-      return new Response('No waiting state', {
-        status: 404,
-        statusText: 'Not Found',
-      });
-    }
-    if (waitingState.players >= 2) {
+    if (this.sessions.player1 && this.sessions.player2) {
       return new Response('Game is full', {
         status: 403,
         statusText: 'Forbidden',
       });
     }
-    this.put('waitingState', {
-      ...waitingState,
-      players: waitingState.players + 1,
-    });
 
     const ip = request.headers.get('CF-Connecting-IP');
     const [client, server] = Object.values(new WebSocketPair());
-    await this.handleSession(server, ip);
+
+    let playerIndex = (Math.floor(Math.random() * 2) + 1) as PlayerIndex;
+    if (this.sessions[`player${playerIndex}`]) {
+      playerIndex = getOpponent(playerIndex);
+    }
+    this.sessions[`player${playerIndex}`] = server;
+
+    server.accept();
+
+    if (this.sessions.player1 && this.sessions.player2) {
+      this.sessions.player1.send(
+        JSON.stringify({ type: 'start', payload: { playerIndex } })
+      );
+      this.sessions.player2.send(
+        JSON.stringify({ type: 'start', payload: { playerIndex } })
+      );
+    }
+
+    await this.handleSession(server, ip, playerIndex);
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  async handleSession(websocket: WebSocket, ip: string | null): Promise<void> {
-    websocket.accept();
+  async handleSession(
+    websocket: WebSocket,
+    ip: string | null,
+    playerIndex: PlayerIndex
+  ): Promise<void> {
+    websocket.addEventListener('close', async () => {
+      this.sessions[`player${playerIndex}`] = undefined;
+    });
     websocket.addEventListener('message', async (msg) => {
       if (typeof msg.data !== 'string') {
         websocket.close(1007, 'Invalid payload');
         return;
       }
-      const { type, payload } = JSON.parse(msg.data);
-      switch (type) {
-        case 'waiting': {
-          const waitingState = await this.get('waitingState');
-          if (typeof waitingState === 'undefined') {
-            websocket.close(1002, 'No waiting state');
-            return;
-          }
-          if (waitingState.players === 2) {
-            let playerIndex;
-            switch (waitingState.randomIndex) {
-              case null: {
-                const randomIndex = (Math.floor(Math.random() * 2) + 1) as
-                  | 1
-                  | 2;
-                await this.put('waitingState', {
-                  ...waitingState,
-                  randomIndex,
-                });
-                console.log(`new index ${randomIndex}`);
-                playerIndex = randomIndex;
-                break;
-              }
-              case 1: {
-                playerIndex = 2;
-                break;
-              }
-              case 2: {
-                playerIndex = 1;
-                break;
-              }
-            }
-            console.log(`index ${playerIndex}`);
-            websocket.send(
-              JSON.stringify({ type: 'start', payload: { playerIndex } })
-            );
-          }
-          break;
-        }
-      }
+      //const { type, payload } = JSON.parse(msg.data);
+      //switch (type) {
+
+      //}
     });
   }
 }

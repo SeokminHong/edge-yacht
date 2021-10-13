@@ -1,6 +1,5 @@
 import { Score } from './score';
 
-export type PlayerIndex = 1 | 2;
 export type Player = {
   id: PlayerIndex;
   score: Score;
