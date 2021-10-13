@@ -60,6 +60,14 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
           //setPlayerIndex(data.payload.playerIndex);
           break;
         }
+        case 'health': {
+          ws.send(
+            JSON.stringify({
+              type: 'health',
+              payload: { index: payload.index },
+            })
+          );
+        }
       }
     });
     setWebsocket(ws);

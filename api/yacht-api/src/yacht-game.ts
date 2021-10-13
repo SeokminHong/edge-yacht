@@ -1,7 +1,16 @@
+import { nanoid } from 'nanoid';
+
 import { cors } from './response';
 
 // eslint-disable-next-line
 type Env = {};
+
+type Session = {
+  webSocket: WebSocket;
+  id: string;
+  sentIndex: number;
+  receivedIndex: number;
+};
 
 type StorageTypes = {
   //waitingState: WaitingState;
@@ -29,15 +38,17 @@ export class YachtGame implements DurableObject {
   state: DurableObjectState;
   env: Env;
   createAt: number;
+  started: boolean;
   sessions: {
-    player1?: WebSocket;
-    player2?: WebSocket;
+    player1?: Session;
+    player2?: Session;
   };
 
   constructor(state: DurableObjectState, env: Env) {
     this.state = state;
     this.env = env;
     this.createAt = 0;
+    this.started = false;
     this.sessions = {};
   }
 
@@ -77,6 +88,32 @@ export class YachtGame implements DurableObject {
     });
   }
 
+  healthCheck(session: Session): void {
+    const { webSocket, sentIndex, receivedIndex } = session;
+    setTimeout(() => {
+      if (sentIndex > receivedIndex + 3) {
+        webSocket.close(1011, 'Session timed out');
+        return;
+      }
+      const index =
+        session === this.sessions.player1
+          ? 1
+          : session === this.sessions.player2
+          ? 2
+          : 0;
+      console.log(`Player ${index}: Sending Health ${sentIndex + 1}`);
+      webSocket.send(
+        JSON.stringify({
+          type: 'health',
+          payload: {
+            index: ++session.sentIndex,
+          },
+        })
+      );
+      setTimeout(this.healthCheck, 5000, session);
+    }, 5000);
+  }
+
   async handleCreate(): Promise<Response> {
     this.createAt = Date.now();
     return new Response();
@@ -91,6 +128,10 @@ export class YachtGame implements DurableObject {
       throw Error('Game is full');
     }
 
+    if (this.started) {
+      throw Error('Game is already started');
+    }
+
     const ip = request.headers.get('CF-Connecting-IP');
     const [client, server] = Object.values(new WebSocketPair());
 
@@ -98,20 +139,30 @@ export class YachtGame implements DurableObject {
     if (this.sessions[`player${playerIndex}`]) {
       playerIndex = getOpponent(playerIndex);
     }
-    this.sessions[`player${playerIndex}`] = server;
+    const session = {
+      webSocket: server,
+      id: nanoid(),
+      sentIndex: 0,
+      receivedIndex: 0,
+    };
+    this.sessions[`player${playerIndex}`] = session;
 
     server.accept();
 
     if (this.sessions.player1 && this.sessions.player2) {
-      this.sessions.player1.send(
+      this.sessions.player1.webSocket.send(
         JSON.stringify({ type: 'start', payload: { playerIndex: 1 } })
       );
-      this.sessions.player2.send(
+      this.sessions.player2.webSocket.send(
         JSON.stringify({ type: 'start', payload: { playerIndex: 2 } })
       );
+      this.started = true;
+
+      this.healthCheck(this.sessions.player1);
+      this.healthCheck(this.sessions.player2);
     }
 
-    await this.handleSession(server, ip, playerIndex);
+    await this.handleSession(session, ip, playerIndex);
     return new Response(null, {
       status: 101,
       webSocket: client,
@@ -120,22 +171,35 @@ export class YachtGame implements DurableObject {
   }
 
   async handleSession(
-    websocket: WebSocket,
+    session: Session,
     ip: string | null,
     playerIndex: PlayerIndex
   ): Promise<void> {
-    websocket.addEventListener('close', async () => {
+    const { webSocket, id, sentIndex, receivedIndex } = session;
+    webSocket.addEventListener('close', async () => {
       this.sessions[`player${playerIndex}`] = undefined;
     });
-    websocket.addEventListener('message', async (msg) => {
+    webSocket.addEventListener('message', async (msg) => {
       if (typeof msg.data !== 'string') {
-        websocket.close(1007, 'Invalid payload');
+        webSocket.close(1007, 'Invalid payload');
         return;
       }
-      //const { type, payload } = JSON.parse(msg.data);
-      //switch (type) {
-
-      //}
+      const { type, payload } = JSON.parse(msg.data);
+      switch (type) {
+        case 'health': {
+          if (payload.index < session.receivedIndex) {
+            console.log(
+              `Received old health: ${payload.index} / ${session.receivedIndex}`
+            );
+          } else if (payload.index !== session.receivedIndex + 1) {
+            console.log(
+              `Skipped some healths ${payload.index} / ${session.receivedIndex}`
+            );
+          }
+          session.receivedIndex = payload.index;
+          break;
+        }
+      }
     });
   }
 }
