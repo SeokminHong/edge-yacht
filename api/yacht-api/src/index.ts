@@ -1,3 +1,4 @@
+import { cors } from './response';
 export { YachtGame } from './yacht-game';
 
 interface Env {
@@ -16,7 +17,7 @@ export default {
         // Start game.
         return handleJoin(request, env);
       default:
-        return new Response('Not found', { status: 404 });
+        return new Response('Not found', { status: 404, headers: cors });
     }
   },
 };
@@ -26,9 +27,7 @@ async function handleCreate(request: Request, env: Env): Promise<Response> {
   await env.yachtGame.get(id).fetch(request);
   return new Response(JSON.stringify({ id: id.toString() }), {
     status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: cors,
   });
 }
 
@@ -36,11 +35,11 @@ async function handleJoin(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const roomId = url.searchParams.get('id');
   if (!roomId) {
-    return new Response('Room not found', { status: 404 });
+    return new Response('Room not found', { status: 404, headers: cors });
   }
   const room = env.yachtGame.get(env.yachtGame.idFromString(roomId));
   if (!room) {
-    return new Response('Room not found', { status: 404 });
+    return new Response('Room not found', { status: 404, headers: cors });
   }
   return await room.fetch(request);
 }

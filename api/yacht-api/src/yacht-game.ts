@@ -1,3 +1,5 @@
+import { cors } from './response';
+
 // eslint-disable-next-line
 type Env = {};
 
@@ -63,9 +65,6 @@ export class YachtGame implements DurableObject {
   }
 
   async handleJoin(request: Request): Promise<Response> {
-    const cors = {
-      'Access-Control-Allow-Origin': '*',
-    };
     if (request.headers.get('Upgrade') !== 'websocket') {
       return new Response('Upgrade header is not websocket', {
         status: 400,
