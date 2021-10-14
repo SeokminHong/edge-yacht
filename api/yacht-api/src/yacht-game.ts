@@ -93,7 +93,7 @@ export class YachtGame implements DurableObject {
     setTimeout(() => {
       if (sentIndex > receivedIndex + 3) {
         webSocket.close(1011, 'Session timed out');
-        return;
+        throw Error('Session timed out');
       }
       const index =
         session === this.sessions.player1
@@ -157,11 +157,9 @@ export class YachtGame implements DurableObject {
         JSON.stringify({ type: 'start', payload: { playerIndex: 2 } })
       );
       this.started = true;
-
-      this.healthCheck(this.sessions.player1);
-      this.healthCheck(this.sessions.player2);
     }
 
+    this.healthCheck(session);
     await this.handleSession(session, ip, playerIndex);
     return new Response(null, {
       status: 101,
@@ -175,7 +173,7 @@ export class YachtGame implements DurableObject {
     ip: string | null,
     playerIndex: PlayerIndex
   ): Promise<void> {
-    const { webSocket, id, sentIndex, receivedIndex } = session;
+    const { webSocket } = session;
     webSocket.addEventListener('close', async () => {
       this.sessions[`player${playerIndex}`] = undefined;
     });
