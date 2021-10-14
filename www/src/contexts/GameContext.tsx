@@ -7,6 +7,7 @@ type Dices = { pending: Dice[]; saved: Dice[] };
 
 const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
+  closeSession: (code?: number, reason?: string) => void;
   players: Player[];
   setPlayers: (_: Player[]) => void;
   turn: PlayerIndex;
@@ -15,6 +16,7 @@ const GameContext = createContext<{
   setDices: (_: Dices) => void;
 }>({
   joinSession: async () => false,
+  closeSession: () => {},
   players: [],
   setPlayers: () => {},
   turn: 1,
@@ -25,7 +27,7 @@ const GameContext = createContext<{
 export default GameContext;
 
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
-  const [websocket, setWebsocket] = useState<WebSocket>();
+  const [webSocket, setWebsocket] = useState<WebSocket>();
   const [players, setPlayers] = useState<Player[]>([
     {
       id: 1,
@@ -73,11 +75,14 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     setWebsocket(ws);
     return true;
   };
+  const closeSession = (code: number = 1000, reason?: string) =>
+    webSocket && webSocket.close(code, reason);
 
   return (
     <GameContext.Provider
       value={{
         joinSession,
+        closeSession,
         players,
         setPlayers,
         turn,

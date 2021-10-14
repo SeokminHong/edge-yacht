@@ -10,6 +10,7 @@ type Session = {
   id: string;
   sentIndex: number;
   receivedIndex: number;
+  tid: number | null;
 };
 
 type StorageTypes = {
@@ -88,20 +89,18 @@ export class YachtGame implements DurableObject {
     });
   }
 
-  healthCheck(session: Session): void {
+  healthCheck(playerIndex: PlayerIndex): void {
+    const session = this.sessions[`player${playerIndex}`];
+    if (typeof session === 'undefined') {
+      throw Error('Invalid session');
+    }
     const { webSocket, sentIndex, receivedIndex } = session;
-    setTimeout(() => {
+    session.tid = setTimeout(() => {
       if (sentIndex > receivedIndex + 3) {
         webSocket.close(1011, 'Session timed out');
-        throw Error('Session timed out');
+        return;
       }
-      const index =
-        session === this.sessions.player1
-          ? 1
-          : session === this.sessions.player2
-          ? 2
-          : 0;
-      console.log(`Player ${index}: Sending Health ${sentIndex + 1}`);
+      console.log(`Player ${playerIndex}: Sending Health ${sentIndex + 1}`);
       webSocket.send(
         JSON.stringify({
           type: 'health',
@@ -110,7 +109,7 @@ export class YachtGame implements DurableObject {
           },
         })
       );
-      setTimeout(this.healthCheck, 5000, session);
+      this.healthCheck(playerIndex);
     }, 5000);
   }
 
@@ -144,6 +143,7 @@ export class YachtGame implements DurableObject {
       id: nanoid(),
       sentIndex: 0,
       receivedIndex: 0,
+      tid: null,
     };
     this.sessions[`player${playerIndex}`] = session;
 
@@ -159,8 +159,11 @@ export class YachtGame implements DurableObject {
       this.started = true;
     }
 
-    this.healthCheck(session);
-    await this.handleSession(session, ip, playerIndex);
+    this.healthCheck(playerIndex);
+    await this.handleSession(session, ip, playerIndex).catch(() => {
+      const session = this.sessions[`player${playerIndex}`];
+      session && clearTimeout(session.tid);
+    });
     return new Response(null, {
       status: 101,
       webSocket: client,
@@ -175,6 +178,8 @@ export class YachtGame implements DurableObject {
   ): Promise<void> {
     const { webSocket } = session;
     webSocket.addEventListener('close', async () => {
+      const session = this.sessions[`player${playerIndex}`];
+      clearTimeout(session?.tid || null);
       this.sessions[`player${playerIndex}`] = undefined;
     });
     webSocket.addEventListener('message', async (msg) => {

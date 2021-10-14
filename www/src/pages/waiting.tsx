@@ -5,7 +5,7 @@ import Layout from '~components/Layout';
 import GameContext from '~contexts/GameContext';
 
 const Waiting = ({ location }: PageProps) => {
-  const { joinSession } = useContext(GameContext);
+  const { joinSession, closeSession } = useContext(GameContext);
   useEffect(() => {
     joinSession(
       `wss://yacht-api.seokmin.workers.dev/join${location.search}`
@@ -18,6 +18,7 @@ const Waiting = ({ location }: PageProps) => {
     <Layout>
       <div>Share link:</div>
       <div>{`localhost:8000/waiting${location.search}`}</div>
+      <button onClick={() => closeSession()}>Cancel</button>
     </Layout>
   );
 };
