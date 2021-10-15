@@ -8,11 +8,7 @@ import { getApi } from '~utils/api';
 const Waiting = ({ location }: PageProps) => {
   const { joinSession, closeSession } = useContext(GameContext);
   useEffect(() => {
-    joinSession(`${getApi('websocket')}/join${location.search}`).then(
-      (success) => {
-        console.log(success ? `success` : `failed`);
-      }
-    );
+    joinSession(`${getApi('websocket')}/join${location.search}`);
   }, [location]);
 
   return (

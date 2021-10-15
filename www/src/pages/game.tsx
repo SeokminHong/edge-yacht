@@ -1,14 +1,17 @@
 import styled from '@emotion/styled';
 
 import Board from '~components/Board';
+import Layout from '~components/Layout';
 import ScoreCard from '~components/ScoreCard';
 
 const GamePage = () => {
   return (
-    <Wrapper>
-      <ScoreCard />
-      <Board />
-    </Wrapper>
+    <Layout>
+      <Wrapper>
+        <ScoreCard />
+        <Board />
+      </Wrapper>
+    </Layout>
   );
 };
 

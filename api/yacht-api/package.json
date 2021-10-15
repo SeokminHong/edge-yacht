@@ -5,7 +5,7 @@
   "module": "dist/worker.mjs",
   "scripts": {
     "build": "rollup -c",
-    "develop": "miniflare dist/worker.mjs -c=wrangler.toml",
+    "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "test": "jest --config jestconfig.json --verbose",

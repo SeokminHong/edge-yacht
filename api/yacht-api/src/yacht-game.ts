@@ -5,6 +5,8 @@ import { cors } from './response';
 // eslint-disable-next-line
 type Env = {};
 
+type GameState = 'waiting' | 'started' | 'finished';
+
 type Session = {
   webSocket: WebSocket;
   id: string;
@@ -39,7 +41,7 @@ export class YachtGame implements DurableObject {
   state: DurableObjectState;
   env: Env;
   createAt: number;
-  started: boolean;
+  gameState: GameState;
   sessions: {
     player1?: Session;
     player2?: Session;
@@ -49,7 +51,7 @@ export class YachtGame implements DurableObject {
     this.state = state;
     this.env = env;
     this.createAt = 0;
-    this.started = false;
+    this.gameState = 'waiting';
     this.sessions = {};
   }
 
@@ -120,15 +122,21 @@ export class YachtGame implements DurableObject {
 
   async handleJoin(request: Request): Promise<Response> {
     if (request.headers.get('Upgrade') !== 'websocket') {
-      throw Error('Upgrade header is not websocket');
+      return new Response('Upgrade header is not websocket', {
+        status: 400,
+      });
+    }
+
+    if (this.gameState !== 'waiting') {
+      return new Response('Game is already started', {
+        status: 403,
+      });
     }
 
     if (this.sessions.player1 && this.sessions.player2) {
-      throw Error('Game is full');
-    }
-
-    if (this.started) {
-      throw Error('Game is already started');
+      return new Response('Game is full', {
+        status: 403,
+      });
     }
 
     const ip = request.headers.get('CF-Connecting-IP');
@@ -156,7 +164,7 @@ export class YachtGame implements DurableObject {
       this.sessions.player2.webSocket.send(
         JSON.stringify({ type: 'start', payload: { playerIndex: 2 } })
       );
-      this.started = true;
+      this.gameState = 'started';
     }
 
     this.healthCheck(playerIndex);

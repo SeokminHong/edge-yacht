@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
-import { defaultDice, Dice } from '~utils/dice';
+import { navigate } from 'gatsby';
 
+import { defaultDice, Dice } from '~utils/dice';
 import { Player, EMPTY_SCORE } from '~utils/player';
 
 type Dices = { pending: Dice[]; saved: Dice[] };
@@ -38,6 +39,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       score: EMPTY_SCORE,
     },
   ]);
+  const [playerIndex, setPlayerIndex] = useState<PlayerIndex | null>(null);
   const [turn, setTurn] = useState<PlayerIndex>(1);
   const [dices, setDices] = useState<Dices>({
     pending: Array(5).fill(defaultDice),
@@ -45,21 +47,23 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const joinSession = async (url: string) => {
     const ws = new WebSocket(url);
+    setWebsocket(ws);
     ws.onclose = (e) => {
       if (e.code === 1006) {
         alert(`ws closed abruptly: ${e.reason}`);
       }
     };
-    ws.addEventListener('message', (msg) => {
+    ws.onmessage = (msg) => {
       const { type, payload } = JSON.parse(msg.data);
       switch (type) {
         case 'error': {
           console.log(payload.message);
           ws.close();
+          break;
         }
         case 'start': {
-          console.log(payload.playerIndex);
-          //setPlayerIndex(data.payload.playerIndex);
+          setPlayerIndex(payload.playerIndex);
+          navigate('/game');
           break;
         }
         case 'health': {
@@ -69,10 +73,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
               payload: { index: payload.index },
             })
           );
+          break;
         }
       }
-    });
-    setWebsocket(ws);
+    };
     return true;
   };
   const closeSession = (code: number = 1000, reason?: string) =>
