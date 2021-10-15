@@ -57,8 +57,9 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       const { type, payload } = JSON.parse(msg.data);
       switch (type) {
         case 'error': {
-          console.log(payload.message);
+          alert(payload.message);
           ws.close();
+          navigate('/');
           break;
         }
         case 'start': {

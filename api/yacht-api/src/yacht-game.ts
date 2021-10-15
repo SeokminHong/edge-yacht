@@ -29,8 +29,11 @@ async function handleErrors(request: Request, func: () => Promise<Response>) {
       server.send(
         JSON.stringify({ type: 'error', payload: { message: err.message } })
       );
-      server.close(1011, 'Uncaught exception during session setup');
-      return new Response(null, { status: 101, webSocket: client });
+      return new Response(null, {
+        status: 101,
+        webSocket: client,
+        headers: cors,
+      });
     } else {
       return new Response(err.stack, { status: 500 });
     }
@@ -122,21 +125,15 @@ export class YachtGame implements DurableObject {
 
   async handleJoin(request: Request): Promise<Response> {
     if (request.headers.get('Upgrade') !== 'websocket') {
-      return new Response('Upgrade header is not websocket', {
-        status: 400,
-      });
+      throw new Error('Upgrade header is not websocket');
     }
 
     if (this.gameState !== 'waiting') {
-      return new Response('Game is already started', {
-        status: 403,
-      });
+      throw new Error('Game is already started');
     }
 
     if (this.sessions.player1 && this.sessions.player2) {
-      return new Response('Game is full', {
-        status: 403,
-      });
+      throw new Error('Game is full');
     }
 
     const ip = request.headers.get('CF-Connecting-IP');
