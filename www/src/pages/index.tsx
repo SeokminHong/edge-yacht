@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
+import { navigate } from 'gatsby';
 import niceColors from 'nice-color-palettes';
 
 import Layout from '~components/Layout';
@@ -10,8 +11,8 @@ import Box from '~meshes/Box';
 import CanvasWrapper from '~meshes/CanvasWrapper';
 import Cup from '~meshes/Cup';
 import Plane from '~meshes/Plane';
+import { getApi } from '~utils/api';
 import { locales, isLocale } from '~utils/locale';
-import { navigate } from 'gatsby-link';
 
 const IndexPage = () => {
   const { locale, setLocale } = useContext(LocaleContext);
@@ -73,7 +74,7 @@ const IndexPage = () => {
       <Layout>
         <button
           onClick={async () => {
-            fetch(`https://yacht-api.seokmin.workers.dev/create`)
+            fetch(`${getApi('http')}/create`)
               .then((res) => res.json())
               .then((body) => {
                 console.log(body);
