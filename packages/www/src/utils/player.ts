@@ -1,5 +1,5 @@
 import { Score } from './score';
-import { PlayerIndex } from '~shared/player';
+import { PlayerIndex } from 'shared';
 
 export type Player = {
   id: PlayerIndex;

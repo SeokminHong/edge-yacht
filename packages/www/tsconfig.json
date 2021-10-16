@@ -14,8 +14,7 @@
       "~contexts/*": ["src/contexts/*"],
       "~hooks/*": ["src/hooks/*"],
       "~meshes/*": ["src/meshes/*"],
-      "~utils/*": ["src/utils/*"],
-      "~shared/*": ["../shared/*"]
+      "~utils/*": ["src/utils/*"]
     },
 
     /* Interop Constraints */
@@ -27,6 +26,5 @@
 
     /* Completeness */
     "skipLibCheck": true
-  },
-  "references": [{ "path": "../shared" }]
+  }
 }

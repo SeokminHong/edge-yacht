@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { navigate } from 'gatsby';
+import { PlayerIndex } from 'shared';
 
-import { PlayerIndex } from '~shared/player';
 import { defaultDice, Dice } from '~utils/dice';
 import { Player, EMPTY_SCORE } from '~utils/player';
 

@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { PlayerIndex } from 'shared';
 
 import GameContext from '~contexts/GameContext';
 import { Player } from '~utils/player';

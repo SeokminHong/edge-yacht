@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "description": "Yacht game on the edge",
-  "author": "Seokmin Hong",
+  "repository": "git@github.com:SeokminHong/edge-yacht.git",
+  "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "keywords": [
     "gatsby"
   ],
