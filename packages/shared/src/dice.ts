@@ -1,7 +1,17 @@
-export type DiceNumber = 1 | 2 | 3 | 4 | 5 | 6;
+export type DiceValue = 1 | 2 | 3 | 4 | 5 | 6;
 
-export type Dice = DiceNumber | null;
+export class Dice {
+  id: number;
+  value: DiceValue;
 
-export const rollDice = () => (Math.floor(Math.random() * 6) + 1) as DiceNumber;
+  constructor(id: number, value: DiceValue) {
+    this.id = id;
+    this.value = value;
+  }
 
-export const defaultDice: Dice = null;
+  roll(): void {
+    this.value = (Math.floor(Math.random() * 6) + 1) as DiceValue;
+  }
+}
+
+export const rollDice = () => (Math.floor(Math.random() * 6) + 1) as DiceValue;

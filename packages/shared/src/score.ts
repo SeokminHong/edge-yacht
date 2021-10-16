@@ -16,11 +16,10 @@ export const LOWER_SECTION = [
   'Yacht',
 ] as const;
 
-type UpperSection = typeof UPPER_SECTION[number];
-type LowerSection = typeof LOWER_SECTION[number];
-export type Score = { [K in UpperSection]: number | null } & {
-  [K in LowerSection]: number | null;
-} & {
+export type UpperSection = typeof UPPER_SECTION[number];
+export type LowerSection = typeof LOWER_SECTION[number];
+export type Sections = UpperSection | LowerSection;
+export type Score = { [K in Sections]: number | null } & {
   Bonus: number | null;
 };
 
@@ -38,10 +37,8 @@ const getCounts = (dice: number[]) => {
   );
 };
 
-export const scoreFunctions: {
-  [K in UpperSection]: (dice: number[]) => number;
-} & {
-  [K in LowerSection]: (dice: number[]) => number;
+const scoreFunctions: {
+  [K in Sections]: (dice: number[]) => number;
 } = {
   Aces: (dice: number[]) => calcScoreFor(dice, 1),
   Twos: (dice: number[]) => calcScoreFor(dice, 2),
@@ -100,3 +97,19 @@ export const scoreFunctions: {
     }
   },
 };
+const scoreFunctionsValidated = Object.entries(scoreFunctions).reduce(
+  (acc, [section, func]) => {
+    return {
+      ...acc,
+      [section]: (dice: number[]) => {
+        if (dice.length !== 5) {
+          return null;
+        }
+        func(dice);
+      },
+    };
+  },
+  {} as { [K in Sections]: (dice: number[]) => number | null }
+);
+
+export { scoreFunctionsValidated as scoreFunctions };
