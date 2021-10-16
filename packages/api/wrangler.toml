@@ -9,14 +9,13 @@ workers_dev = true
 command = "yarn install && yarn build"
 [build.upload]
 format = "modules"
-main = "./worker.js"
+main = "./worker.mjs"
 
 [durable_objects]
 bindings = [
-#    { name = "yachtGame", class_name = "YachtGame" }
-    {name = "hello", class_name = "Hello"}
+    { name = "yachtGame", class_name = "YachtGame" }
 ]
 
-#[[migrations]]
-#tag = "v1"
-#new_classes = ["YachtGame"]
+[[migrations]]
+tag = "v1"
+new_classes = ["YachtGame"]

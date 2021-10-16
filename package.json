@@ -11,6 +11,9 @@
   "scripts": {
     "postinstall": "patch-package"
   },
+  "dependencies": {
+    "shared": "file:packages/shared"
+  },
   "devDependencies": {
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",

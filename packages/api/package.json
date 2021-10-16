@@ -2,12 +2,13 @@
   "name": "yacht-api",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
-  "main": "dist/worker.js",
+  "module": "dist/mjs",
   "scripts": {
-    "build": "webpack",
-    "develop": "miniflare dist/worker.js -c=wrangler.toml -w",
+    "build": "rollup -c",
+    "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
+    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "postinstall": "yarn --cwd ../.. postinstall"
   },
   "author": "author",
   "license": "MIT OR Apache-2.0",

@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
-    "composite": true,
+    "outDir": "./dist",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "alwaysStrict": true,
     "declaration": true,
-    "declarationMap": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
     "sourceMap": true,
-    "baseUrl": ".",
-    "rootDir": "."
-  }
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

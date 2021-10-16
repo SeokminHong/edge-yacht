@@ -10,13 +10,8 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "types": ["@cloudflare/workers-types"],
-    "baseUrl": "./",
-    "paths": {
-      "~shared/*": ["../shared/*"]
-    },
-    "rootDirs": [".", "../shared"]
+    "baseUrl": "./"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "test"],
-  "references": [{ "path": "../shared" }]
+  "exclude": ["node_modules", "dist", "test"]
 }
