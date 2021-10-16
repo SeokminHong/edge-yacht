@@ -6,9 +6,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "api",
-    "shared",
-    "www"
+    "packages/*"
   ],
   "scripts": {
     "postinstall": "patch-package"
