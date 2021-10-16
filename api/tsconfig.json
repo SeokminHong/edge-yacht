@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types", "../../shared"]
+    "types": ["@cloudflare/workers-types", "../shared"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "test"]

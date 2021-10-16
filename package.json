@@ -1,0 +1,13 @@
+{
+  "name": "edge-yahtzee",
+  "version": "1.0.0",
+  "repository": "git@github.com:SeokminHong/edge-yacht.git",
+  "author": "Seokmin Hong <ghdtjrals240@naver.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "api",
+    "shared",
+    "www"
+  ]
+}
