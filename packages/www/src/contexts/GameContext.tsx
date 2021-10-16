@@ -1,11 +1,7 @@
 import { createContext, useState } from 'react';
 import { navigate } from 'gatsby';
-import { PlayerIndex } from 'shared';
+import { PlayerIndex, Player, EMPTY_SCORE, defaultDice, Dice } from 'shared';
 
-import { defaultDice, Dice } from '~utils/dice';
-import { Player, EMPTY_SCORE } from '~utils/player';
-
-type T = {};
 type Dices = { pending: Dice[]; saved: Dice[] };
 
 const GameContext = createContext<{

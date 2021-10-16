@@ -8,7 +8,7 @@
     "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "postinstall": "yarn --cwd ../.. postinstall"
+    "postinstall": "yarn --cwd ../.. patch-package"
   },
   "repository": "git@github.com:SeokminHong/edge-yacht.git",
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",

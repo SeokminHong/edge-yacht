@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "patch-package"
+    "postinstall": "patch-package && yarn --cwd packages/shared link && yarn link shared"
   },
   "dependencies": {
     "shared": "file:packages/shared"

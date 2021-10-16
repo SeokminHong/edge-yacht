@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import GameContext from '~contexts/GameContext';
-
-import { usePlayer } from '~hooks/player';
-import { DiceNumber } from '~utils/dice';
 import {
   UPPER_SECTION,
   LOWER_SECTION,
   Score,
   scoreFunctions,
-} from '~utils/score';
+  DiceNumber,
+} from 'shared';
+
+import GameContext from '~contexts/GameContext';
+import { usePlayer } from '~hooks/player';
 
 const ScoreRow = ({ score }: { score: keyof Score }) => {
   const { player } = usePlayer(1);

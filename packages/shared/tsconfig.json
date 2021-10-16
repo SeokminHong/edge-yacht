@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "esnext",
-    "lib": ["esnext"],
     "alwaysStrict": true,
     "declaration": true,
-    "strict": true,
-    "preserveConstEnums": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "esModuleInterop": true
+    "strict": true
   },
-  "include": ["./src"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
