@@ -5,6 +5,10 @@ interface Env {
   yachtGame: DurableObjectNamespace;
 }
 
+export class Hello {
+  async fetch() {}
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);

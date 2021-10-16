@@ -5,6 +5,7 @@ import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
+import alias from '@rollup/plugin-alias';
 
 export default {
   input: 'src/index.ts',
@@ -14,5 +15,13 @@ export default {
     file: 'dist/worker.mjs',
     sourcemap: true,
   },
-  plugins: [typescript(), commonjs(), nodeResolve({ browser: true }), terser()],
+  plugins: [
+    alias({
+      entries: [{ find: '~shared', replacement: '../shared' }],
+    }),
+    typescript(),
+    commonjs(),
+    nodeResolve({ browser: true }),
+    terser(),
+  ],
 };

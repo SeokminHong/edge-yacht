@@ -2,10 +2,10 @@
   "name": "yacht-api",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
-  "module": "dist/worker.mjs",
+  "main": "dist/worker.js",
   "scripts": {
-    "build": "rollup -c",
-    "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
+    "build": "webpack",
+    "develop": "miniflare dist/worker.js -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
   },
@@ -21,12 +21,23 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
+    "@rollup/plugin-alias": "^3.1.5",
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-typescript": "^8.2.5",
+    "@swc/core": "^1.2.97",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-typescript": "^3.0.0",
     "miniflare": "^1.4.1",
     "rollup": "^2.58.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "swc-loader": "^0.1.15",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0"
   },
   "dependencies": {
     "nanoid": "^3.1.29"
