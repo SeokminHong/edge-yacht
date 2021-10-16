@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import { cors } from './response';
+import { PlayerIndex } from '~shared/player';
 
 // eslint-disable-next-line
 type Env = {};

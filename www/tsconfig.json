@@ -4,7 +4,7 @@
     "target": "ES2020",
     "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "types": ["node", "../shared"],
+    "types": ["node"],
 
     /* Modules */
     "module": "commonjs",
@@ -14,7 +14,8 @@
       "~contexts/*": ["src/contexts/*"],
       "~hooks/*": ["src/hooks/*"],
       "~meshes/*": ["src/meshes/*"],
-      "~utils/*": ["src/utils/*"]
+      "~utils/*": ["src/utils/*"],
+      "~shared/*": ["../shared/*"]
     },
 
     /* Interop Constraints */
@@ -26,5 +27,6 @@
 
     /* Completeness */
     "skipLibCheck": true
-  }
+  },
+  "references": [{ "path": "../shared" }]
 }

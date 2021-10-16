@@ -21,6 +21,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         '~hooks': path.resolve(__dirname, 'src/hooks'),
         '~meshes': path.resolve(__dirname, 'src/meshes'),
         '~utils': path.resolve(__dirname, 'src/utils'),
+        '~shared': path.resolve(__dirname, '../shared'),
       },
     },
   });
