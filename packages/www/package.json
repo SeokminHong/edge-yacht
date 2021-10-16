@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "description": "Yacht game on the edge",
-  "author": "Seokmin Hong",
+  "repository": "git@github.com:SeokminHong/edge-yacht.git",
+  "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "keywords": [
     "gatsby"
   ],
@@ -38,8 +39,6 @@
     "three-stdlib": "^2.4.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "^2.2.7",
-    "prettier": "^2.4.1",
-    "typescript": "^4.4.3"
+    "@types/js-cookie": "^2.2.7"
   }
 }

@@ -1,19 +1,20 @@
 {
-  "name": "worker-typescript-template",
+  "name": "yacht-api",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
-  "module": "dist/worker.mjs",
+  "module": "dist/mjs",
   "scripts": {
     "build": "rollup -c",
     "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "test": "jest --config jestconfig.json --verbose",
-    "postinstall": "patch-package"
+    "postinstall": "yarn --cwd ../.. postinstall"
   },
-  "author": "author",
+  "repository": "git@github.com:SeokminHong/edge-yacht.git",
+  "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
+    "parser": "babel-eslint",
     "root": true,
     "extends": [
       "typescript",
@@ -25,19 +26,15 @@
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-typescript": "^8.2.5",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-typescript": "^3.0.0",
     "miniflare": "^1.4.1",
-    "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
-    "prettier": "^2.3.0",
     "rollup": "^2.58.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "shared": "file:../../shared",
-    "typescript": "^4.3.2"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "nanoid": "^3.1.29"

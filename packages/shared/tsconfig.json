@@ -4,13 +4,13 @@
     "target": "esnext",
     "lib": ["esnext"],
     "alwaysStrict": true,
+    "declaration": true,
     "strict": true,
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types", "../../shared"]
+    "esModuleInterop": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "test"]
+  "include": ["./src"],
+  "exclude": ["node_modules", "dist"]
 }
