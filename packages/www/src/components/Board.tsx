@@ -1,45 +1,31 @@
 import { useContext } from 'react';
-import { rollDice } from 'shared';
 
 import GameContext from '~contexts/GameContext';
 
 const Board = () => {
-  const { dices, setDices } = useContext(GameContext);
-  const rollDices = () => {
-    const newDices = dices.pending.map(() => rollDice());
-    setDices({ ...dices, pending: newDices });
-  };
-  const SaveDice = (index: number) => {
-    const newDices = {
-      pending: dices.pending.filter((_, i) => i !== index),
-      saved: [...dices.saved, dices.pending[index]],
-    };
-    setDices(newDices);
-  };
-  const UnsaveDice = (index: number) => {
-    const newDices = {
-      pending: [...dices.pending, dices.saved[index]],
-      saved: dices.saved.filter((_, i) => i !== index),
-    };
-    setDices(newDices);
-  };
+  const { game, saveDice, loadDice, rollDices } = useContext(GameContext);
+  const { boardDices, savedDices, rolled } = game;
 
   return (
     <div>
-      {dices.pending.map((d, idx) => {
+      {boardDices.map(({ id, value }) => {
         return (
-          <div key={`dice-${idx}`}>
-            {d}
-            <button onClick={() => SaveDice(idx)}>Save</button>
+          <div key={`dice-${id}`}>
+            {value}
+            <button {...{ disabled: !rolled }} onClick={() => saveDice(id)}>
+              Save
+            </button>
           </div>
         );
       })}
       <hr />
-      {dices.saved.map((d, idx) => {
+      {savedDices.map(({ id, value }) => {
         return (
-          <div key={`saved-${idx}`}>
-            {d}
-            <button onClick={() => UnsaveDice(idx)}>Unsave</button>
+          <div key={`saved-${id}`}>
+            {value}
+            <button {...{ disabled: !rolled }} onClick={() => loadDice(id)}>
+              Unsave
+            </button>
           </div>
         );
       })}

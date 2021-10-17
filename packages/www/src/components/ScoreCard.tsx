@@ -1,40 +1,56 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import {
-  UPPER_SECTION,
-  LOWER_SECTION,
-  Score,
-  scoreFunctions,
-  DiceNumber,
-} from 'shared';
+import { UPPER_SECTION, LOWER_SECTION, Score, scoreFunctions } from 'shared';
 
 import GameContext from '~contexts/GameContext';
-import { usePlayer } from '~hooks/player';
 
 const ScoreRow = ({ score }: { score: keyof Score }) => {
-  const { player } = usePlayer(1);
-  const { dices } = useContext(GameContext);
+  let { game, playerIndex, select } = useContext(GameContext);
+  const { players, boardDices, savedDices, rolled } = game;
 
-  let scoreValue = player.score[score];
-  const confirmed = scoreValue !== null;
-  if (scoreValue === null) {
-    const allDices = dices.pending.concat(dices.saved);
-    if (!allDices.includes(null)) {
-      if (score !== 'Bonus') {
-        scoreValue = scoreFunctions[score](allDices as DiceNumber[]);
-      }
+  if (!playerIndex) {
+    return <></>;
+  }
+
+  const scoreValue = players[playerIndex - 1].score[score];
+  let calculatedScore = 0;
+  if (rolled && scoreValue === null) {
+    const allDices = boardDices.concat(savedDices).map((d) => d.value);
+    if (score !== 'Bonus') {
+      calculatedScore = scoreFunctions[score](allDices) ?? 0;
     }
   }
 
   return (
-    <tr>
+    <tr style={{ position: 'relative' }}>
+      <OverlayButton
+        className={rolled ? 'rolled' : ''}
+        onClick={score !== 'Bonus' ? () => select(score) : undefined}
+      ></OverlayButton>
       <td>{score}</td>
-      <ScoreColumn {...(confirmed && { className: 'confirmed' })}>
-        {player.score[score] || scoreValue}
+      <ScoreColumn {...(scoreValue !== null && { className: 'confirmed' })}>
+        {scoreValue ?? calculatedScore}
       </ScoreColumn>
     </tr>
   );
 };
+
+const OverlayButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+
+  &.rolled {
+    cursor: pointer;
+  }
+`;
 
 const ScoreCard = () => {
   return (

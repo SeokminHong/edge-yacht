@@ -25,8 +25,8 @@ export const DEFAULT_GAME: IGame = {
   ],
   savedDices: [],
   players: [
-    { id: 1, score: EMPTY_SCORE },
-    { id: 2, score: EMPTY_SCORE },
+    { id: 1, score: { ...EMPTY_SCORE } },
+    { id: 2, score: { ...EMPTY_SCORE } },
   ],
   rolled: false,
 };

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { navigate } from 'gatsby';
 import {
   IGame,
@@ -8,6 +8,8 @@ import {
   isError,
   isHealth,
   isStart,
+  isUpdate,
+  Sections,
 } from 'shared';
 
 const GameContext = createContext<{
@@ -15,11 +17,19 @@ const GameContext = createContext<{
   closeSession: (code?: number, reason?: string) => void;
   playerIndex: PlayerIndex | null;
   game: IGame;
+  saveDice: (diceId: number) => void;
+  loadDice: (diceId: number) => void;
+  rollDices: () => void;
+  select: (section: Sections) => void;
 }>({
   joinSession: async () => false,
   closeSession: () => {},
   playerIndex: null,
   game: DEFAULT_GAME,
+  saveDice: () => {},
+  loadDice: () => {},
+  rollDices: () => {},
+  select: () => {},
 });
 export default GameContext;
 
@@ -53,12 +63,25 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         setPlayerIndex(data.payload.playerIndex);
         setGame(data.payload.game);
         navigate('/game');
+      } else if (isUpdate(data)) {
+        setGame(data.payload.game);
       }
     };
     return true;
   };
   const closeSession = (code: number = 1000, reason?: string) =>
     webSocket && webSocket.close(code, reason);
+  const saveDice = (diceId: number) =>
+    webSocket &&
+    webSocket.send(JSON.stringify({ type: 'save', payload: { diceId } }));
+  const loadDice = (diceId: number) =>
+    webSocket &&
+    webSocket.send(JSON.stringify({ type: 'load', payload: { diceId } }));
+  const rollDices = () =>
+    webSocket && webSocket.send(JSON.stringify({ type: 'roll' }));
+  const select = (section: Sections) =>
+    webSocket &&
+    webSocket.send(JSON.stringify({ type: 'select', payload: { section } }));
 
   return (
     <GameContext.Provider
@@ -67,9 +90,15 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         closeSession,
         playerIndex,
         game,
+        saveDice,
+        loadDice,
+        rollDices,
+        select,
       }}
     >
       {children}
     </GameContext.Provider>
   );
 };
+
+export const useGame = () => useContext(GameContext).game;

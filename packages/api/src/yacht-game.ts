@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 
 import { Game } from './game';
 import { cors } from './response';
-import { PlayerIndex, getOpponent } from 'shared';
+import { PlayerIndex, getOpponent, DEFAULT_GAME } from 'shared';
 
 // eslint-disable-next-line
 type Env = {};
@@ -67,6 +67,15 @@ export class YachtGame implements DurableObject {
         }
       }
     });
+  }
+
+  updateGame(): void {
+    this.sendAll(
+      JSON.stringify({
+        type: 'update',
+        payload: { game: this.game },
+      })
+    );
   }
 
   sendAll(msg: string): void {
@@ -138,13 +147,13 @@ export class YachtGame implements DurableObject {
       this.sessions.player1.webSocket.send(
         JSON.stringify({
           type: 'start',
-          payload: { playerIndex: 1, game: this.game.toString() },
+          payload: { playerIndex: 1, game: this.game },
         })
       );
       this.sessions.player2.webSocket.send(
         JSON.stringify({
           type: 'start',
-          payload: { playerIndex: 2, game: this.game.toString() },
+          payload: { playerIndex: 2, game: this.game },
         })
       );
       this.game.start();
@@ -195,22 +204,22 @@ export class YachtGame implements DurableObject {
         }
         case 'roll': {
           this.game.roll(playerIndex);
-          this.sendAll(this.game.toString());
+          this.updateGame();
           break;
         }
         case 'save': {
           this.game.save(playerIndex, payload.diceId);
-          this.sendAll(this.game.toString());
+          this.updateGame();
           break;
         }
         case 'load': {
           this.game.load(playerIndex, payload.diceId);
-          this.sendAll(this.game.toString());
+          this.updateGame();
           break;
         }
         case 'select': {
           this.game.select(playerIndex, payload.section);
-          this.sendAll(this.game.toString());
+          this.updateGame();
           break;
         }
         default: {

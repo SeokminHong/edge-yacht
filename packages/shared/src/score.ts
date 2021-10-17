@@ -121,7 +121,7 @@ const scoreFunctionsValidated = Object.entries(scoreFunctions).reduce(
         if (dice.length !== 5) {
           return null;
         }
-        func(dice);
+        return func(dice);
       },
     };
   },

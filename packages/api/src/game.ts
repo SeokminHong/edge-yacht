@@ -1,7 +1,7 @@
 import {
   GameState,
   IGame,
-  DEFAULT_GAME,
+  EMPTY_SCORE,
   PlayerIndex,
   Player,
   Dice,
@@ -20,12 +20,21 @@ export class Game implements IGame {
   rolled: boolean;
 
   constructor() {
-    this.state = DEFAULT_GAME.state;
-    this.currentPlayer = DEFAULT_GAME.currentPlayer;
-    this.boardDices = DEFAULT_GAME.boardDices;
-    this.savedDices = DEFAULT_GAME.savedDices;
-    this.players = DEFAULT_GAME.players;
-    this.rolled = DEFAULT_GAME.rolled;
+    this.state = 'waiting';
+    (this.currentPlayer = 1),
+      (this.boardDices = [
+        { id: 1, value: 1 },
+        { id: 2, value: 1 },
+        { id: 3, value: 1 },
+        { id: 4, value: 1 },
+        { id: 5, value: 1 },
+      ]);
+    (this.savedDices = []),
+      (this.players = [
+        { id: 1, score: { ...EMPTY_SCORE } },
+        { id: 2, score: { ...EMPTY_SCORE } },
+      ]);
+    this.rolled = false;
   }
 
   start() {
@@ -55,6 +64,9 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
+    if (!this.rolled) {
+      throw new Error('You must roll the dice first');
+    }
 
     const dice = this.boardDices.find((dice) => dice.id === id);
     if (!dice) {
@@ -71,6 +83,9 @@ export class Game implements IGame {
     }
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
+    }
+    if (!this.rolled) {
+      throw new Error('You must roll the dice first');
     }
 
     const dice = this.savedDices.find((dice) => dice.id === id);
@@ -89,6 +104,9 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
+    if (!this.rolled) {
+      throw new Error('You must roll the dice first');
+    }
 
     const diceValues = [
       ...this.boardDices.map((dice) => dice.value),
@@ -98,14 +116,15 @@ export class Game implements IGame {
     if (!score) {
       throw new Error(`Score is invalid`);
     }
-    this.players[player].score[section] = score;
+    this.players[player - 1].score[section] = score;
 
     // TODO: Update bonus
-  }
 
-  changeTurn() {
+    // Change turn
     this.rolled = false;
     this.currentPlayer = getOpponent(this.currentPlayer);
+    this.savedDices.forEach((dice) => this.boardDices.push(dice));
+    this.savedDices = [];
   }
 
   toString(): string {

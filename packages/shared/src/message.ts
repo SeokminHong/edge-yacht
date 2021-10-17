@@ -12,6 +12,9 @@ export type PayloadTypes = {
     playerIndex: PlayerIndex;
     game: IGame;
   };
+  update: {
+    game: IGame;
+  };
 };
 
 export type ActionTypes = keyof PayloadTypes;
@@ -29,3 +32,6 @@ export const isHealth = (data: DataType): data is DataType<'health'> =>
 
 export const isStart = (data: DataType): data is DataType<'start'> =>
   data.type === 'start';
+
+export const isUpdate = (data: DataType): data is DataType<'update'> =>
+  data.type === 'update';
