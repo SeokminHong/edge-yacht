@@ -1,27 +1,19 @@
 import { createContext, useState } from 'react';
 import { navigate } from 'gatsby';
-import { PlayerIndex, Player, EMPTY_SCORE, Dice } from 'shared';
+import { IGame, PlayerIndex, Player, EMPTY_SCORE, Dice } from 'shared';
 
 type Dices = { boardDices: Dice[]; savedDices: Dice[] };
 
 const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
   closeSession: (code?: number, reason?: string) => void;
-  players: Player[];
-  setPlayers: (_: Player[]) => void;
-  turn: PlayerIndex;
-  setTurn: (_: PlayerIndex) => void;
-  dices: Dices;
-  setDices: (_: Dices) => void;
+  game: IGame;
 }>({
   joinSession: async () => false,
   closeSession: () => {},
-  players: [],
-  setPlayers: () => {},
-  turn: 1,
-  setTurn: () => {},
-  dices: { boardDices: [], savedDices: [] },
-  setDices: () => {},
+  game: {
+    state: 'waiting',
+  },
 });
 export default GameContext;
 

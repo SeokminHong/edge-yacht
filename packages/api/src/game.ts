@@ -1,4 +1,7 @@
 import {
+  GameState,
+  IGame,
+  DEFAULT_GAME,
   PlayerIndex,
   Player,
   Dice,
@@ -8,9 +11,7 @@ import {
   rollDice,
 } from 'shared';
 
-export type GameState = 'waiting' | 'playing' | 'finished';
-
-export class Game {
+export class Game implements IGame {
   state: GameState;
   currentPlayer: PlayerIndex;
   boardDices: Dice[];

@@ -23,6 +23,22 @@ export type Score = { [K in Sections]: number | null } & {
   Bonus: number | null;
 };
 
+export const EMPTY_SCORE: Score = {
+  Aces: null,
+  Twos: null,
+  Threes: null,
+  Fours: null,
+  Fives: null,
+  Sixes: null,
+  Chance: null,
+  'Four of a Kind': null,
+  'Full House': null,
+  'Small Straight': null,
+  'Large Straight': null,
+  Yacht: null,
+  Bonus: null,
+};
+
 const calcScoreFor = (dice: number[], value: number) => {
   const count = dice.filter((d) => d === value).length;
   return count * value;
