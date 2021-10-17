@@ -7,8 +7,8 @@ import {
   Dice,
   Sections,
   scoreFunctions,
-  EMPTY_SCORE,
   rollDice,
+  getOpponent,
 } from 'shared';
 
 export class Game implements IGame {
@@ -17,22 +17,15 @@ export class Game implements IGame {
   boardDices: Dice[];
   savedDices: Dice[];
   players: Player[];
+  rolled: boolean;
 
   constructor() {
-    this.state = 'waiting';
-    this.currentPlayer = 1;
-    this.boardDices = [
-      { id: 1, value: 1 },
-      { id: 2, value: 1 },
-      { id: 3, value: 1 },
-      { id: 4, value: 1 },
-      { id: 5, value: 1 },
-    ];
-    this.savedDices = [];
-    this.players = [
-      { id: 1, score: EMPTY_SCORE },
-      { id: 2, score: EMPTY_SCORE },
-    ];
+    this.state = DEFAULT_GAME.state;
+    this.currentPlayer = DEFAULT_GAME.currentPlayer;
+    this.boardDices = DEFAULT_GAME.boardDices;
+    this.savedDices = DEFAULT_GAME.savedDices;
+    this.players = DEFAULT_GAME.players;
+    this.rolled = DEFAULT_GAME.rolled;
   }
 
   start() {
@@ -46,6 +39,8 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
+
+    this.rolled = true;
 
     this.boardDices = this.boardDices.map(({ id }) => ({
       id,
@@ -106,6 +101,11 @@ export class Game implements IGame {
     this.players[player].score[section] = score;
 
     // TODO: Update bonus
+  }
+
+  changeTurn() {
+    this.rolled = false;
+    this.currentPlayer = getOpponent(this.currentPlayer);
   }
 
   toString(): string {
