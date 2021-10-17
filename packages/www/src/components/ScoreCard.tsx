@@ -53,6 +53,15 @@ const OverlayButton = styled.button`
 `;
 
 const ScoreCard = () => {
+  const { game, playerIndex } = useContext(GameContext);
+  const { players } = game;
+  let total = 0;
+  if (playerIndex) {
+    total = Object.entries(players[playerIndex - 1].score).reduce(
+      (acc, [, score]) => acc + (score ?? 0),
+      0
+    );
+  }
   return (
     <Table>
       <tbody>
@@ -63,6 +72,10 @@ const ScoreCard = () => {
         {LOWER_SECTION.map((s) => (
           <ScoreRow key={`score-${s}`} score={s} />
         ))}
+        <tr>
+          <td>Total</td>
+          <td>{total}</td>
+        </tr>
       </tbody>
     </Table>
   );
