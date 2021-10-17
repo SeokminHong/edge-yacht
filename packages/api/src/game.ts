@@ -9,6 +9,7 @@ import {
   scoreFunctions,
   rollDice,
   getOpponent,
+  UPPER_SECTION,
 } from 'shared';
 
 export class Game implements IGame {
@@ -118,7 +119,14 @@ export class Game implements IGame {
     }
     this.players[player - 1].score[section] = score;
 
-    // TODO: Update bonus
+    // Update bonus
+    const upperSum = UPPER_SECTION.reduce(
+      (sum, section) => sum + (this.players[player - 1].score[section] ?? 0),
+      0
+    );
+    if (upperSum >= 63) {
+      this.players[player - 1].score.Bonus = 35;
+    }
 
     // Change turn
     this.rollCount = 0;
