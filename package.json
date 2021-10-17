@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "patch-package && yarn --cwd packages/shared build && yarn --cwd packages/shared link && yarn link shared",
+    "postinstall": "yarn --cwd packages/shared build && yarn --cwd packages/shared link && yarn link shared",
     "develop": "yarn --cwd packages/shared build && yarn concurrently \"yarn --cwd packages/api develop\" \"yarn --cwd packages/www develop\""
   },
   "dependencies": {
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "concurrently": "^6.3.0",
-    "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.4.1",
     "typescript": "^4.4.4"

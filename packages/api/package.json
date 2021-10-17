@@ -7,8 +7,7 @@
     "build": "rollup -c",
     "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "postinstall": "yarn --cwd ../.. patch-package"
+    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
   },
   "repository": "git@github.com:SeokminHong/edge-yacht.git",
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
@@ -22,7 +21,7 @@
     ]
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^2.2.2",
+    "@cloudflare/workers-types": "^3.0.0",
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-typescript": "^8.2.5",
