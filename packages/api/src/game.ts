@@ -17,7 +17,7 @@ export class Game implements IGame {
   boardDices: Dice[];
   savedDices: Dice[];
   players: Player[];
-  rolled: boolean;
+  rollCount: number;
 
   constructor() {
     this.state = 'waiting';
@@ -34,7 +34,7 @@ export class Game implements IGame {
         { id: 1, score: { ...EMPTY_SCORE } },
         { id: 2, score: { ...EMPTY_SCORE } },
       ]);
-    this.rolled = false;
+    this.rollCount = 0;
   }
 
   start() {
@@ -49,7 +49,7 @@ export class Game implements IGame {
       throw new Error(`It is not Player ${player}'s turn`);
     }
 
-    this.rolled = true;
+    this.rollCount++;
 
     this.boardDices = this.boardDices.map(({ id }) => ({
       id,
@@ -64,7 +64,7 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
-    if (!this.rolled) {
+    if (this.rollCount === 0) {
       throw new Error('You must roll the dice first');
     }
 
@@ -84,7 +84,7 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
-    if (!this.rolled) {
+    if (this.rollCount === 0) {
       throw new Error('You must roll the dice first');
     }
 
@@ -104,7 +104,7 @@ export class Game implements IGame {
     if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
-    if (!this.rolled) {
+    if (this.rollCount === 0) {
       throw new Error('You must roll the dice first');
     }
 
@@ -113,7 +113,7 @@ export class Game implements IGame {
       ...this.savedDices.map((dice) => dice.value),
     ];
     const score = scoreFunctions[section](diceValues);
-    if (!score) {
+    if (score === null) {
       throw new Error(`Score is invalid`);
     }
     this.players[player - 1].score[section] = score;
@@ -121,7 +121,7 @@ export class Game implements IGame {
     // TODO: Update bonus
 
     // Change turn
-    this.rolled = false;
+    this.rollCount = 0;
     this.currentPlayer = getOpponent(this.currentPlayer);
     this.savedDices.forEach((dice) => this.boardDices.push(dice));
     this.savedDices = [];

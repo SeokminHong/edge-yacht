@@ -4,9 +4,11 @@ import { UPPER_SECTION, LOWER_SECTION, Score, scoreFunctions } from 'shared';
 
 import GameContext from '~contexts/GameContext';
 
+// TODO: Change table into CSS grid
+
 const ScoreRow = ({ score }: { score: keyof Score }) => {
   let { game, playerIndex, select } = useContext(GameContext);
-  const { players, boardDices, savedDices, rolled } = game;
+  const { players, boardDices, savedDices, rollCount, currentPlayer } = game;
 
   if (!playerIndex) {
     return <></>;
@@ -14,19 +16,24 @@ const ScoreRow = ({ score }: { score: keyof Score }) => {
 
   const scoreValue = players[playerIndex - 1].score[score];
   let calculatedScore = 0;
-  if (rolled && scoreValue === null) {
+  if (rollCount > 0 && scoreValue === null) {
     const allDices = boardDices.concat(savedDices).map((d) => d.value);
     if (score !== 'Bonus') {
       calculatedScore = scoreFunctions[score](allDices) ?? 0;
     }
   }
 
+  const clickable =
+    currentPlayer === playerIndex && rollCount > 0 && score !== 'Bonus';
+
   return (
     <tr style={{ position: 'relative' }}>
       <OverlayButton
-        className={rolled ? 'rolled' : ''}
-        onClick={score !== 'Bonus' ? () => select(score) : undefined}
-      ></OverlayButton>
+        {...(clickable && {
+          onClick: () => select(score),
+          className: 'clickable',
+        })}
+      />
       <td>{score}</td>
       <ScoreColumn {...(scoreValue !== null && { className: 'confirmed' })}>
         {scoreValue ?? calculatedScore}
@@ -47,7 +54,7 @@ const OverlayButton = styled.button`
   width: 100%;
   height: 100%;
 
-  &.rolled {
+  &.clickable {
     cursor: pointer;
   }
 `;

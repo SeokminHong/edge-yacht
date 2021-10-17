@@ -10,7 +10,7 @@ export interface IGame {
   boardDices: Dice[];
   savedDices: Dice[];
   players: Player[];
-  rolled: boolean;
+  rollCount: number;
 }
 
 export const DEFAULT_GAME: IGame = {
@@ -28,5 +28,5 @@ export const DEFAULT_GAME: IGame = {
     { id: 1, score: { ...EMPTY_SCORE } },
     { id: 2, score: { ...EMPTY_SCORE } },
   ],
-  rolled: false,
+  rollCount: 0,
 };
