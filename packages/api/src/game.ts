@@ -5,26 +5,27 @@ import {
   Sections,
   scoreFunctions,
   EMPTY_SCORE,
+  rollDice,
 } from 'shared';
 
-export type GameState = 'waiting' | 'started' | 'finished';
+export type GameState = 'waiting' | 'playing' | 'finished';
 
 export class Game {
   state: GameState;
-  turn: PlayerIndex;
+  currentPlayer: PlayerIndex;
   boardDices: Dice[];
   savedDices: Dice[];
   players: Player[];
 
   constructor() {
     this.state = 'waiting';
-    this.turn = 1;
+    this.currentPlayer = 1;
     this.boardDices = [
-      new Dice(1, 1),
-      new Dice(2, 1),
-      new Dice(3, 1),
-      new Dice(4, 1),
-      new Dice(5, 1),
+      { id: 1, value: 1 },
+      { id: 2, value: 1 },
+      { id: 3, value: 1 },
+      { id: 4, value: 1 },
+      { id: 5, value: 1 },
     ];
     this.savedDices = [];
     this.players = [
@@ -34,25 +35,28 @@ export class Game {
   }
 
   start() {
-    this.state = 'started';
+    this.state = 'playing';
   }
 
   roll(player: PlayerIndex) {
-    if (this.state !== 'started') {
+    if (this.state !== 'playing') {
       throw new Error('Game is not started');
     }
-    if (player !== this.turn) {
+    if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
 
-    this.boardDices.forEach((dice) => dice.roll());
+    this.boardDices = this.boardDices.map(({ id }) => ({
+      id,
+      value: rollDice(),
+    }));
   }
 
   save(player: PlayerIndex, id: number) {
-    if (this.state !== 'started') {
+    if (this.state !== 'playing') {
       throw new Error('Game is not started');
     }
-    if (player !== this.turn) {
+    if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
 
@@ -66,10 +70,10 @@ export class Game {
   }
 
   load(player: PlayerIndex, id: number) {
-    if (this.state !== 'started') {
+    if (this.state !== 'playing') {
       throw new Error('Game is not started');
     }
-    if (player !== this.turn) {
+    if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
 
@@ -83,10 +87,10 @@ export class Game {
   }
 
   select(player: PlayerIndex, section: Sections) {
-    if (this.state !== 'started') {
+    if (this.state !== 'playing') {
       throw new Error('Game is not started');
     }
-    if (player !== this.turn) {
+    if (player !== this.currentPlayer) {
       throw new Error(`It is not Player ${player}'s turn`);
     }
 
@@ -101,5 +105,9 @@ export class Game {
     this.players[player].score[section] = score;
 
     // TODO: Update bonus
+  }
+
+  toString(): string {
+    return JSON.stringify({ type: 'game', payload: this });
   }
 }

@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react';
 import { navigate } from 'gatsby';
-import { PlayerIndex, Player, EMPTY_SCORE, defaultDice, Dice } from 'shared';
+import { PlayerIndex, Player, EMPTY_SCORE, Dice } from 'shared';
 
-type Dices = { pending: Dice[]; saved: Dice[] };
+type Dices = { boardDices: Dice[]; savedDices: Dice[] };
 
 const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
@@ -20,7 +20,7 @@ const GameContext = createContext<{
   setPlayers: () => {},
   turn: 1,
   setTurn: () => {},
-  dices: { pending: [], saved: [] },
+  dices: { boardDices: [], savedDices: [] },
   setDices: () => {},
 });
 export default GameContext;
@@ -40,8 +40,14 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [playerIndex, setPlayerIndex] = useState<PlayerIndex | null>(null);
   const [turn, setTurn] = useState<PlayerIndex>(1);
   const [dices, setDices] = useState<Dices>({
-    pending: Array(5).fill(defaultDice),
-    saved: [],
+    boardDices: [
+      { id: 1, value: 1 },
+      { id: 2, value: 1 },
+      { id: 3, value: 1 },
+      { id: 4, value: 1 },
+      { id: 5, value: 1 },
+    ],
+    savedDices: [],
   });
   const joinSession = async (url: string) => {
     const ws = new WebSocket(url);

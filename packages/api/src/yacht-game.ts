@@ -1,12 +1,11 @@
 import { nanoid } from 'nanoid';
 
+import { Game } from './game';
 import { cors } from './response';
-import { PlayerIndex } from 'shared';
+import { PlayerIndex, getOpponent } from 'shared';
 
 // eslint-disable-next-line
 type Env = {};
-
-type GameState = 'waiting' | 'started' | 'finished';
 
 type Session = {
   webSocket: WebSocket;
@@ -15,12 +14,6 @@ type Session = {
   receivedIndex: number;
   tid: number | null;
 };
-
-type StorageTypes = {
-  //waitingState: WaitingState;
-};
-
-const getOpponent = (index: PlayerIndex) => (index === 1 ? 2 : 1);
 
 async function handleErrors(request: Request, func: () => Promise<Response>) {
   return await func().catch((err: Error) => {
@@ -45,7 +38,7 @@ export class YachtGame implements DurableObject {
   state: DurableObjectState;
   env: Env;
   createAt: number;
-  gameState: GameState;
+  game: Game;
   sessions: {
     player1?: Session;
     player2?: Session;
@@ -55,27 +48,8 @@ export class YachtGame implements DurableObject {
     this.state = state;
     this.env = env;
     this.createAt = 0;
-    this.gameState = 'waiting';
+    this.game = new Game();
     this.sessions = {};
-  }
-
-  async get<T extends keyof StorageTypes>(
-    key: T
-  ): Promise<StorageTypes[T] | undefined> {
-    return this.state.storage?.get(key);
-  }
-  async put<T extends keyof StorageTypes>(
-    key: T,
-    value: StorageTypes[T],
-    options?: DurableObjectStorageOperationsPutOptions
-  ): Promise<void> {
-    return this.state.storage?.put(key, value, options);
-  }
-  async delete<T extends keyof StorageTypes>(
-    key: T,
-    options?: DurableObjectStorageOperationsPutOptions
-  ): Promise<boolean> {
-    return this.state.storage ? this.state.storage.delete(key, options) : false;
   }
 
   fetch(request: Request): Promise<Response> {
@@ -93,6 +67,11 @@ export class YachtGame implements DurableObject {
         }
       }
     });
+  }
+
+  sendAll(msg: string): void {
+    this.sessions.player1?.webSocket?.send(msg);
+    this.sessions.player2?.webSocket?.send(msg);
   }
 
   healthCheck(playerIndex: PlayerIndex): void {
@@ -129,7 +108,7 @@ export class YachtGame implements DurableObject {
       throw new Error('Upgrade header is not websocket');
     }
 
-    if (this.gameState !== 'waiting') {
+    if (this.game.state !== 'waiting') {
       throw new Error('Game is already started');
     }
 
@@ -157,12 +136,18 @@ export class YachtGame implements DurableObject {
 
     if (this.sessions.player1 && this.sessions.player2) {
       this.sessions.player1.webSocket.send(
-        JSON.stringify({ type: 'start', payload: { playerIndex: 1 } })
+        JSON.stringify({
+          type: 'start',
+          payload: { playerIndex: 1, game: this.game.toString() },
+        })
       );
       this.sessions.player2.webSocket.send(
-        JSON.stringify({ type: 'start', payload: { playerIndex: 2 } })
+        JSON.stringify({
+          type: 'start',
+          payload: { playerIndex: 2, game: this.game.toString() },
+        })
       );
-      this.gameState = 'started';
+      this.game.start();
     }
 
     this.healthCheck(playerIndex);
@@ -207,6 +192,31 @@ export class YachtGame implements DurableObject {
           }
           session.receivedIndex = payload.index;
           break;
+        }
+        case 'roll': {
+          this.game.roll(playerIndex);
+          this.sendAll(this.game.toString());
+          break;
+        }
+        case 'save': {
+          this.game.save(playerIndex, payload.diceId);
+          this.sendAll(this.game.toString());
+          break;
+        }
+        case 'load': {
+          this.game.load(playerIndex, payload.diceId);
+          this.sendAll(this.game.toString());
+          break;
+        }
+        case 'select': {
+          this.game.select(playerIndex, payload.section);
+          this.sendAll(this.game.toString());
+          break;
+        }
+        default: {
+          webSocket.send(
+            JSON.stringify({ type: 'error', payload: 'Unimplemented type' })
+          );
         }
       }
     });
