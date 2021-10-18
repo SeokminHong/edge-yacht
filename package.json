@@ -16,9 +16,16 @@
     "shared": "file:packages/shared"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^3.0.0",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@rollup/plugin-typescript": "^8.3.0",
     "concurrently": "^6.3.0",
+    "miniflare": "^1.4.1",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.4.1",
+    "rollup": "^2.58.0",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.4.4"
   }
 }

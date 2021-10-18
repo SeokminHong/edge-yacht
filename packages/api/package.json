@@ -13,7 +13,6 @@
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
-    "parser": "babel-eslint",
     "root": true,
     "extends": [
       "typescript",
@@ -21,19 +20,11 @@
     ]
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.0.0",
-    "@rollup/plugin-commonjs": "^21.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.5",
-    "@rollup/plugin-typescript": "^8.2.5",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-typescript": "^3.0.0",
-    "miniflare": "^1.4.1",
-    "postinstall-postinstall": "^2.1.0",
-    "rollup": "^2.58.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "eslint-config-typescript": "^3.0.0"
   },
   "dependencies": {
     "nanoid": "^3.1.29"
