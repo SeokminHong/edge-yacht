@@ -7,5 +7,4 @@ const authHost = isDev ? 'localhost:8788' : 'yacht-auth.seokmin.workers.dev';
 export const getApi = (protocol: 'http' | 'websocket') =>
   `${protocol === 'http' ? httpProtocol : wsProtocol}//${apiHost}`;
 
-export const getAuth = (protocol: 'http' | 'websocket') =>
-  `${protocol === 'http' ? httpProtocol : wsProtocol}//${authHost}`;
+export const getAuth = () => `${httpProtocol}//${authHost}`;

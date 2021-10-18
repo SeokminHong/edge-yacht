@@ -5,4 +5,5 @@ export type Env = {
   AUTH0_CALLBACK_URL: string;
   AUTH_STORE: KVNamespace;
   SALT: string;
+  PAGE_DOMAIN: string;
 };

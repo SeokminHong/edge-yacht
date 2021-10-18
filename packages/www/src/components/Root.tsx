@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { AuthPovider } from '~contexts/AuthContext';
 import { LocaleProvider } from '~contexts/LocaleContext';
 import { GameProvider } from '~contexts/GameContext';
 
@@ -9,9 +10,11 @@ interface Props {
 
 const Root = ({ children }: Props) => {
   return (
-    <LocaleProvider>
-      <GameProvider>{children}</GameProvider>
-    </LocaleProvider>
+    <AuthPovider>
+      <LocaleProvider>
+        <GameProvider>{children}</GameProvider>
+      </LocaleProvider>
+    </AuthPovider>
   );
 };
 

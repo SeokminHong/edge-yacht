@@ -28,6 +28,7 @@ const Wrapper = styled.div`
   pointer-events: none;
 
   * {
+    a,
     select,
     button,
     input {

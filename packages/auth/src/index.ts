@@ -6,15 +6,34 @@ import { authorize, handleRedirect, logout } from './auth0';
 const router = Router();
 
 router.get('/', async (request: Request, env: Env) => {
+  const authResult = await authorize(request, env);
+  if (authResult[0]) {
+    return await fetch(`${env.AUTH0_DOMAIN}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${authResult[1].authorization.accessToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (user) =>
+          new Response(JSON.stringify(user), {
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': env.PAGE_DOMAIN,
+              'Access-Control-Allow-Credentials': 'true',
+            },
+          })
+      );
+  } else {
+    return new Response(null, { status: 401 });
+  }
+});
+
+router.get('/login', async (request: Request, env: Env) => {
   try {
     const authResult = await authorize(request, env);
-
     if (authResult[0]) {
-      return await fetch(`${env.AUTH0_DOMAIN}/userinfo`, {
-        headers: {
-          Authorization: `Bearer ${authResult[1].authorization.accessToken}`,
-        },
-      });
+      return Response.redirect(env.PAGE_DOMAIN);
     } else {
       return Response.redirect(authResult[1].redirectUrl);
     }
@@ -33,15 +52,20 @@ router.get('/auth', async (request: Request, env: Env) => {
   if (!authorizedResponse) {
     return new Response('Unauthorized', { status: 401 });
   }
-  const response = new Response(null, {
+  return new Response(null, {
     ...authorizedResponse,
   });
-  return response;
 });
 
-router.get('/logout', async (request: Request) => {
+router.get('/logout', async (request: Request, env: Env) => {
   const { headers } = logout(request);
-  return new Response(null, headers && { headers });
+  return new Response(null, {
+    headers: {
+      ...headers,
+      Location: `${env.PAGE_DOMAIN}/logout`,
+    },
+    status: 302,
+  });
 });
 
 router.all('*', () => new Response(null, { status: 404 }));

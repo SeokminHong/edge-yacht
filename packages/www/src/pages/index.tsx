@@ -4,7 +4,7 @@ import { Physics } from '@react-three/cannon';
 import { navigate } from 'gatsby';
 import niceColors from 'nice-color-palettes';
 
-import Layout from '~components/Layout';
+import OutgameLayout from '~components/OutgameLayout';
 import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
 import Box from '~meshes/Box';
@@ -71,7 +71,7 @@ const IndexPage = () => {
           </Physics>
         </Canvas>
       </CanvasWrapper>
-      <Layout>
+      <OutgameLayout>
         <button
           onClick={async () => {
             fetch(`${getApi('http')}/create`)
@@ -96,7 +96,7 @@ const IndexPage = () => {
             </option>
           ))}
         </select>
-      </Layout>
+      </OutgameLayout>
     </>
   );
 };
