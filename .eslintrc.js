@@ -1,6 +1,11 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  extends: ['typescript', 'prettier'],
+  extends: [
+    'typescript',
+    'prettier',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+  ],
   plugins: ['@typescript-eslint'],
   env: {
     es6: true,
