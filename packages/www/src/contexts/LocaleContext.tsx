@@ -3,9 +3,12 @@ import Cookies from 'js-cookie';
 
 import { Locale, defaultLocale, isLocale } from '~utils/locale';
 
-const LocaleContext = createContext({
+const LocaleContext = createContext<{
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+}>({
   locale: defaultLocale,
-  setLocale: (locale: Locale) => {},
+  setLocale: () => {},
 });
 
 interface Props {

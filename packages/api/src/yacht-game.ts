@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 
 import { Game } from './game';
 import { cors } from './response';
-import { PlayerIndex, getOpponent, DEFAULT_GAME } from 'shared';
+import { PlayerIndex, getOpponent } from 'shared';
 
 // eslint-disable-next-line
 type Env = {};

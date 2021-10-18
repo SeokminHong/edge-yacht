@@ -7,7 +7,7 @@ import GameContext from '~contexts/GameContext';
 // TODO: Change table into CSS grid
 
 const ScoreRow = ({ score }: { score: keyof Score }) => {
-  let { game, playerIndex, select } = useContext(GameContext);
+  const { game, playerIndex, select } = useContext(GameContext);
   const { players, boardDices, savedDices, rollCount, currentPlayer } = game;
 
   if (!playerIndex) {
