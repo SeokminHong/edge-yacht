@@ -1,14 +1,12 @@
 import { Router } from 'itty-router';
 
 import { Env } from './env';
-import { authorize } from './auth0';
+import { authorize, handleRedirect, logout } from './auth0';
 
 const router = Router();
 
 router.get('/', async (request: Request, env: Env) => {
-  console.log(env);
   const response = new Response(null);
-  const url = new URL(request.url);
 
   try {
     const authResult = await authorize(request, env);
@@ -34,9 +32,30 @@ router.get('/', async (request: Request, env: Env) => {
   }
 });
 
-router.get('/auth', async () => {
-  return new Response(null);
+router.get('/auth', async (request: Request, env: Env) => {
+  const authorizedResponse = await handleRedirect(request, env);
+  if (!authorizedResponse) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+  const response = new Response(null, {
+    ...authorizedResponse,
+  });
+  return response;
 });
+
+router.get('/logout', async (request: Request) => {
+  const { headers } = logout(request);
+  const redirect = Response.redirect('http://localhost:8000/');
+  new Response(null, {
+    ...redirect,
+    headers: {
+      ...redirect.headers,
+      ...headers,
+    },
+  });
+});
+
+router.all('*', () => new Response(null, { status: 404 }));
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
