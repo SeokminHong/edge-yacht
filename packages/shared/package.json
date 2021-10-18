@@ -7,6 +7,6 @@
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "run -T tsc"
   }
 }

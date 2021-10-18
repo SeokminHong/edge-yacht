@@ -9,11 +9,8 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "yarn --cwd packages/shared build && yarn --cwd packages/shared link && yarn link shared",
-    "develop": "yarn --cwd packages/shared build && yarn concurrently \"yarn --cwd packages/api develop\" \"yarn --cwd packages/www develop\""
-  },
-  "dependencies": {
-    "shared": "file:packages/shared"
+    "postinstall": "yarn workspace shared build",
+    "develop": "yarn workspace shared build && yarn concurrently \"yarn workspace yacht-api develop\" \"yarn workspace yacht-www develop\""
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",
@@ -28,7 +25,6 @@
     "eslint-config-typescript": "^3.0.0",
     "eslint-plugin-react": "^7.26.1",
     "miniflare": "^1.4.1",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.4.1",
     "rollup": "^2.58.0",
     "rollup-plugin-terser": "^7.0.2",

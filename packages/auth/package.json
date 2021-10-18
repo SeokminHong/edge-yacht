@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
-    "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w -p=8788 -e=.env.dev"
+    "build": "run -T rollup -c",
+    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w -p=8788 -e=.env.dev"
   }
 }
