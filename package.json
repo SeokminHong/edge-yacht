@@ -9,10 +9,8 @@
     "packages/*"
   ],
   "scripts": {
-    "develop": "yarn --cwd packages/shared build && yarn concurrently \"yarn --cwd packages/api develop\" \"yarn --cwd packages/www develop\""
-  },
-  "dependencies": {
-    "shared": "file:packages/shared"
+    "postinstall": "yarn workspace shared build",
+    "develop": "yarn workspace shared build && yarn concurrently \"yarn workspace yacht-api develop\" \"yarn workspace edge-yacht develop\""
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",

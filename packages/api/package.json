@@ -4,15 +4,16 @@
   "description": "Cloudflare worker TypeScript template",
   "module": "dist/mjs",
   "scripts": {
-    "build": "rollup -c",
-    "develop": "miniflare dist/worker.mjs -c=wrangler.toml -w",
-    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
+    "build": "run -T rollup -c",
+    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w",
+    "format": "run -T prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "lint": "run -T eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
   },
   "repository": "git@github.com:SeokminHong/edge-yacht.git",
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT OR Apache-2.0",
   "dependencies": {
-    "nanoid": "^3.1.29"
+    "nanoid": "^3.1.29",
+    "shared": "workspace:*"
   }
 }

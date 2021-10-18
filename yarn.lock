@@ -5685,6 +5685,7 @@ __metadata:
     react-dom: ^18.0.0-alpha-bc9bb87c2-20210917
     react-error-boundary: ^3.1.3
     react-helmet: ^6.1.0
+    shared: "workspace:*"
     three: ^0.132.2
     three-stdlib: ^2.4.0
   languageName: unknown
@@ -5709,7 +5710,6 @@ __metadata:
     prettier: ^2.4.1
     rollup: ^2.58.0
     rollup-plugin-terser: ^7.0.2
-    shared: "file:packages/shared"
     typescript: ^4.4.4
   languageName: unknown
   linkType: soft
@@ -13164,14 +13164,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"shared@file:packages/shared::locator=edge-yahtzee%40workspace%3A.":
-  version: 1.0.0
-  resolution: "shared@file:packages/shared#packages/shared::hash=e9c3b0&locator=edge-yahtzee%40workspace%3A."
-  checksum: 8fdae26a7e1af4ea68566e8c83629347bca530bdd8dd351086140de24662caea4287c464ea3d3737c9a38a0ffe658f6c1fa2260b077b478ba5d3efca4b682f66
-  languageName: node
-  linkType: hard
-
-"shared@workspace:packages/shared":
+"shared@workspace:*, shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "shared@workspace:packages/shared"
   languageName: unknown
@@ -15272,6 +15265,7 @@ resolve@^2.0.0-next.3:
   resolution: "yacht-api@workspace:packages/api"
   dependencies:
     nanoid: ^3.1.29
+    shared: "workspace:*"
   languageName: unknown
   linkType: soft
 
