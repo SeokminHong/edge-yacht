@@ -12,7 +12,6 @@
   "repository": "git@github.com:SeokminHong/edge-yacht.git",
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT OR Apache-2.0",
-  "devDependencies": {},
   "dependencies": {
     "nanoid": "^3.1.29"
   }
