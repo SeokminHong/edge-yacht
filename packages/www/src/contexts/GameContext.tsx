@@ -69,7 +69,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     };
     return true;
   };
-  const closeSession = (code: number = 1000, reason?: string) =>
+  const closeSession = (code = 1000, reason?: string) =>
     webSocket && webSocket.close(code, reason);
   const saveDice = (diceId: number) =>
     webSocket &&
