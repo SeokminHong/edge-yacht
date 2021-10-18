@@ -28,14 +28,18 @@ const exchangeCode = async (code: string, env: Env) => {
     code,
     redirect_uri: env.AUTH0_CALLBACK_URL,
   });
-  const res = await fetch(env.AUTH0_DOMAIN + '/oauth/token', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body,
-  }).catch((e) => console.log(e));
-  console.log(res);
 
-  return persistAuth(res, env);
+  try {
+    const res = await fetch(env.AUTH0_DOMAIN + '/oauth/token', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body,
+    });
+    return persistAuth(res, env);
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 };
 
 const validateToken = (token: Token, env: Env) => {
@@ -79,7 +83,6 @@ const validateToken = (token: Token, env: Env) => {
 };
 
 const persistAuth = async (exchange: Response, env: Env) => {
-  console.log(exchange);
   const body: { error?: string; id_token: string } = await exchange.json();
 
   if (!exchange.ok || body.error) {
@@ -112,7 +115,6 @@ const persistAuth = async (exchange: Response, env: Env) => {
 
 export const handleRedirect = async (request: Request, env: Env) => {
   const url = new URL(request.url);
-  console.log(`Handling redirect ${url}`);
 
   const state = url.searchParams.get('state');
   if (!state) {

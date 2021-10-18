@@ -6,13 +6,11 @@ import { authorize, handleRedirect, logout } from './auth0';
 const router = Router();
 
 router.get('/', async (request: Request, env: Env) => {
-  const response = new Response(null);
-
   try {
     const authResult = await authorize(request, env);
 
     if (authResult[0]) {
-      request = new Request(request, {
+      return await fetch(`${env.AUTH0_DOMAIN}/userinfo`, {
         headers: {
           Authorization: `Bearer ${authResult[1].authorization.accessToken}`,
         },
@@ -20,8 +18,6 @@ router.get('/', async (request: Request, env: Env) => {
     } else {
       return Response.redirect(authResult[1].redirectUrl);
     }
-
-    return response;
   } catch (e) {
     if (e instanceof Error) {
       return new Response(e.message, { status: 500 });
@@ -45,14 +41,7 @@ router.get('/auth', async (request: Request, env: Env) => {
 
 router.get('/logout', async (request: Request) => {
   const { headers } = logout(request);
-  const redirect = Response.redirect('http://localhost:8000/');
-  new Response(null, {
-    ...redirect,
-    headers: {
-      ...redirect.headers,
-      ...headers,
-    },
-  });
+  return new Response(null, headers && { headers });
 });
 
 router.all('*', () => new Response(null, { status: 404 }));
