@@ -5664,33 +5664,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"edge-yacht@workspace:packages/www":
-  version: 0.0.0-use.local
-  resolution: "edge-yacht@workspace:packages/www"
-  dependencies:
-    "@emotion/react": ^11.4.1
-    "@emotion/styled": ^11.3.0
-    "@react-three/cannon": ^3.1.2
-    "@react-three/fiber": ^7.0.7
-    "@types/js-cookie": ^2.2.7
-    "@types/react-helmet": ^6.1.2
-    "@types/three": ^0.131.1
-    gatsby: ^4.0.0-zz-next.1
-    gatsby-plugin-emotion: ^7.0.0-zz-next.1
-    gatsby-plugin-react-helmet: ^5.0.0-zz-next.1
-    gatsby-source-filesystem: ^4.0.0-zz-next.1
-    js-cookie: ^3.0.1
-    nice-color-palettes: ^3.0.0
-    react: ^18.0.0-alpha-bc9bb87c2-20210917
-    react-dom: ^18.0.0-alpha-bc9bb87c2-20210917
-    react-error-boundary: ^3.1.3
-    react-helmet: ^6.1.0
-    shared: "workspace:*"
-    three: ^0.132.2
-    three-stdlib: ^2.4.0
-  languageName: unknown
-  linkType: soft
-
 "edge-yahtzee@workspace:.":
   version: 0.0.0-use.local
   resolution: "edge-yahtzee@workspace:."
@@ -15272,6 +15245,33 @@ resolve@^2.0.0-next.3:
 "yacht-auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "yacht-auth@workspace:packages/auth"
+  languageName: unknown
+  linkType: soft
+
+"yacht-www@workspace:packages/www":
+  version: 0.0.0-use.local
+  resolution: "yacht-www@workspace:packages/www"
+  dependencies:
+    "@emotion/react": ^11.4.1
+    "@emotion/styled": ^11.3.0
+    "@react-three/cannon": ^3.1.2
+    "@react-three/fiber": ^7.0.7
+    "@types/js-cookie": ^2.2.7
+    "@types/react-helmet": ^6.1.2
+    "@types/three": ^0.131.1
+    gatsby: ^4.0.0-zz-next.1
+    gatsby-plugin-emotion: ^7.0.0-zz-next.1
+    gatsby-plugin-react-helmet: ^5.0.0-zz-next.1
+    gatsby-source-filesystem: ^4.0.0-zz-next.1
+    js-cookie: ^3.0.1
+    nice-color-palettes: ^3.0.0
+    react: ^18.0.0-alpha-bc9bb87c2-20210917
+    react-dom: ^18.0.0-alpha-bc9bb87c2-20210917
+    react-error-boundary: ^3.1.3
+    react-helmet: ^6.1.0
+    shared: "workspace:*"
+    three: ^0.132.2
+    three-stdlib: ^2.4.0
   languageName: unknown
   linkType: soft
 

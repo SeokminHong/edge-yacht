@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "postinstall": "yarn workspace shared build",
-    "develop": "yarn workspace shared build && yarn concurrently \"yarn workspace yacht-api develop\" \"yarn workspace edge-yacht develop\""
+    "develop": "yarn workspace shared build && yarn concurrently \"yarn workspace yacht-api develop\" \"yarn workspace yacht-www develop\""
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",
