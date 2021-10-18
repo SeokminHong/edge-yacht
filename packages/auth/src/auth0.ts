@@ -1,6 +1,10 @@
+import cookie from 'cookie';
+
 import { Env } from './env';
 
-const redirectUrl = (state, env: Env) =>
+const cookieKey = 'AUTH0-AUTH';
+
+const redirectUrl = (state: string, env: Env) =>
   `${env.AUTH0_DOMAIN}/authorize?response_type=code&client_id=${
     env.AUTH0_CLIENT_ID
   }&redirect_uri=${
@@ -9,14 +13,73 @@ const redirectUrl = (state, env: Env) =>
 
 const generateStateParam = () => 'stub';
 
-const verify = async (event) => {
-  // Verify a user based on an auth cookie and Workers KV data
-  return { accessToken: '123' };
+// https://github.com/pose/webcrypto-jwt/blob/master/index.js
+const decodeJWT = (token: string) => {
+  let output = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += '==';
+      break;
+    case 3:
+      output += '=';
+      break;
+    default:
+      throw 'Illegal base64url string!';
+  }
+
+  const result = atob(output);
+
+  try {
+    return decodeURIComponent(escape(result));
+  } catch (err) {
+    console.log(err);
+    return result;
+  }
 };
 
-export const authorize = async (event, env: Env) => {
-  const authorization = await verify(event);
-  if (authorization.accessToken) {
+type AuthResult = { accessToken: string; idToken: string; userInfo: string };
+
+const verify = async (
+  request: Request,
+  env: Env
+): Promise<AuthResult | null> => {
+  const cookieHeader = request.headers.get('Cookie');
+  if (cookieHeader && cookieHeader.includes(cookieKey)) {
+    const cookies = cookie.parse(cookieHeader);
+    if (!cookies[cookieKey]) {
+      return null;
+    }
+    const sub = cookies[cookieKey];
+
+    const kvData = await env.AUTH_STORE.get(sub);
+    if (!kvData) {
+      throw new Error('Unable to find authorization data');
+    }
+
+    let kvStored;
+    try {
+      kvStored = JSON.parse(kvData);
+    } catch (err) {
+      throw new Error('Unable to parse auth information from Workers KV');
+    }
+
+    const { access_token: accessToken, id_token: idToken } = kvStored;
+    const userInfo = JSON.parse(decodeJWT(idToken));
+    return { accessToken, idToken, userInfo };
+  }
+  return null;
+};
+
+export const authorize = async (
+  request: Request,
+  env: Env
+): Promise<
+  [true, { authorization: AuthResult }] | [false, { redirectUrl: string }]
+> => {
+  const authorization = await verify(request, env);
+  if (authorization) {
     return [true, { authorization }];
   } else {
     const state = await generateStateParam();

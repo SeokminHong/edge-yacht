@@ -9078,6 +9078,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"itty-router@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "itty-router@npm:2.4.4"
+  checksum: 20ad2ea5a0ee8657829fa1415837f82645ee629b04d106e3344557b1a0882a689e1ae801649c92d5cae8e9ce802e613b56317a43cb235d0f0c318ba3227688b5
+  languageName: node
+  linkType: hard
+
 "jest-diff@npm:^25.5.0":
   version: 25.5.0
   resolution: "jest-diff@npm:25.5.0"
@@ -15245,6 +15252,9 @@ resolve@^2.0.0-next.3:
 "yacht-auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "yacht-auth@workspace:packages/auth"
+  dependencies:
+    cookie: ^0.4.1
+    itty-router: ^2.4.4
   languageName: unknown
   linkType: soft
 
