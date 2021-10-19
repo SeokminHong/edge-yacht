@@ -84,11 +84,11 @@ const scoreFunctions: {
     }
   },
   'Small Straight': (dice: number[]) => {
-    const counts = dice.reduce((acc, d) => (acc |= 1 << d), 0);
+    const counts = dice.reduce((acc, d) => (acc |= 1 << (d - 1)), 0);
     if (
       (counts & 0b001111) === 0b001111 ||
       (counts & 0b011110) === 0b011110 ||
-      (counts & 0b11110) === 0b11110
+      (counts & 0b111100) === 0b111100
     ) {
       return 30;
     } else {
@@ -96,7 +96,7 @@ const scoreFunctions: {
     }
   },
   'Large Straight': (dice: number[]) => {
-    const counts = dice.reduce((acc, d) => (acc |= 1 << d), 0);
+    const counts = dice.reduce((acc, d) => (acc |= 1 << (d - 1)), 0);
     if ((counts & 0b011111) === 0b011111 || (counts & 0b111110) === 0b111110) {
       return 40;
     } else {
