@@ -1,108 +1,159 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import { UPPER_SECTION, LOWER_SECTION, Score, scoreFunctions } from 'shared';
+import {
+  PlayerIndex,
+  UPPER_SECTION,
+  LOWER_SECTION,
+  Sections,
+  scoreFunctions,
+} from 'shared';
 
 import GameContext from '~contexts/GameContext';
 
-// TODO: Change table into CSS grid
-
-const ScoreRow = ({ score }: { score: keyof Score }) => {
+const ScoreCell = ({
+  section,
+  index,
+}: {
+  section: Sections;
+  index: PlayerIndex;
+}) => {
   const { game, playerIndex, select } = useContext(GameContext);
-  const { players, boardDices, savedDices, rollCount, currentPlayer } = game;
+  const { currentPlayer, players, rollCount, boardDices, savedDices } = game;
+  let score = null;
+  let predictedScore = null;
+  if (playerIndex) {
+    score = players[index - 1].score[section];
 
-  if (!playerIndex) {
-    return <></>;
-  }
-
-  const scoreValue = players[playerIndex - 1].score[score];
-  let calculatedScore = 0;
-  if (rollCount > 0 && scoreValue === null) {
     const allDices = boardDices.concat(savedDices).map((d) => d.value);
-    if (score !== 'Bonus') {
-      calculatedScore = scoreFunctions[score](allDices) ?? 0;
+    if (rollCount > 0 && score === null && currentPlayer == index) {
+      predictedScore = scoreFunctions[section](allDices);
     }
   }
-
-  const clickable =
-    currentPlayer === playerIndex && rollCount > 0 && score !== 'Bonus';
-
-  return (
-    <tr style={{ position: 'relative' }}>
-      <OverlayButton
-        {...(clickable && {
-          onClick: () => select(score),
-          className: 'clickable',
-        })}
-      />
-      <td>{score}</td>
-      <ScoreColumn {...(scoreValue !== null && { className: 'confirmed' })}>
-        {scoreValue ?? calculatedScore}
-      </ScoreColumn>
-    </tr>
+  const scoreValue =
+    score === null ? (predictedScore === null ? '' : predictedScore) : score;
+  const className = `cell score${score !== null ? ' confirmed' : ''}`;
+  return index === playerIndex ? (
+    <button
+      className={className}
+      disabled={predictedScore === null}
+      onClick={() => select(section)}
+    >
+      {scoreValue}
+    </button>
+  ) : (
+    <div className={className}>{scoreValue}</div>
   );
 };
 
-const OverlayButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
+const ScoreRow = ({ section }: { section: Sections }) => {
+  return (
+    <>
+      <div className="cell">{section}</div>
+      <ScoreCell section={section} index={1} />
+      <ScoreCell section={section} index={2} />
+    </>
+  );
+};
 
-  &.clickable {
-    cursor: pointer;
-  }
-`;
-
-const ScoreCard = () => {
+const BonusRow = () => {
   const { game, playerIndex } = useContext(GameContext);
   const { players } = game;
-  let total = 0;
+  let [subtotal1, subtotal2] = [0, 0];
+  let bonus1 = null;
+  let bonus2 = null;
   if (playerIndex) {
-    total = Object.entries(players[playerIndex - 1].score).reduce(
-      (acc, [, score]) => acc + (score ?? 0),
+    [subtotal1, subtotal2] = UPPER_SECTION.reduce(
+      ([acc1, acc2], s) => [
+        acc1 + (players[0].score[s] || 0),
+        acc2 + (players[1].score[s] || 0),
+      ],
+      [0, 0]
+    );
+    bonus1 = players[0].score.Bonus;
+    bonus2 = players[1].score.Bonus;
+  }
+  return (
+    <>
+      <div className="cell">Subtotal</div>
+      <div className="cell">{`${subtotal1}/63`}</div>
+      <div className="cell">{`${subtotal2}/63`}</div>
+      <div className="cell">+35 Bonus</div>
+      <div className="cell score">{bonus1}</div>
+      <div className="cell score">{bonus2}</div>
+    </>
+  );
+};
+
+const TotalRow = () => {
+  const { game, playerIndex } = useContext(GameContext);
+  const { players } = game;
+  let total1 = 0;
+  let total2 = 0;
+  if (playerIndex) {
+    total1 = Object.entries(players[0].score).reduce(
+      (acc, [, v]) => acc + (v || 0),
+      0
+    );
+    total2 = Object.entries(players[1].score).reduce(
+      (acc, [, v]) => acc + (v || 0),
       0
     );
   }
+
   return (
-    <Table>
-      <tbody>
-        {UPPER_SECTION.map((s) => (
-          <ScoreRow key={`score-${s}`} score={s} />
-        ))}
-        <ScoreRow score={'Bonus'} />
-        {LOWER_SECTION.map((s) => (
-          <ScoreRow key={`score-${s}`} score={s} />
-        ))}
-        <tr>
-          <td>Total</td>
-          <td>{total}</td>
-        </tr>
-      </tbody>
-    </Table>
+    <>
+      <div className="cell">Total</div>
+      <div className="cell score">{total1}</div>
+      <div className="cell score">{total2}</div>
+    </>
   );
 };
 
-const Table = styled.table`
-  border-collapse: collapse;
+const ScoreCard = () => {
+  return (
+    <CardWrapper>
+      {UPPER_SECTION.map((s) => (
+        <ScoreRow key={`row-${s}`} section={s} />
+      ))}
+      <BonusRow />
+      {LOWER_SECTION.map((s) => (
+        <ScoreRow key={`row-${s}`} section={s} />
+      ))}
+      <TotalRow />
+    </CardWrapper>
+  );
+};
 
-  tr,
-  td {
-    border: 1px black solid;
+const CardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 4em 4em;
+  margin: 0;
+
+  & > div {
+    height: 2em;
+    line-height: 2em;
   }
-`;
-
-const ScoreColumn = styled.td`
-  min-width: 6em;
-  color: silver;
-
-  &.confirmed {
-    color: black;
+  & > button:not(:disabled) {
+    cursor: pointer;
+    :hover {
+      background-color: yellow;
+    }
+  }
+  & > .cell {
+    padding: 0 16px;
+    background: none;
+    border: none;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    font-size: 1rem;
+    font-family: sans-serif;
+  }
+  & > .score {
+    text-align: center;
+    color: gray;
+    &.confirmed {
+      color: black;
+    }
   }
 `;
 

@@ -20,6 +20,7 @@ export default AuthContext;
 
 export const AuthPovider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null as User | null);
+  /*
   useEffect(() => {
     if (!user) {
       fetch(`${getAuth()}`, {
@@ -32,6 +33,7 @@ export const AuthPovider = ({ children }: { children: ReactNode }) => {
         .catch((err) => console.log(`Auth Error! ${err}`));
     }
   });
+  */
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
