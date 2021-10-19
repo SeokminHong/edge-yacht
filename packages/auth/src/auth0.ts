@@ -107,7 +107,8 @@ const persistAuth = async (exchange: Response, env: Env) => {
 
   const headers = {
     Location: '/login',
-    'Set-cookie': `${cookieKey}=${id}; Secure; HttpOnly; SameSite=Lax; Expires=${date.toUTCString()}`,
+    'Access-Control-Expose-Headers': 'Set-Cookie',
+    'Set-Cookie': `${cookieKey}=${id}; Secure; HttpOnly; SameSite=Lax; Expires=${date.toUTCString()}`,
   };
 
   return { headers, status: 302 };
