@@ -68,7 +68,7 @@ router.get('/logout', async (request: Request, env: Env) => {
   return new Response(null, {
     headers: {
       ...headers,
-      Location: `${env.AUTH0_DOMAIN}/v2/logout?client_id=${env.AUTH0_CLIENT_ID}&returnTo=http://localhost:8000/logout`,
+      Location: `${env.AUTH0_DOMAIN}/v2/logout?client_id=${env.AUTH0_CLIENT_ID}&returnTo=${env.PAGE_DOMAIN}/logout`,
     },
     status: 302,
   });
