@@ -4,7 +4,10 @@ on:
   pull_request:
   push:
     branches: [main]
-    paths: [packages/www/**, .github/workflows/publish-page.yml]
+    paths:
+      - packages/www/**
+      - packages/shared/**
+      - .github/workflows/publish-page.yml
 
 jobs:
   publish:
