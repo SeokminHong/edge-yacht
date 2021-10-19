@@ -25,7 +25,13 @@ router.get('/', async (request: Request, env: Env) => {
           })
       );
   } else {
-    return new Response(null, { status: 401 });
+    return new Response(null, {
+      status: 401,
+      headers: {
+        'Access-Control-Allow-Origin': env.PAGE_DOMAIN,
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
   }
 });
 
@@ -58,11 +64,11 @@ router.get('/auth', async (request: Request, env: Env) => {
 });
 
 router.get('/logout', async (request: Request, env: Env) => {
-  const { headers } = logout(request);
+  const { headers } = await logout(request, env);
   return new Response(null, {
     headers: {
       ...headers,
-      Location: `${env.PAGE_DOMAIN}/logout`,
+      Location: `${env.AUTH0_DOMAIN}/v2/logout?client_id=${env.AUTH0_CLIENT_ID}&returnTo=http://localhost:8000/logout`,
     },
     status: 302,
   });

@@ -5,6 +5,10 @@ account_id = ""
 route = ""
 workers_dev = true
 
+kv_namespaces = [
+    { binding = "AUTH_STORE", id = "91aeb1425b6c4a0e9c8a5cda05f3755a" }
+]
+
 [build]
 command = "yarn install && yarn build"
 [build.upload]

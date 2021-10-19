@@ -18,11 +18,15 @@ const AuthContext = createContext({
 
 export default AuthContext;
 
-export const AuthPovider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null as User | null);
-  /*
+
   useEffect(() => {
-    if (!user) {
+    if (
+      !user &&
+      window.location.pathname !== '/login' &&
+      window.location.pathname !== '/logout'
+    ) {
       fetch(`${getAuth()}`, {
         credentials: 'include',
       })
@@ -33,7 +37,6 @@ export const AuthPovider = ({ children }: { children: ReactNode }) => {
         .catch((err) => console.log(`Auth Error! ${err}`));
     }
   });
-  */
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

@@ -30,7 +30,7 @@ const exchangeCode = async (code: string, env: Env) => {
   });
 
   try {
-    const res = await fetch(env.AUTH0_DOMAIN + '/oauth/token', {
+    const res = await fetch(`${env.AUTH0_DOMAIN}/oauth/token`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body,
@@ -182,7 +182,7 @@ const verify = async (
 
     const kvData = await env.AUTH_STORE.get(sub);
     if (!kvData) {
-      throw new Error('Unable to find authorization data');
+      return null;
     }
 
     let kvStored;
@@ -214,9 +214,15 @@ export const authorize = async (
   }
 };
 
-export const logout = (request: Request) => {
+export const logout = async (request: Request, env: Env) => {
   const cookieHeader = request.headers.get('Cookie');
   if (cookieHeader && cookieHeader.includes(cookieKey)) {
+    const cookies = cookie.parse(cookieHeader);
+    const sub = cookies[cookieKey];
+    if (sub) {
+      await env.AUTH_STORE.delete(sub);
+    }
+
     return {
       headers: {
         'Set-cookie': `${cookieKey}=""; HttpOnly; Secure; SameSite=Lax;`,
