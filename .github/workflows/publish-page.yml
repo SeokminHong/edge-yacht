@@ -7,19 +7,20 @@ on:
     paths: [packages/www/**, .github/workflows/publish-page.yml]
 
 jobs:
-  name: Publish to Cloudflare Pages
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - uses: indiesdev/curl@v1
-      id: api
-      with:
-        url: https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT }}/pages/projects/edge-yacht/deployments
-        method: POST
-        headers: '{"X-Auth-Email": "${{ secrets.CLOUDFLARE_EMAIL }}", "X-Auth-Key": "${{ secrets.CLOUDFLARE_AUTH_KEY }}"}'
-    - name: Response
-      run: |
-        echo ${{ steps.api.outputs.response }}
-        if [ ${{ steps.api.outputs.response.success }} != "true" ]; then
-          exit(1)
-        fi
+  publish:
+    name: Publish to Cloudflare Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: indiesdev/curl@v1
+        id: api
+        with:
+          url: https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT }}/pages/projects/edge-yacht/deployments
+          method: POST
+          headers: '{"X-Auth-Email": "${{ secrets.CLOUDFLARE_EMAIL }}", "X-Auth-Key": "${{ secrets.CLOUDFLARE_AUTH_KEY }}"}'
+      - name: Response
+        run: |
+          echo ${{ steps.api.outputs.response }}
+          if [ ${{ steps.api.outputs.response.success }} != "true" ]; then
+            exit(1)
+          fi
