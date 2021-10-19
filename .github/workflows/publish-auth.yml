@@ -1,0 +1,22 @@
+name: Publish Auth
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - packages/auth/**
+      - packages/shared/**
+      - .github/workflows/publish-auth.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.3.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: packages/auth
