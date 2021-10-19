@@ -120,12 +120,18 @@ export class Game implements IGame {
     this.players[player - 1].score[section] = score;
 
     // Update bonus
-    const upperSum = UPPER_SECTION.reduce(
-      (sum, section) => sum + (this.players[player - 1].score[section] ?? 0),
-      0
+    const [upperSum, hasNull] = UPPER_SECTION.reduce(
+      ([sum, hasNull], section) => [
+        sum + (this.players[player - 1].score[section] ?? 0),
+        hasNull || this.players[player - 1].score[section] === null,
+      ],
+      [0, false]
     );
     if (upperSum >= 63) {
       this.players[player - 1].score.Bonus = 35;
+    } else if (!hasNull) {
+      // Set bonus as 0 when the upper sections are full but not more than 63.
+      this.players[player - 1].score.Bonus = 0;
     }
 
     // Change turn
