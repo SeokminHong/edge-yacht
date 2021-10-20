@@ -16505,6 +16505,8 @@ resolve@^2.0.0-next.3:
   resolution: "yacht-router@workspace:packages/router"
   dependencies:
     cookie: ^0.4.1
+    itty-router: ^2.4.4
+    nanoid: ^3.1.30
   languageName: unknown
   linkType: soft
 

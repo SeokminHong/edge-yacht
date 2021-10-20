@@ -12,6 +12,8 @@
     "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w -p=8789"
   },
   "dependencies": {
-    "cookie": "^0.4.1"
+    "cookie": "^0.4.1",
+    "itty-router": "^2.4.4",
+    "nanoid": "^3.1.30"
   }
 }
