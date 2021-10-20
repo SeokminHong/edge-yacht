@@ -228,7 +228,7 @@ export const logout = async (request: Request, env: Env) => {
 
     return {
       headers: {
-        'Set-cookie': `${cookieKey}=""; HttpOnly; Secure; SameSite=Lax;`,
+        'Set-cookie': `${cookieKey}=""; HttpOnly; Secure; SameSite=Lax; Path=/;`,
       },
     };
   }
