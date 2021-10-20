@@ -13,7 +13,7 @@ jobs:
     name: Publish to Cloudflare Pages
     runs-on: ubuntu-latest
     steps:
-      - name: Run deploy hooks
+      - name: Deploy pages
         uses: SeokminHong/pages-action@v0.1
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
