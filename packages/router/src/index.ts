@@ -1,5 +1,10 @@
-// eslint-disable-next-line
-type Env = {};
+type Env = {
+  AUTH0_DOMAIN: string;
+  AUTH0_CLIENT_ID: string;
+  AUTH0_CLIENT_SECRET: string;
+  AUTH_STORE: KVNamespace;
+  SALT: string;
+};
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
