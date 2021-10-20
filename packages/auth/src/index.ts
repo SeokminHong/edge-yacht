@@ -55,11 +55,21 @@ router.get('/login', async (request: Request, env: Env) => {
 
 router.get('/auth', async (request: Request, env: Env) => {
   const authorizedResponse = await handleRedirect(request, env);
+
+  const cors = {
+    'Access-Control-Allow-Origin': env.PAGE_DOMAIN,
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Expose-Headers': 'Set-Cookie',
+  };
   if (!authorizedResponse) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response('Unauthorized', { status: 401, headers: cors });
   }
   return new Response(null, {
     ...authorizedResponse,
+    headers: {
+      ...authorizedResponse.headers,
+      ...cors,
+    },
   });
 });
 

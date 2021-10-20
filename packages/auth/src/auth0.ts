@@ -106,9 +106,6 @@ const persistAuth = async (exchange: Response, env: Env) => {
   await env.AUTH_STORE.put(id, JSON.stringify(body));
 
   const headers = {
-    'Access-Control-Allow-Origin': env.PAGE_DOMAIN,
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Expose-Headers': 'Set-Cookie',
     'Set-Cookie':
       `${cookieKey}=${id};` +
       `Secure; HttpOnly; SameSite=Lax;` +
