@@ -106,7 +106,8 @@ const persistAuth = async (exchange: Response, env: Env) => {
   await env.AUTH_STORE.put(id, JSON.stringify(body));
 
   const headers = {
-    Location: '/login',
+    'Access-Control-Allow-Origin': env.PAGE_DOMAIN,
+    'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Expose-Headers': 'Set-Cookie',
     'Set-Cookie':
       `${cookieKey}=${id};` +
@@ -115,7 +116,7 @@ const persistAuth = async (exchange: Response, env: Env) => {
       `Domain=${new URL(env.PAGE_DOMAIN).hostname}`,
   };
 
-  return { headers, status: 302 };
+  return { headers, status: 200 };
 };
 
 export const handleRedirect = async (request: Request, env: Env) => {
