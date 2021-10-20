@@ -109,8 +109,7 @@ const persistAuth = async (exchange: Response, env: Env) => {
     'Set-Cookie':
       `${cookieKey}=${id};` +
       `Secure; HttpOnly; SameSite=Lax;` +
-      `Expires=${date.toUTCString()};` +
-      `Domain=${new URL(env.PAGE_DOMAIN).hostname}`,
+      `Expires=${date.toUTCString()};`,
   };
 
   return { headers, status: 200 };
