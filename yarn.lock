@@ -16490,16 +16490,6 @@ resolve@^2.0.0-next.3:
   languageName: unknown
   linkType: soft
 
-"yacht-auth@workspace:packages/auth":
-  version: 0.0.0-use.local
-  resolution: "yacht-auth@workspace:packages/auth"
-  dependencies:
-    cookie: ^0.4.1
-    itty-router: ^2.4.4
-    nanoid: ^3.1.30
-  languageName: unknown
-  linkType: soft
-
 "yacht-router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "yacht-router@workspace:packages/router"

@@ -41,12 +41,12 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const joinSession = async (url: string) => {
     const ws = new WebSocket(url);
     setWebsocket(ws);
-    ws.onclose = (e) => {
+    ws.addEventListener('close', (e) => {
       if (e.code === 1006) {
         alert(`ws closed abruptly: ${e.reason}`);
       }
-    };
-    ws.onmessage = (msg) => {
+    });
+    ws.addEventListener('message', (msg) => {
       const data: DataType = JSON.parse(msg.data);
       if (isError(data)) {
         alert(data.payload.message);
@@ -66,7 +66,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       } else if (isUpdate(data)) {
         setGame(data.payload.game);
       }
-    };
+    });
+    ws.addEventListener('error', (e) => {
+      alert(`Websocket error: ${e}`);
+    });
     return true;
   };
   const closeSession = (code = 1000, reason?: string) =>
