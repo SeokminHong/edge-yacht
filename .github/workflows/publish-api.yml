@@ -19,3 +19,9 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: packages/api
+          secrets: |
+            AUTH0_CLIENT_SECRET
+            SALT
+        env:
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          SALT: ${{ secrets.SALT }}
