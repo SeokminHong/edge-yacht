@@ -5,30 +5,36 @@ import { useTrimesh } from '@react-three/cannon';
 
 interface CupGLTF extends GLTF {
   materials: {
-    Cup: Material;
+    material_0: Material;
   };
   nodes: {
-    Cup: { geometry: BufferGeometry };
+    mesh_0: { geometry: BufferGeometry };
   };
 }
 
 const Cup = () => {
-  const { nodes, materials } = useLoader(GLTFLoader, 'cup.glb') as CupGLTF;
-  const geometry = nodes.Cup.geometry;
+  const { nodes, materials } = useLoader(
+    GLTFLoader,
+    'meshes/Dice.glb'
+  ) as CupGLTF;
+  console.log(nodes);
+  console.log(materials);
+  const geometry = nodes.mesh_0.geometry;
   const vertices = geometry.attributes.position.array;
   const indices = geometry.index!.array;
-  const [ref, api] = useTrimesh(() => ({
+  /*const [ref, api] = useTrimesh(() => ({
     mass: 1,
     args: [vertices, indices],
     position: [0, 0, 32],
-  }));
+  }));*/
   return (
     <mesh
-      ref={ref}
       castShadow
       receiveShadow
-      material={materials.Cup}
-      geometry={nodes.Cup.geometry}
+      material={materials.material_0}
+      geometry={nodes.mesh_0.geometry}
+      position={[0, 0, 32]}
+      scale={[1, 1, 1]}
     />
   );
 };

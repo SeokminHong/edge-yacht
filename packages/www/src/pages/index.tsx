@@ -9,7 +9,7 @@ import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
 import Box from '~meshes/Box';
 import CanvasWrapper from '~meshes/CanvasWrapper';
-import Cup from '~meshes/Cup';
+import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
 import { locales, isLocale } from '~utils/locale';
 
@@ -63,10 +63,11 @@ const IndexPage = () => {
               rotation={[-0.9, 0, 0]}
               size={[30, 10]}
             />
-            <Box position={[0, 0, 4]} />
-            <Box position={[4, 4, 4]} />
-            <Box position={[-4, -4, 4]} />
-            <Cup />
+            <Dice position={[0, 0, 32]} rotation={[0.15, 1.6, 0]} />
+            <Dice position={[-4, 4, 32]} rotation={[1.15, 1, 0]} />
+            <Dice position={[4, 4, 32]} rotation={[3, 1.2, 2]} />
+            <Dice position={[-4, -4, 32]} rotation={[2, 1.7, 1.5]} />
+            <Dice position={[4, -4, 32]} rotation={[1.1, 3, 2.1]} />
           </Physics>
         </Canvas>
       </CanvasWrapper>
