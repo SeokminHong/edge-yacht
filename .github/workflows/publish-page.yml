@@ -1,7 +1,6 @@
 name: Publish page
 
 on:
-  pull_request:
   push:
     branches: [main]
     paths:
