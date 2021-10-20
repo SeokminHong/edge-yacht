@@ -7,9 +7,7 @@ import { getAuth } from '~utils/api';
 const LoginPage = ({ location }: PageProps) => {
   useEffect(() => {
     fetch(`${getAuth()}/auth${location.search}`, {
-      headers: {
-        credentials: 'include',
-      },
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((body) => console.log(body));

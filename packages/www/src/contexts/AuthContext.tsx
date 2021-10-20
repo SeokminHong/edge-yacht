@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         })
         .catch((err) => console.log(`Auth Error! ${err}`));
     }
-  });
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
