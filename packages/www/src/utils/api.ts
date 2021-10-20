@@ -1,7 +1,15 @@
-const isDev = process.env.NODE_ENV === 'development';
-const httpProtocol = isDev ? 'http:' : 'https:';
-const wsProtocol = isDev ? 'ws:' : 'wss:';
-const apiHost = isDev ? 'localhost:8787' : 'yacht-api.seokmin.workers.dev';
+export const toWebsocketUrl = (url: string) => {
+  // Valid websocket URL
+  if (url.startsWith('ws')) {
+    return url;
+  }
+  // Relative URL
+  if (url.startsWith('/')) {
+    const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:';
+    return `${protocol}//${window.location.host}${url}`;
+  }
+  // Absolute URL
+  return url.replace(/^http(s)?/, 'ws$1');
 
-export const getApi = (protocol: 'http' | 'websocket') =>
-  `${protocol === 'http' ? httpProtocol : wsProtocol}//${apiHost}`;
+  // Do not consider other protocols
+};

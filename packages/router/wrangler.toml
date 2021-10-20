@@ -1,4 +1,4 @@
-name = "yacht-router"
+name = "yacht-api"
 type = "javascript"
 zone_id = ""
 account_id = ""
@@ -15,8 +15,17 @@ AUTH0_DOMAIN = "https://dev-seokmin.us.auth0.com"
 AUTH0_CLIENT_ID = "oEKdGffuHxeSYn9aj68hNIDBBABBgX9w"
 ROUTE_DOMAIN = "https://yacht.seokmin.dev"
 
+[durable_objects]
+bindings = [
+    { name = "yachtGame", class_name = "YachtGame" }
+]
+
 [build]
 command = "yarn install && yarn build"
 [build.upload]
 format = "modules"
 main = "./worker.mjs"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["YachtGame"]

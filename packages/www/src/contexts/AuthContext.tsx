@@ -1,12 +1,5 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
-
-type User = {
-  sub: string;
-  nickname: string;
-  name: string;
-  picture: string;
-  updated_at: Date;
-};
+import { User } from 'shared';
 
 const AuthContext = createContext({
   user: null as User | null,
@@ -20,7 +13,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null as User | null);
 
   useEffect(() => {
-    fetch(`/userinfo`, {
+    fetch(`/api/userinfo`, {
       credentials: 'include',
     })
       .then((res) => res.json())

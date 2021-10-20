@@ -11,7 +11,6 @@ import Box from '~meshes/Box';
 import CanvasWrapper from '~meshes/CanvasWrapper';
 import Cup from '~meshes/Cup';
 import Plane from '~meshes/Plane';
-import { getApi } from '~utils/api';
 import { locales, isLocale } from '~utils/locale';
 
 const IndexPage = () => {
@@ -74,7 +73,7 @@ const IndexPage = () => {
       <OutgameLayout>
         <button
           onClick={async () => {
-            fetch(`${getApi('http')}/create`)
+            fetch('/api/create')
               .then((res) => res.json())
               .then((body) => {
                 console.log(body);

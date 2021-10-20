@@ -12,6 +12,8 @@ import {
   Sections,
 } from 'shared';
 
+import { toWebsocketUrl } from '~utils/api';
+
 const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
   closeSession: (code?: number, reason?: string) => void;
@@ -39,7 +41,8 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [game, setGame] = useState(DEFAULT_GAME);
 
   const joinSession = async (url: string) => {
-    const ws = new WebSocket(url);
+    const u = toWebsocketUrl(url);
+    const ws = new WebSocket(u);
     setWebsocket(ws);
     ws.addEventListener('close', (e) => {
       if (e.code === 1006) {

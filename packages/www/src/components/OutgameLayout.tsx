@@ -12,10 +12,10 @@ const OutgameLayout = ({ children }: { children: ReactNode }) => {
         <span>
           <img src={user.picture} />
           {user.nickname}
-          <a href={`/logout`}>Logout</a>
+          <a href={`/api/logout`}>Logout</a>
         </span>
       ) : (
-        <a href={`/login`}>Log in</a>
+        <a href={`/api/login`}>Log in</a>
       )}
       {children}
     </Layout>

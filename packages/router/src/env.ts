@@ -7,4 +7,5 @@ export type Env = {
   SALT: string;
   ROUTE_DOMAIN: string;
   PAGE_DOMAIN?: string;
+  yachtGame: DurableObjectNamespace;
 };

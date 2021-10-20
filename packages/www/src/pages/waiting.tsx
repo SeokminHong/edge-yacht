@@ -3,12 +3,11 @@ import { useContext, useEffect } from 'react';
 
 import Layout from '~components/Layout';
 import GameContext from '~contexts/GameContext';
-import { getApi } from '~utils/api';
 
 const Waiting = ({ location }: PageProps) => {
   const { joinSession, closeSession } = useContext(GameContext);
   useEffect(() => {
-    joinSession(`${getApi('websocket')}/join${location.search}`);
+    joinSession(`/api/join${location.search}`);
   }, [location]);
 
   return (
