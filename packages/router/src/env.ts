@@ -4,5 +4,6 @@ export type Env = {
   AUTH0_CLIENT_SECRET: string;
   AUTH_STORE: KVNamespace;
   SALT: string;
-  PAGE_DOMAIN: string;
+  ROUTE_DOMAIN: string;
+  PAGE_DOMAIN?: string;
 };

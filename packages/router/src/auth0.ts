@@ -16,7 +16,7 @@ const cookieKey = 'AUTH0-AUTH';
 const redirectUrl = (state: string, env: Env) =>
   `${env.AUTH0_DOMAIN}/authorize?response_type=code` +
   `&client_id=${env.AUTH0_CLIENT_ID}` +
-  `&redirect_uri=${env.PAGE_DOMAIN}/auth` +
+  `&redirect_uri=${env.ROUTE_DOMAIN}/auth` +
   `&scope=openid%20profile%20email` +
   `&state=${encodeURIComponent(state)}`;
 
@@ -26,7 +26,7 @@ const exchangeCode = async (code: string, env: Env) => {
     client_id: env.AUTH0_CLIENT_ID,
     client_secret: env.AUTH0_CLIENT_SECRET,
     code,
-    redirect_uri: `${env.PAGE_DOMAIN}/login`,
+    redirect_uri: `${env.ROUTE_DOMAIN}/login`,
   });
 
   try {

@@ -69,7 +69,41 @@ router.get('/logout', async (request: Request, env: Env) => {
   });
 });
 
-router.get('*', async (request: Request) => await fetch(request));
+router.get('*', async (request: Request, env: Env) => {
+  let url = request.url;
+  if (env.PAGE_DOMAIN) {
+    url = url.replace(env.ROUTE_DOMAIN, env.PAGE_DOMAIN);
+  }
+
+  if (request.headers.get('Upgrade') !== 'websocket') {
+    return await fetch(url, request);
+  }
+
+  // Websocket request
+  const [client, server] = Object.values(new WebSocketPair());
+  const res = await fetch(url, {
+    headers: {
+      Upgrade: 'websocket',
+    },
+  });
+  if (!res.webSocket) {
+    throw Error();
+  }
+  const routerWs = res.webSocket;
+  routerWs.accept();
+  server.accept();
+
+  // Relay socket events
+  routerWs.addEventListener('message', (m) => server.send(m.data));
+  server.addEventListener('message', (m) => routerWs.send(m.data));
+  routerWs.addEventListener('close', () => server.close());
+  server.addEventListener('close', () => routerWs.close());
+
+  return new Response(null, {
+    status: 101,
+    webSocket: client,
+  });
+});
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
