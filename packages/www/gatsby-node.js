@@ -1,5 +1,7 @@
 const path = require('path');
 
+throw Error();
+
 /** @type {import('gatsby').GatsbyNode['onCreateBabelConfig']} */
 exports.onCreateBabelConfig = ({ actions }) => {
   actions.setBabelPlugin({
