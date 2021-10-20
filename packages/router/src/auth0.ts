@@ -11,6 +11,20 @@ type Token = {
   iat: number;
 };
 
+export type UserInfo = {
+  nickname: string;
+  name: string;
+  picture: string;
+  updated_at: Date;
+  iss: string;
+  sub: string;
+  aud: string;
+  iat: number;
+  exp: number;
+};
+
+type AuthResult = { accessToken: string; idToken: string; userInfo: UserInfo };
+
 const cookieKey = 'AUTH0-AUTH';
 
 const redirectUrl = (state: string, env: Env) =>
@@ -168,8 +182,6 @@ const decodeJWT = (token: string) => {
     return result;
   }
 };
-
-type AuthResult = { accessToken: string; idToken: string; userInfo: string };
 
 const verify = async (
   request: Request,

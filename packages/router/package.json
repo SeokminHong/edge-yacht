@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "build": "run -T rollup -c",
-    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w -p=8788 -e=.env.dev"
+    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w -p=8788 -e=.env.dev --kv-persist"
   },
   "dependencies": {
     "cookie": "^0.4.1",

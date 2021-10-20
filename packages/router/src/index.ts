@@ -1,4 +1,5 @@
 import { Router } from 'itty-router';
+import { User } from 'shared';
 
 import { Env } from './env';
 import { authorize, handleRedirect, logout } from './auth0';
@@ -8,20 +9,25 @@ const router = Router();
 router.get('/userinfo', async (request: Request, env: Env) => {
   const authResult = await authorize(request, env);
   if (authResult[0]) {
-    return await fetch(`${env.AUTH0_DOMAIN}/userinfo`, {
+    const userInfo = authResult[1].authorization.userInfo;
+    const kvUser = await env.YACHT_USERS.get(userInfo.sub);
+    let user: User;
+    if (kvUser) {
+      user = JSON.parse(kvUser);
+    } else {
+      user = {
+        nickname: userInfo.nickname,
+        picture: userInfo.picture,
+        wins: 0,
+        playCount: 0,
+      };
+      env.YACHT_USERS.put(userInfo.sub, JSON.stringify(user));
+    }
+    return new Response(JSON.stringify(user), {
       headers: {
-        Authorization: `Bearer ${authResult[1].authorization.accessToken}`,
+        'Content-Type': 'application/json',
       },
-    })
-      .then((res) => res.json())
-      .then(
-        (user) =>
-          new Response(JSON.stringify(user), {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-      );
+    });
   } else {
     return new Response(null, {
       status: 401,

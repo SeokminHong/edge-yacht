@@ -7,6 +7,7 @@
   "author": "Seokmin Hong <ghdtjrals240@naver.com>",
   "license": "MIT",
   "scripts": {
-    "build": "run -T tsc"
+    "build": "run -T tsc",
+    "develop": "run -T tsc-watch"
   }
 }

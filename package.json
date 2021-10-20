@@ -10,7 +10,12 @@
   ],
   "scripts": {
     "postinstall": "yarn workspace shared build",
-    "develop": "yarn workspace shared build && yarn concurrently \"yarn workspace yacht-api develop\" \"yarn workspace yacht-www develop\"",
+    "develop:shared": "yarn workspace shared develop",
+    "develop:api": "yarn workspace yacht-api develop",
+    "develop:www": "yarn workspace yacht-www develop",
+    "develop:router": "yarn workspace yacht-router develop",
+    "develop:packages": "yarn concurrently \"yarn develop:api\" \"yarn develop:www\" \"yarn develop:router\"",
+    "develop": "yarn develop:shared --onFirstSuccess \"yarn develop:packages\"",
     "build:page": "yarn workspace yacht-www build"
   },
   "devDependencies": {
@@ -29,6 +34,7 @@
     "prettier": "^2.4.1",
     "rollup": "^2.58.0",
     "rollup-plugin-terser": "^7.0.2",
+    "tsc-watch": "^4.5.0",
     "typescript": "^4.4.4"
   }
 }

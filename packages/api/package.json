@@ -5,7 +5,7 @@
   "module": "dist/mjs",
   "scripts": {
     "build": "run -T rollup -c",
-    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w",
+    "develop": "run -T miniflare dist/worker.mjs -c=wrangler.toml -w --kv-persist",
     "format": "run -T prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "run -T eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'"
   },

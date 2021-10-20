@@ -5,6 +5,10 @@ account_id = ""
 route = ""
 workers_dev = true
 
+kv_namespaces = [
+    { binding = "YACHT_USERS", id = "c8ffbbf3c0634098818d7617cedd12f8" }
+]
+
 [build]
 command = "yarn install && yarn build"
 [build.upload]
