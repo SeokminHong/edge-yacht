@@ -1,45 +1,72 @@
-import { cors } from './response';
+import { Router } from 'itty-router';
+
+import { Env } from './env';
+import { getUserInfo, handleLogin, handleAuth, handleLogout } from './auth';
+import { handleCreate, handleJoin } from './session';
+
+// Re-export YachtGame durable object class
 export { YachtGame } from './yacht-game';
 
-interface Env {
-  yachtGame: DurableObjectNamespace;
-}
+const router = Router();
+const apiRouter = Router({ base: '/api' });
+
+// Get user information
+apiRouter
+  .get('/userinfo', getUserInfo)
+  // Login endpoint
+  .get('/login', handleLogin)
+  // Auth0 login callback
+  .get('/auth', handleAuth)
+  // Logout endpoint
+  .get('/logout', handleLogout)
+  // Create a game session and redirect to the waiting room.
+  .get('/create', handleCreate)
+  // Join a game session.
+  .get('/join', handleJoin);
+
+router
+  // API endpoints
+  .all('/api/*', apiRouter.handle)
+  // Route to Cloudflare Pages
+  .all('*', async (request: Request, env: Env) => {
+    let url = request.url;
+    if (env.PAGE_DOMAIN) {
+      url = url.replace(env.ROUTE_DOMAIN, env.PAGE_DOMAIN);
+    }
+
+    if (request.headers.get('Upgrade') !== 'websocket') {
+      return await fetch(url, request);
+    }
+
+    // Websocket request
+    // It's required for development HMR
+    const [client, server] = Object.values(new WebSocketPair());
+    const res = await fetch(url, {
+      headers: {
+        Upgrade: 'websocket',
+      },
+    });
+    if (!res.webSocket) {
+      throw Error();
+    }
+    const routerWs = res.webSocket;
+    routerWs.accept();
+    server.accept();
+
+    // Relay socket events
+    routerWs.addEventListener('message', (m) => server.send(m.data));
+    server.addEventListener('message', (m) => routerWs.send(m.data));
+    routerWs.addEventListener('close', () => server.close());
+    server.addEventListener('close', () => routerWs.close());
+
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+    });
+  });
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-
-    switch (url.pathname) {
-      case '/create':
-        // Create a game session and redirect to the wating room.
-        return handleCreate(request, env);
-      case '/join':
-        // Start game.
-        return handleJoin(request, env);
-      default:
-        return new Response('Not found', { status: 404, headers: cors });
-    }
+    return router.handle(request, env);
   },
 };
-
-async function handleCreate(request: Request, env: Env): Promise<Response> {
-  const id = env.yachtGame.newUniqueId();
-  await env.yachtGame.get(id).fetch(request);
-  return new Response(JSON.stringify({ id: id.toString() }), {
-    status: 200,
-    headers: cors,
-  });
-}
-
-async function handleJoin(request: Request, env: Env): Promise<Response> {
-  const url = new URL(request.url);
-  const roomId = url.searchParams.get('id');
-  if (!roomId) {
-    return new Response('Room not found', { status: 404, headers: cors });
-  }
-  const room = env.yachtGame.get(env.yachtGame.idFromString(roomId));
-  if (!room) {
-    return new Response('Room not found', { status: 404, headers: cors });
-  }
-  return await room.fetch(request);
-}

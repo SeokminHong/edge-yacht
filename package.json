@@ -13,8 +13,7 @@
     "develop:shared": "yarn workspace shared develop",
     "develop:api": "yarn workspace yacht-api develop",
     "develop:www": "yarn workspace yacht-www develop",
-    "develop:router": "yarn workspace yacht-router develop",
-    "develop:packages": "yarn concurrently \"yarn develop:api\" \"yarn develop:www\" \"yarn develop:router\"",
+    "develop:packages": "yarn concurrently \"yarn develop:api\" \"yarn develop:www\"",
     "develop": "yarn develop:shared --onFirstSuccess \"yarn develop:packages\"",
     "build:page": "yarn workspace yacht-www build"
   },

@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid';
 
 import { Game } from './game';
-import { cors } from './response';
 import { PlayerIndex, getOpponent } from 'shared';
 
 // eslint-disable-next-line
@@ -26,7 +25,6 @@ async function handleErrors(request: Request, func: () => Promise<Response>) {
       return new Response(null, {
         status: 101,
         webSocket: client,
-        headers: cors,
       });
     } else {
       return new Response(err.stack, { status: 500 });
@@ -56,14 +54,14 @@ export class YachtGame implements DurableObject {
     return handleErrors(request, async () => {
       const url = new URL(request.url);
       switch (url.pathname) {
-        case '/create': {
+        case '/api/create': {
           return this.handleCreate();
         }
-        case '/join': {
+        case '/api/join': {
           return this.handleJoin(request);
         }
         default: {
-          return (async () => new Response())();
+          throw Error('Invalid path');
         }
       }
     });
@@ -167,7 +165,6 @@ export class YachtGame implements DurableObject {
     return new Response(null, {
       status: 101,
       webSocket: client,
-      headers: cors,
     });
   }
 
