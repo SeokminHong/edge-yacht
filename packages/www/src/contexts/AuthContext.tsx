@@ -1,7 +1,5 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
 
-import { getAuth } from '~utils/api';
-
 type User = {
   sub: string;
   nickname: string;
@@ -22,20 +20,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null as User | null);
 
   useEffect(() => {
-    if (
-      !user &&
-      !window.location.pathname.startsWith('/login') &&
-      !window.location.pathname.startsWith('/logout')
-    ) {
-      fetch(`${getAuth()}`, {
-        credentials: 'include',
+    fetch(`/userinfo`, {
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((body) => {
+        setUser(body);
       })
-        .then((res) => res.json())
-        .then((body) => {
-          setUser(body);
-        })
-        .catch((err) => console.log(`Auth Error! ${err}`));
-    }
+      .catch(() => setUser(null));
   }, []);
 
   return (

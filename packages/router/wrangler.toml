@@ -12,7 +12,7 @@ kv_namespaces = [
 [vars]
 AUTH0_DOMAIN = "https://dev-seokmin.us.auth0.com"
 AUTH0_CLIENT_ID = "oEKdGffuHxeSYn9aj68hNIDBBABBgX9w"
-PAGE_DOMAIN = "https://edge-yacht.pages.dev"
+PAGE_DOMAIN = "https://yacht.seokmin.dev"
 
 [build]
 command = "yarn install && yarn build"
