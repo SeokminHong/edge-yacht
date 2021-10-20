@@ -6,12 +6,7 @@ import { getAuth } from '~utils/api';
 
 const LoginPage = ({ location }: PageProps) => {
   useEffect(() => {
-    fetch(`${getAuth()}/auth${location.search}`, {
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((body) => console.log(body));
-    //navigate(`${getAuth()}/auth${location.search}`);
+    navigate(`${getAuth()}/auth${location.search}`);
   }, []);
 
   return (

@@ -106,13 +106,14 @@ const persistAuth = async (exchange: Response, env: Env) => {
   await env.AUTH_STORE.put(id, JSON.stringify(body));
 
   const headers = {
+    Location: env.PAGE_DOMAIN,
     'Set-Cookie':
       `${cookieKey}=${id};` +
       `Secure; HttpOnly; SameSite=Lax;` +
       `Expires=${date.toUTCString()};`,
   };
 
-  return { headers, status: 200 };
+  return { headers, status: 302 };
 };
 
 export const handleRedirect = async (request: Request, env: Env) => {

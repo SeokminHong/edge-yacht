@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (
       !user &&
-      window.location.pathname !== '/login' &&
-      window.location.pathname !== '/logout'
+      window.location.pathname.startsWith('/login') &&
+      window.location.pathname.startsWith('/logout')
     ) {
       fetch(`${getAuth()}`, {
         credentials: 'include',
