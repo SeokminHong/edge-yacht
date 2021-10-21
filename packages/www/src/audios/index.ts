@@ -19,9 +19,7 @@ export class AudioPlayer {
       this.audios = [];
       return;
     }
-    const audio = new Audio(url);
-    this.audios = Array(instances - 1).fill((() => audio.cloneNode())());
-    this.audios.push(audio);
+    this.audios = [...Array(instances)].map(() => new Audio(url));
   }
 
   play() {
