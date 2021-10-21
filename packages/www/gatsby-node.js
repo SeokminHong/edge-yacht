@@ -16,6 +16,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
     resolve: {
       // Set alias for module paths
       alias: {
+        '~audios': path.resolve(__dirname, 'src/audios'),
         '~components': path.resolve(__dirname, 'src/components'),
         '~contexts': path.resolve(__dirname, 'src/contexts'),
         '~hooks': path.resolve(__dirname, 'src/hooks'),

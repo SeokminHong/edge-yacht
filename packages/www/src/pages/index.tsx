@@ -4,10 +4,10 @@ import { Physics } from '@react-three/cannon';
 import { navigate } from 'gatsby';
 import niceColors from 'nice-color-palettes';
 
+import { diceShake, diceRoll } from '~audios';
 import OutgameLayout from '~components/OutgameLayout';
 import SEO from '~components/SEO';
 import LocaleContext from '~contexts/LocaleContext';
-import Box from '~meshes/Box';
 import CanvasWrapper from '~meshes/CanvasWrapper';
 import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
@@ -96,6 +96,8 @@ const IndexPage = () => {
             </option>
           ))}
         </select>
+        <button onClick={() => diceShake[0].play()}>Shake</button>
+        <button onClick={() => diceRoll[0].play()}>Roll</button>
       </OutgameLayout>
     </>
   );
