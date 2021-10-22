@@ -96,8 +96,8 @@ const IndexPage = () => {
             </option>
           ))}
         </select>
-        <button onClick={() => diceShake[0].play()}>Shake</button>
-        <button onClick={() => diceRoll[0].play()}>Roll</button>
+        <button onClick={() => diceShake.play()}>Shake</button>
+        <button onClick={() => diceRoll.play()}>Roll</button>
       </OutgameLayout>
     </>
   );
