@@ -12,6 +12,7 @@ import CanvasWrapper from '~meshes/CanvasWrapper';
 import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
 import { locales, isLocale } from '~utils/locale';
+import { isSSR } from '~utils/window';
 
 const IndexPage = () => {
   const { locale, setLocale } = useContext(LocaleContext);
@@ -25,7 +26,7 @@ const IndexPage = () => {
           shadows
           gl={{ alpha: false, antialias: true }}
           camera={{ position: [0, 0, 64], fov: 45 }}
-          dpr={window.devicePixelRatio}
+          dpr={isSSR ? 1 : window.devicePixelRatio}
         >
           <hemisphereLight intensity={0.35} />
           <spotLight
