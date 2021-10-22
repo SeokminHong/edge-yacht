@@ -4,7 +4,6 @@ module.exports = {
     title: 'edge-yahtzee',
   },
   plugins: [
-    'gatsby-plugin-emotion',
     'gatsby-plugin-image',
     'gatsby-plugin-sharp',
     'gatsby-plugin-react-helmet',
@@ -16,6 +15,10 @@ module.exports = {
         path: './src/images/',
       },
       __key: 'images',
+    },
+    {
+      resolve: '@chakra-ui/gatsby-plugin',
+      options: {},
     },
   ],
 };

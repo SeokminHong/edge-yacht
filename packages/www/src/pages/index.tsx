@@ -23,8 +23,9 @@ const IndexPage = () => {
         <Canvas
           mode="concurrent"
           shadows
-          gl={{ alpha: false }}
+          gl={{ alpha: false, antialias: true }}
           camera={{ position: [0, 0, 64], fov: 45 }}
+          dpr={window.devicePixelRatio}
         >
           <hemisphereLight intensity={0.35} />
           <spotLight
