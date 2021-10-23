@@ -14,6 +14,7 @@ module.exports = {
   ignorePatterns: ['dist', 'node_modules'],
   rules: {
     '@typescript-eslint/no-empty-function': 'off',
+    'react/prop-types': 'off',
   },
   settings: {
     react: {

@@ -19,7 +19,7 @@ const Dice = ({
 }: JSX.IntrinsicElements['mesh']) => {
   const { nodes, materials } = useLoader(
     GLTFLoader,
-    'meshes/dice.glb'
+    '/meshes/dice.glb'
   ) as DiceGLTF;
   const [ref, api] = useBox(() => ({
     mass: 1,

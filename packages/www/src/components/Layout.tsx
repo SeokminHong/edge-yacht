@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 import styled from '@emotion/styled';
+import { Button } from '@chakra-ui/button';
+import { navigate } from 'gatsby';
 
 interface Props {
   children: ReactNode;
@@ -8,6 +10,9 @@ interface Props {
 const Layout = ({ children }: Props) => {
   return (
     <Wrapper>
+      <div>
+        <Button onClick={() => navigate('/')}>Go to home</Button>
+      </div>
       <Content>{children}</Content>
       <Footer>
         Built with Gatsby
@@ -25,16 +30,6 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  pointer-events: none;
-
-  * {
-    a,
-    select,
-    button,
-    input {
-      pointer-events: auto;
-    }
-  }
 `;
 
 const Content = styled.div`

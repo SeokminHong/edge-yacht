@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { AuthProvider } from '~contexts/AuthContext';
+import { CanvasProvider } from '~contexts/CanvasContext';
 import { LocaleProvider } from '~contexts/LocaleContext';
 import { GameProvider } from '~contexts/GameContext';
 
@@ -12,7 +13,9 @@ const Root = ({ children }: Props) => {
   return (
     <AuthProvider>
       <LocaleProvider>
-        <GameProvider>{children}</GameProvider>
+        <CanvasProvider>
+          <GameProvider>{children}</GameProvider>
+        </CanvasProvider>
       </LocaleProvider>
     </AuthProvider>
   );
