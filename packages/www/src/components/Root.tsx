@@ -13,9 +13,9 @@ const Root = ({ children }: Props) => {
   return (
     <AuthProvider>
       <LocaleProvider>
-        <CanvasProvider>
-          <GameProvider>{children}</GameProvider>
-        </CanvasProvider>
+        <GameProvider>
+          <CanvasProvider>{children}</CanvasProvider>
+        </GameProvider>
       </LocaleProvider>
     </AuthProvider>
   );
