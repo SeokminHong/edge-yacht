@@ -1,7 +1,6 @@
 import { Suspense, forwardRef, useContext } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Canvas } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
 import { Spinner } from '@chakra-ui/spinner';
 
@@ -29,8 +28,8 @@ const CanvasWrapper = forwardRef<
             dpr={isSSR ? 1 : dpr}
           >
             <Scene />
-            <Html>{children}</Html>
           </Canvas>
+          {children}
         </div>
       </Suspense>
     </ErrorBoundary>
@@ -41,8 +40,8 @@ CanvasWrapper.displayName = 'CanvasWrapper';
 
 export default styled(CanvasWrapper)`
   position: absolute;
-  height: 100%;
-  width: 100%;
   top: 0;
   left: 0;
+  height: 100%;
+  width: 100%;
 `;
