@@ -26,7 +26,6 @@ export class AudioPlayer {
 
   play() {
     const audioIndex = Math.floor(Math.random() * this.audios.length);
-    console.log(audioIndex);
     this.audios[audioIndex][this.counter[audioIndex]].play();
     this.counter[audioIndex] = (this.counter[audioIndex] + 1) % this.instances;
   }
