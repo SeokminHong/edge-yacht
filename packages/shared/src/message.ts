@@ -11,8 +11,7 @@ export type PayloadTypes = {
   start: {
     playerIndex: PlayerIndex;
     game: IGame;
-    myInfo: PlayerInfo;
-    opponentInfo: PlayerInfo;
+    playersInfo: PlayerInfo[];
   };
   update: {
     game: IGame;

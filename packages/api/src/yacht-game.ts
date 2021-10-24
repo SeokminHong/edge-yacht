@@ -157,14 +157,17 @@ export class YachtGame implements DurableObject {
     server.accept();
 
     if (this.sessions.player1 && this.sessions.player2) {
+      const playersInfo = [
+        this.sessions.player1.playerInfo,
+        this.sessions.player2.playerInfo,
+      ];
       this.sessions.player1.webSocket.send(
         JSON.stringify({
           type: 'start',
           payload: {
             playerIndex: 1,
             game: this.game,
-            myInfo: this.sessions.player1.playerInfo,
-            opponentInfo: this.sessions.player2.playerInfo,
+            playersInfo,
           },
         })
       );
@@ -174,8 +177,7 @@ export class YachtGame implements DurableObject {
           payload: {
             playerIndex: 2,
             game: this.game,
-            myInfo: this.sessions.player2.playerInfo,
-            opponentInfo: this.sessions.player1.playerInfo,
+            playersInfo,
           },
         })
       );

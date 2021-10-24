@@ -15,6 +15,7 @@
     "develop:www": "yarn workspace yacht-www develop",
     "develop:packages": "yarn concurrently \"yarn develop:api\" \"yarn develop:www\"",
     "develop": "yarn develop:shared --onFirstSuccess \"yarn develop:packages\"",
+    "build:shared": "yarn workspace shared build",
     "build:www": "yarn workspace yacht-www build"
   },
   "devDependencies": {

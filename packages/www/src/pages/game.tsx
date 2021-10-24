@@ -8,16 +8,20 @@ import ScoreCard from '~components/ScoreCard';
 import GameContext from '~contexts/GameContext';
 
 const GamePage = () => {
-  const { myInfo, opponentInfo } = useContext(GameContext);
+  const { playersInfo } = useContext(GameContext);
   return (
     <Layout>
       <Wrapper>
-        <div>
-          <PlayerInfoIcon playerInfo={myInfo} size={40} />
-        </div>
-        <div>
-          <PlayerInfoIcon playerInfo={opponentInfo} size={40} />
-        </div>
+        {playersInfo.length > 0 && (
+          <>
+            <div>
+              <PlayerInfoIcon playerInfo={playersInfo[0]} size={40} />
+            </div>
+            <div>
+              <PlayerInfoIcon playerInfo={playersInfo[1]} size={40} />
+            </div>
+          </>
+        )}
         <ScoreCard />
         <Board />
       </Wrapper>
