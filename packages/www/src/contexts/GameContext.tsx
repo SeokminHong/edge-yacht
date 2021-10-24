@@ -3,6 +3,7 @@ import { navigate } from 'gatsby';
 import {
   IGame,
   PlayerIndex,
+  PlayerInfo,
   DEFAULT_GAME,
   DataType,
   isError,
@@ -18,6 +19,8 @@ const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
   closeSession: (code?: number, reason?: string) => void;
   playerIndex: PlayerIndex | null;
+  myInfo?: PlayerInfo;
+  opponentInfo?: PlayerInfo;
   game: IGame;
   saveDice: (diceId: number) => void;
   loadDice: (diceId: number) => void;
@@ -39,6 +42,8 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [webSocket, setWebsocket] = useState<WebSocket>();
   const [playerIndex, setPlayerIndex] = useState<PlayerIndex | null>(null);
   const [game, setGame] = useState(DEFAULT_GAME);
+  const [playersInfo, setPlayersInfo] =
+    useState<{ myInfo: PlayerInfo; opponentInfo: PlayerInfo }>();
 
   const joinSession = async (url: string) => {
     const u = toWebsocketUrl(url);
@@ -65,6 +70,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       } else if (isStart(data)) {
         setPlayerIndex(data.payload.playerIndex);
         setGame(data.payload.game);
+        setPlayersInfo({
+          myInfo: data.payload.myInfo,
+          opponentInfo: data.payload.opponentInfo,
+        });
         navigate('/game');
       } else if (isUpdate(data)) {
         setGame(data.payload.game);
@@ -95,6 +104,8 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         joinSession,
         closeSession,
         playerIndex,
+        myInfo: playersInfo?.myInfo,
+        opponentInfo: playersInfo?.opponentInfo,
         game,
         saveDice,
         loadDice,

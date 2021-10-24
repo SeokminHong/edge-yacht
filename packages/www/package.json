@@ -24,6 +24,7 @@
     "@react-three/cannon": "^3.1.2",
     "@react-three/drei": "^7.17.1",
     "@react-three/fiber": "^7.0.7",
+    "boring-avatars": "^1.5.8",
     "framer-motion": "^4.1.17",
     "gatsby": "^4.0.0",
     "gatsby-plugin-image": "^2.0.0",

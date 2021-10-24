@@ -1,10 +1,9 @@
 import { nanoid } from 'nanoid';
+import { PlayerIndex, getOpponent, PlayerInfo } from 'shared';
 
+import { authorize } from './auth0';
+import { Env } from './env';
 import { Game } from './game';
-import { PlayerIndex, getOpponent } from 'shared';
-
-// eslint-disable-next-line
-type Env = {};
 
 type Session = {
   webSocket: WebSocket;
@@ -12,6 +11,7 @@ type Session = {
   sentIndex: number;
   receivedIndex: number;
   tid: number | null;
+  playerInfo: PlayerInfo;
 };
 
 async function handleErrors(request: Request, func: () => Promise<Response>) {
@@ -123,6 +123,20 @@ export class YachtGame implements DurableObject {
       throw new Error('Game is full');
     }
 
+    const authorization = await authorize(request, this.env);
+    let playerInfo: PlayerInfo | null = null;
+    if (authorization[0]) {
+      const kvUser = await this.env.YACHT_USERS.get(
+        authorization[1].authorization.userInfo.sub
+      );
+      if (kvUser) {
+        playerInfo = { type: 'user', user: JSON.parse(kvUser) };
+      }
+    }
+    if (!playerInfo) {
+      playerInfo = { type: 'guest', id: nanoid(8) };
+    }
+
     const ip = request.headers.get('CF-Connecting-IP');
     const [client, server] = Object.values(new WebSocketPair());
 
@@ -136,6 +150,7 @@ export class YachtGame implements DurableObject {
       sentIndex: 0,
       receivedIndex: 0,
       tid: null,
+      playerInfo,
     };
     this.sessions[`player${playerIndex}`] = session;
 
@@ -145,13 +160,23 @@ export class YachtGame implements DurableObject {
       this.sessions.player1.webSocket.send(
         JSON.stringify({
           type: 'start',
-          payload: { playerIndex: 1, game: this.game },
+          payload: {
+            playerIndex: 1,
+            game: this.game,
+            myInfo: this.sessions.player1.playerInfo,
+            opponentInfo: this.sessions.player2.playerInfo,
+          },
         })
       );
       this.sessions.player2.webSocket.send(
         JSON.stringify({
           type: 'start',
-          payload: { playerIndex: 2, game: this.game },
+          payload: {
+            playerIndex: 2,
+            game: this.game,
+            myInfo: this.sessions.player2.playerInfo,
+            opponentInfo: this.sessions.player1.playerInfo,
+          },
         })
       );
       this.game.start();

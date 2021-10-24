@@ -25,12 +25,12 @@ export type UserInfo = {
 
 type AuthResult = { accessToken: string; idToken: string; userInfo: UserInfo };
 
-const cookieKey = 'AUTH0-AUTH';
+export const cookieKey = 'AUTH0-AUTH';
 
 const redirectUrl = (state: string, env: Env) =>
   `${env.AUTH0_DOMAIN}/authorize?response_type=code` +
   `&client_id=${env.AUTH0_CLIENT_ID}` +
-  `&redirect_uri=${env.ROUTE_DOMAIN}/auth` +
+  `&redirect_uri=${env.ROUTE_DOMAIN}/api/auth` +
   `&scope=openid%20profile%20email` +
   `&state=${encodeURIComponent(state)}`;
 
