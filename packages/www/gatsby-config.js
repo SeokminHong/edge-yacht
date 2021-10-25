@@ -20,5 +20,12 @@ module.exports = {
       resolve: '@chakra-ui/gatsby-plugin',
       options: {},
     },
+    {
+      resolve: 'gatsby-plugin-google-fonts',
+      options: {
+        fonts: [`Noto+Sans+KR\:400,700`, `Black+Han+Sans`],
+        display: 'swap',
+      },
+    },
   ],
 };

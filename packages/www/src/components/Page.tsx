@@ -22,6 +22,17 @@ const globalStyles = css`
     height: 100%;
     margin: 0;
   }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Black Han Sans', sans-serif;
+  }
 `;
 
 export default Page;

@@ -27,6 +27,7 @@
     "boring-avatars": "^1.5.8",
     "framer-motion": "^4.1.17",
     "gatsby": "^4.0.0",
+    "gatsby-plugin-google-fonts": "^1.0.1",
     "gatsby-plugin-image": "^2.0.0",
     "gatsby-plugin-react-helmet": "^5.0.0",
     "gatsby-plugin-sharp": "^4.0.0",
