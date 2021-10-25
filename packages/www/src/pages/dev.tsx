@@ -1,33 +1,58 @@
-import { Box, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Center, Flex, Grid, GridItem, Tooltip } from '@chakra-ui/react';
+// import {} from '@chakra-ui/icons'
+import styled from '@emotion/styled';
+import { UPPER_SECTION } from 'shared';
 
 import Layout from '~components/Layout';
+import PlayerInfoIcon from '~components/PlayerInfoIcon';
 
 const ScoreBoard = () => {
   return (
-    <Grid
-      templateRows={`repeat(5, 1fr)`}
-      templateColumns="repeat(5, 1fr)"
-      gap={0}
-      bg="gray.100"
-    >
-      <GridItem bg="yellow.500" rowSpan={2} gridColumn="1/4">
-        Turn
-      </GridItem>
-      <GridItem bg="red.500" rowSpan={2} gridColumn="1/4">
-        1 / 12
-      </GridItem>
-      <GridItem bg="gray.500" rowSpan={1} gridColumn="1/4">
+    <Grid gap={0} bg="gray.100">
+      <StyledGridItem bg="yellow.500" gridColumn={1} h="64px" fontSize="3xl">
+        <Center h="100%">Turn</Center>
+      </StyledGridItem>
+      <StyledGridItem bg="red.500" gridColumn={1} h="64px" fontSize="4xl">
+        <Center h="100%">1/12</Center>
+      </StyledGridItem>
+      <StyledGridItem bg="gray.500" gridColumn={1} fontSize="xl">
         Categories
-      </GridItem>
-      <GridItem bg="green.300" gridRow="1/6" gridColumn={4}>
-        player1
-      </GridItem>
-      <GridItem bg="green.900" gridRow="1/6" gridColumn={5}>
-        player2
-      </GridItem>
+      </StyledGridItem>
+      <StyledGridItem gridRow="1/3" gridColumn={2}>
+        <Center h="100%">
+          <PlayerInfoIcon size={64} />
+        </Center>
+      </StyledGridItem>
+      <StyledGridItem gridRow="1/3" gridColumn={3}>
+        <Center h="100%">
+          <PlayerInfoIcon size={64} />
+        </Center>
+      </StyledGridItem>
+      <StyledGridItem bg="green.300" gridRow="3" gridColumn={2}>
+        <Center h="100%">Player 1</Center>
+      </StyledGridItem>
+      <StyledGridItem bg="green.900" gridRow="3" gridColumn={3}>
+        <Center h="100%">Player 2</Center>
+      </StyledGridItem>
+      {UPPER_SECTION.map((s) => (
+        <StyledGridItem key={`${s}-row`} gridColumn={1}>
+          <Tooltip
+            label={'detailed explaination for the category'}
+            aria-label="tooltip"
+          >
+            <Flex align="center" justify="end">
+              {s}
+            </Flex>
+          </Tooltip>
+        </StyledGridItem>
+      ))}
     </Grid>
   );
 };
+
+const StyledGridItem = styled(GridItem)`
+  padding: 8px;
+`;
 
 const DevPage = () => {
   return (
