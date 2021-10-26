@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Box, Center } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { PlayerIndex, Sections, scoreFunctions } from 'shared';
 
 import GameContext from '~contexts/GameContext';
@@ -27,7 +28,7 @@ const ScoreCell = ({
     score === null ? (predictedScore === null ? '' : predictedScore) : score;
   const className = `cell score${score !== null ? ' confirmed' : ''}`;
   return (
-    <Center>
+    <Wrapper h="100%">
       {index === playerIndex ? (
         <Box
           as="button"
@@ -42,8 +43,21 @@ const ScoreCell = ({
       ) : (
         <Box className={className}>{scoreValue}</Box>
       )}
-    </Center>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled(Center)`
+  color: var(--chakra-colors-gray-500);
+  & *.confirmed {
+    color: black;
+  }
+  button:not(:disabled):hover {
+    background-color: #aaa6;
+  }
+  button:disabled {
+    cursor: default;
+  }
+`;
 
 export default ScoreCell;

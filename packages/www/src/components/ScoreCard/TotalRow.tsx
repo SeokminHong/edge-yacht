@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Center, GridItem } from '@chakra-ui/react';
 
 import GameContext from '~contexts/GameContext';
 
@@ -17,12 +18,17 @@ const TotalRow = () => {
       0
     );
   }
-
   return (
     <>
-      <div className="cell">Total</div>
-      <div className="cell score">{total1}</div>
-      <div className="cell score">{total2}</div>
+      <GridItem gridColumn={1} bg="gray.400" fontWeight="700">
+        <Center>Total</Center>
+      </GridItem>
+      <GridItem gridColumn={2} bg="gray.400" fontWeight="700">
+        <Center>{total1}</Center>
+      </GridItem>
+      <GridItem gridColumn={3} bg="gray.400" fontWeight="700">
+        <Center>{total2}</Center>
+      </GridItem>
     </>
   );
 };
