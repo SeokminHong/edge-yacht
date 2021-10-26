@@ -3,15 +3,15 @@ import { useContext } from 'react';
 import GameContext from '~contexts/GameContext';
 
 const Board = () => {
-  const { game, saveDice, loadDice, rollDices, playerIndex } =
+  const { game, saveDice, loadDice, rollDice, playerIndex } =
     useContext(GameContext);
-  const { boardDices, savedDices, rollCount, currentPlayer } = game;
+  const { boardDice, savedDice, rollCount, currentPlayer } = game;
 
   const isCurrentPlayer = playerIndex === currentPlayer;
 
   return (
     <div>
-      {boardDices.map(({ id, value }) => {
+      {boardDice.map(({ id, value }) => {
         return (
           <div key={`dice-${id}`}>
             {value}
@@ -25,7 +25,7 @@ const Board = () => {
         );
       })}
       <hr />
-      {savedDices.map(({ id, value }) => {
+      {savedDice.map(({ id, value }) => {
         return (
           <div key={`saved-${id}`}>
             {value}
@@ -38,10 +38,7 @@ const Board = () => {
           </div>
         );
       })}
-      <button
-        disabled={!isCurrentPlayer || rollCount === 3}
-        onClick={rollDices}
-      >
+      <button disabled={!isCurrentPlayer || rollCount === 3} onClick={rollDice}>
         Roll
       </button>
     </div>

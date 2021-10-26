@@ -11,15 +11,15 @@ const ScoreCell = ({
   index: PlayerIndex;
 }) => {
   const { game, playerIndex, select } = useContext(GameContext);
-  const { currentPlayer, players, rollCount, boardDices, savedDices } = game;
+  const { currentPlayer, players, rollCount, boardDice, savedDice } = game;
   let score = null;
   let predictedScore = null;
   if (playerIndex) {
     score = players[index - 1].score[section];
 
-    const allDices = boardDices.concat(savedDices).map((d) => d.value);
+    const allDice = boardDice.concat(savedDice).map((d) => d.value);
     if (rollCount > 0 && score === null && currentPlayer == index) {
-      predictedScore = scoreFunctions[section](allDices);
+      predictedScore = scoreFunctions[section](allDice);
     }
   }
   const scoreValue =

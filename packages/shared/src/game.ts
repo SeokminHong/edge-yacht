@@ -7,8 +7,8 @@ export type GameState = 'waiting' | 'playing' | 'finished';
 export interface IGame {
   state: GameState;
   currentPlayer: PlayerIndex;
-  boardDices: Dice[];
-  savedDices: Dice[];
+  boardDice: Dice[];
+  savedDice: Dice[];
   players: Player[];
   rollCount: number;
 }
@@ -16,14 +16,14 @@ export interface IGame {
 export const DEFAULT_GAME: IGame = {
   state: 'waiting',
   currentPlayer: 1,
-  boardDices: [
+  boardDice: [
     { id: 1, value: 1 },
     { id: 2, value: 1 },
     { id: 3, value: 1 },
     { id: 4, value: 1 },
     { id: 5, value: 1 },
   ],
-  savedDices: [],
+  savedDice: [],
   players: [
     { id: 1, score: { ...EMPTY_SCORE } },
     { id: 2, score: { ...EMPTY_SCORE } },

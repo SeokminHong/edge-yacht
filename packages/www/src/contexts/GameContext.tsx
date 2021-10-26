@@ -23,7 +23,7 @@ const GameContext = createContext<{
   game: IGame;
   saveDice: (diceId: number) => void;
   loadDice: (diceId: number) => void;
-  rollDices: () => void;
+  rollDice: () => void;
   select: (section: Sections) => void;
 }>({
   joinSession: async () => false,
@@ -33,7 +33,7 @@ const GameContext = createContext<{
   game: DEFAULT_GAME,
   saveDice: () => {},
   loadDice: () => {},
-  rollDices: () => {},
+  rollDice: () => {},
   select: () => {},
 });
 export default GameContext;
@@ -88,7 +88,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const loadDice = (diceId: number) =>
     webSocket &&
     webSocket.send(JSON.stringify({ type: 'load', payload: { diceId } }));
-  const rollDices = () =>
+  const rollDice = () =>
     webSocket && webSocket.send(JSON.stringify({ type: 'roll' }));
   const select = (section: Sections) =>
     webSocket &&
@@ -104,7 +104,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         game,
         saveDice,
         loadDice,
-        rollDices,
+        rollDice,
         select,
       }}
     >

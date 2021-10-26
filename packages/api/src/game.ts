@@ -15,22 +15,22 @@ import {
 export class Game implements IGame {
   state: GameState;
   currentPlayer: PlayerIndex;
-  boardDices: Dice[];
-  savedDices: Dice[];
+  boardDice: Dice[];
+  savedDice: Dice[];
   players: Player[];
   rollCount: number;
 
   constructor() {
     this.state = 'waiting';
     (this.currentPlayer = 1),
-      (this.boardDices = [
+      (this.boardDice = [
         { id: 1, value: 1 },
         { id: 2, value: 1 },
         { id: 3, value: 1 },
         { id: 4, value: 1 },
         { id: 5, value: 1 },
       ]);
-    (this.savedDices = []),
+    (this.savedDice = []),
       (this.players = [
         { id: 1, score: { ...EMPTY_SCORE } },
         { id: 2, score: { ...EMPTY_SCORE } },
@@ -52,7 +52,7 @@ export class Game implements IGame {
 
     this.rollCount++;
 
-    this.boardDices = this.boardDices.map(({ id }) => ({
+    this.boardDice = this.boardDice.map(({ id }) => ({
       id,
       value: rollDice(),
     }));
@@ -69,13 +69,13 @@ export class Game implements IGame {
       throw new Error('You must roll the dice first');
     }
 
-    const dice = this.boardDices.find((dice) => dice.id === id);
+    const dice = this.boardDice.find((dice) => dice.id === id);
     if (!dice) {
       throw new Error(`Dice with id ${id} not found`);
     }
 
-    this.savedDices.push(dice);
-    this.boardDices = this.boardDices.filter((dice) => dice.id !== id);
+    this.savedDice.push(dice);
+    this.boardDice = this.boardDice.filter((dice) => dice.id !== id);
   }
 
   load(player: PlayerIndex, id: number) {
@@ -89,13 +89,13 @@ export class Game implements IGame {
       throw new Error('You must roll the dice first');
     }
 
-    const dice = this.savedDices.find((dice) => dice.id === id);
+    const dice = this.savedDice.find((dice) => dice.id === id);
     if (!dice) {
       throw new Error(`Dice with id ${id} not found`);
     }
 
-    this.boardDices.push(dice);
-    this.savedDices = this.savedDices.filter((dice) => dice.id !== id);
+    this.boardDice.push(dice);
+    this.savedDice = this.savedDice.filter((dice) => dice.id !== id);
   }
 
   select(player: PlayerIndex, section: Sections) {
@@ -110,8 +110,8 @@ export class Game implements IGame {
     }
 
     const diceValues = [
-      ...this.boardDices.map((dice) => dice.value),
-      ...this.savedDices.map((dice) => dice.value),
+      ...this.boardDice.map((dice) => dice.value),
+      ...this.savedDice.map((dice) => dice.value),
     ];
     const score = scoreFunctions[section](diceValues);
     if (score === null) {
@@ -137,8 +137,8 @@ export class Game implements IGame {
     // Change turn
     this.rollCount = 0;
     this.currentPlayer = getOpponent(this.currentPlayer);
-    this.savedDices.forEach((dice) => this.boardDices.push(dice));
-    this.savedDices = [];
+    this.savedDice.forEach((dice) => this.boardDice.push(dice));
+    this.savedDice = [];
   }
 
   toString(): string {
