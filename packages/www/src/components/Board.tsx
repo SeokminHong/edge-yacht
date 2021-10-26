@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Box, Button, Center, Divider } from '@chakra-ui/react';
 
 import GameContext from '~contexts/GameContext';
 
@@ -10,38 +11,44 @@ const Board = () => {
   const isCurrentPlayer = playerIndex === currentPlayer;
 
   return (
-    <div>
+    <Box bg="gray.100">
       {boardDice.map(({ id, value }) => {
         return (
-          <div key={`dice-${id}`}>
-            {value}
-            <button
+          <Box key={`dice-${id}`} bg="gray.200">
+            <Center p="2" display="inline-block">
+              {value}
+            </Center>
+            <Button
+              p="2"
               disabled={!isCurrentPlayer || rollCount === 0}
               onClick={() => saveDice(id)}
             >
               Save
-            </button>
-          </div>
+            </Button>
+          </Box>
         );
       })}
-      <hr />
+      <Divider />
       {savedDice.map(({ id, value }) => {
         return (
-          <div key={`saved-${id}`}>
-            {value}
-            <button
+          <Box key={`saved-${id}`} bg="gray.400">
+            <Center p="2" display="inline-block">
+              {value}
+            </Center>
+            <Button
+              p="2"
               disabled={!isCurrentPlayer || rollCount === 0}
               onClick={() => loadDice(id)}
             >
               Unsave
-            </button>
-          </div>
+            </Button>
+          </Box>
         );
       })}
-      <button disabled={!isCurrentPlayer || rollCount === 3} onClick={rollDice}>
+      <Button disabled={!isCurrentPlayer || rollCount === 3} onClick={rollDice}>
         Roll
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 

@@ -137,7 +137,12 @@ export class Game implements IGame {
     }
 
     // Change turn
-    this.turn++;
+    if (player === 2) {
+      this.turn++;
+    }
+    if (this.turn === 13) {
+      this.state = 'finished';
+    }
     this.rollCount = 0;
     this.currentPlayer = getOpponent(this.currentPlayer);
     this.savedDice.forEach((dice) => this.boardDice.push(dice));

@@ -39,10 +39,10 @@ const BonusRow = () => {
         </Tooltip>
       </GridItem>
       <GridItem gridColumn={2}>
-        <Center>{bonus1}</Center>
+        <Center>{bonus1 !== null ? `+${bonus1}` : ''}</Center>
       </GridItem>
       <GridItem gridColumn={3}>
-        <Center>{bonus2}</Center>
+        <Center>{bonus2 !== null ? `+${bonus2}` : ''}</Center>
       </GridItem>
     </>
   );

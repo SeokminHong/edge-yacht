@@ -76,6 +76,8 @@ export class YachtGame implements DurableObject {
     );
   }
 
+  endGame(): void {}
+
   sendAll(msg: string): void {
     this.sessions.player1?.webSocket?.send(msg);
     this.sessions.player2?.webSocket?.send(msg);
@@ -237,6 +239,9 @@ export class YachtGame implements DurableObject {
         }
         case 'select': {
           this.game.select(playerIndex, payload.section);
+          if (this.game.state === 'finished') {
+            this.endGame();
+          }
           this.updateGame();
           break;
         }
