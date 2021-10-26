@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { PlayerIndex, getOpponent, PlayerInfo } from 'shared';
+import { PlayerIndex, getOpponent, User } from 'shared';
 
 import { authorize } from './auth0';
 import { Env } from './env';
@@ -11,7 +11,7 @@ type Session = {
   sentIndex: number;
   receivedIndex: number;
   tid: number | null;
-  playerInfo: PlayerInfo;
+  user?: User;
 };
 
 async function handleErrors(request: Request, func: () => Promise<Response>) {
@@ -124,17 +124,14 @@ export class YachtGame implements DurableObject {
     }
 
     const authorization = await authorize(request, this.env);
-    let playerInfo: PlayerInfo | null = null;
+    let user: User | undefined = undefined;
     if (authorization[0]) {
       const kvUser = await this.env.YACHT_USERS.get(
         authorization[1].authorization.userInfo.sub
       );
       if (kvUser) {
-        playerInfo = { type: 'user', user: JSON.parse(kvUser) };
+        user = JSON.parse(kvUser);
       }
-    }
-    if (!playerInfo) {
-      playerInfo = { type: 'guest', id: nanoid(8) };
     }
 
     const ip = request.headers.get('CF-Connecting-IP');
@@ -150,24 +147,21 @@ export class YachtGame implements DurableObject {
       sentIndex: 0,
       receivedIndex: 0,
       tid: null,
-      playerInfo,
+      user,
     };
     this.sessions[`player${playerIndex}`] = session;
 
     server.accept();
 
     if (this.sessions.player1 && this.sessions.player2) {
-      const playersInfo = [
-        this.sessions.player1.playerInfo,
-        this.sessions.player2.playerInfo,
-      ];
+      const users = [this.sessions.player1.user, this.sessions.player2.user];
       this.sessions.player1.webSocket.send(
         JSON.stringify({
           type: 'start',
           payload: {
             playerIndex: 1,
             game: this.game,
-            playersInfo,
+            users,
           },
         })
       );
@@ -177,7 +171,7 @@ export class YachtGame implements DurableObject {
           payload: {
             playerIndex: 2,
             game: this.game,
-            playersInfo,
+            users,
           },
         })
       );

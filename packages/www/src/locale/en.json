@@ -1,0 +1,17 @@
+{
+  "score": {
+    "Aces": "Total of all 1s",
+    "Twos": "Total of all 2s",
+    "Threes": "Total of all 3s",
+    "Fours": "Total of all 4s",
+    "Fives": "Total of all 5s",
+    "Sixes": "Total of all 6s",
+    "Four of a Kind": "Four of the same number",
+    "Full House": "Three of a kind + Two of a kine",
+    "Small Straight": "Four dice are consecutive",
+    "Large Straight": "All dice are consecutive",
+    "Yacht": "All dice are the same",
+    "Chance": "Total of all dice",
+    "Bonus": "Get bonus if subtotal is 63 or more"
+  }
+}

@@ -1704,6 +1704,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chakra-ui/icons@npm:^1.0.16":
+  version: 1.0.16
+  resolution: "@chakra-ui/icons@npm:1.0.16"
+  dependencies:
+    "@chakra-ui/icon": 1.1.12
+    "@types/react": ^17.0.0
+  peerDependencies:
+    "@chakra-ui/system": ">=1.0.0"
+    react: ">=16.8.6"
+  checksum: dc3576f05509db17738dd7d818bb2b6be0821080ef1e414dc92186eaed6ccc946ec9575a986aa4b1a1b9cd21df7d26a7a4af9d510db46d6a36ee4bdbc32f6198
+  languageName: node
+  linkType: hard
+
 "@chakra-ui/image@npm:1.0.21":
   version: 1.0.21
   resolution: "@chakra-ui/image@npm:1.0.21"
@@ -4109,14 +4122,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 17.0.31
-  resolution: "@types/react@npm:17.0.31"
+"@types/react@npm:*, @types/react@npm:^17.0.0":
+  version: 17.0.33
+  resolution: "@types/react@npm:17.0.33"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: c2ea547b3e3398f53971908ae34bdb1ca1f2d8f1cf57a6f21c37b2bb77c2e625b5349de69b3c573f969056362eddac4bbac075d5d470716feef4161e26692b83
+  checksum: 5f53f3dae034229ff1eccb5de1c16d046696e883f8eae81b86e95c532798e655015e4edff8a6c9ec8f1c0ef12bb60dec43622d06256ba33ba6069e67a74b8d4e
   languageName: node
   linkType: hard
 
@@ -18438,6 +18451,7 @@ resolve@^2.0.0-next.3:
   resolution: "yacht-www@workspace:packages/www"
   dependencies:
     "@chakra-ui/gatsby-plugin": ^2.0.1
+    "@chakra-ui/icons": ^1.0.16
     "@chakra-ui/machine": ^1.4.1
     "@chakra-ui/react": ^1.6.10
     "@emotion/react": ^11.4.1

@@ -1,44 +1,23 @@
-import styled from '@emotion/styled';
-import Avatar from 'boring-avatars';
-import { PlayerInfo } from 'shared';
+import { Avatar, ThemingProps } from '@chakra-ui/react';
+import { User } from 'shared';
 
 interface IPlayerInfoIconProps {
-  playerInfo?: PlayerInfo;
-  size: number;
+  user?: User;
+  size?: ThemingProps<'Avatar'>['size'];
 }
 
-const palette = ['#99b898', '#fecea8', '#ff847c', '#e84a5f', '#2a363b'];
-
-const PlayerInfoIcon = ({ playerInfo, size }: IPlayerInfoIconProps) => {
-  if (!playerInfo) {
-    return <PlaceHolder size={size} />;
-  }
-  if (playerInfo.type === 'guest') {
-    return (
-      <Avatar
-        size={size}
-        name={playerInfo.id}
-        variant="beam"
-        colors={palette}
-      />
-    );
+const PlayerInfoIcon = ({ user, size }: IPlayerInfoIconProps) => {
+  if (!user) {
+    return <Avatar size={size} />;
   }
   return (
-    <IconImage src={playerInfo.user.picture} alt="Player avatar" size={size} />
+    <Avatar
+      name={user.nickname}
+      src={user.picture}
+      alt="Player avatar"
+      size={size}
+    />
   );
 };
-
-const PlaceHolder = styled.div<{ size: number }>`
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-  border-radius: 50%;
-  background-color: #ccc;
-`;
-
-const IconImage = styled.img<{ size: number }>`
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-  border-radius: 50%;
-`;
 
 export default PlayerInfoIcon;

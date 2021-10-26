@@ -19,6 +19,7 @@ export class Game implements IGame {
   savedDice: Dice[];
   players: Player[];
   rollCount: number;
+  turn: number;
 
   constructor() {
     this.state = 'waiting';
@@ -36,6 +37,7 @@ export class Game implements IGame {
         { id: 2, score: { ...EMPTY_SCORE } },
       ]);
     this.rollCount = 0;
+    this.turn = 1;
   }
 
   start() {
@@ -135,6 +137,7 @@ export class Game implements IGame {
     }
 
     // Change turn
+    this.turn++;
     this.rollCount = 0;
     this.currentPlayer = getOpponent(this.currentPlayer);
     this.savedDice.forEach((dice) => this.boardDice.push(dice));

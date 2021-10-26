@@ -1,5 +1,6 @@
-import { PlayerIndex, PlayerInfo } from './player';
+import { PlayerIndex } from './player';
 import { IGame } from './game';
+import { User } from './user';
 
 export type PayloadTypes = {
   error: {
@@ -11,7 +12,7 @@ export type PayloadTypes = {
   start: {
     playerIndex: PlayerIndex;
     game: IGame;
-    playersInfo: PlayerInfo[];
+    users: User[];
   };
   update: {
     game: IGame;

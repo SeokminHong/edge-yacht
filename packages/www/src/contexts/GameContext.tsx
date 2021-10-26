@@ -3,7 +3,6 @@ import { navigate } from 'gatsby';
 import {
   IGame,
   PlayerIndex,
-  PlayerInfo,
   DEFAULT_GAME,
   DataType,
   isError,
@@ -11,6 +10,7 @@ import {
   isStart,
   isUpdate,
   Sections,
+  User,
 } from 'shared';
 
 import { toWebsocketUrl } from '~utils/api';
@@ -19,7 +19,7 @@ const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
   closeSession: (code?: number, reason?: string) => void;
   playerIndex: PlayerIndex | null;
-  playersInfo: PlayerInfo[];
+  users: User[];
   game: IGame;
   saveDice: (diceId: number) => void;
   loadDice: (diceId: number) => void;
@@ -29,7 +29,7 @@ const GameContext = createContext<{
   joinSession: async () => false,
   closeSession: () => {},
   playerIndex: null,
-  playersInfo: [],
+  users: [],
   game: DEFAULT_GAME,
   saveDice: () => {},
   loadDice: () => {},
@@ -42,7 +42,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [webSocket, setWebsocket] = useState<WebSocket>();
   const [playerIndex, setPlayerIndex] = useState<PlayerIndex | null>(null);
   const [game, setGame] = useState(DEFAULT_GAME);
-  const [playersInfo, setPlayersInfo] = useState<PlayerInfo[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const joinSession = async (url: string) => {
     const u = toWebsocketUrl(url);
@@ -69,7 +69,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       } else if (isStart(data)) {
         setPlayerIndex(data.payload.playerIndex);
         setGame(data.payload.game);
-        setPlayersInfo(data.payload.playersInfo);
+        setUsers(data.payload.users);
         navigate('/game');
       } else if (isUpdate(data)) {
         setGame(data.payload.game);
@@ -100,7 +100,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         joinSession,
         closeSession,
         playerIndex,
-        playersInfo,
+        users,
         game,
         saveDice,
         loadDice,

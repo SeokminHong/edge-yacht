@@ -11,6 +11,7 @@ export interface IGame {
   savedDice: Dice[];
   players: Player[];
   rollCount: number;
+  turn: number;
 }
 
 export const DEFAULT_GAME: IGame = {
@@ -29,4 +30,5 @@ export const DEFAULT_GAME: IGame = {
     { id: 2, score: { ...EMPTY_SCORE } },
   ],
   rollCount: 0,
+  turn: 1,
 };
