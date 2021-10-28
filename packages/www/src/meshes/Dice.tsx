@@ -12,25 +12,21 @@ interface DiceGLTF extends GLTF {
   };
 }
 
-const Dice = ({
-  position,
-  rotation,
-  ...props
-}: JSX.IntrinsicElements['mesh']) => {
+const Dice = ({ ...props }: JSX.IntrinsicElements['mesh']) => {
   const { nodes, materials } = useLoader(
     GLTFLoader,
     '/meshes/dice.glb'
   ) as DiceGLTF;
-  const [ref, api] = useBox(() => ({
-    mass: 1,
-    args: [4, 4, 4],
-    position: position as Triplet,
-    rotation: rotation as Triplet,
-  }));
+  // const [ref, api] = useBox(() => ({
+  //   mass: 1,
+  //   args: [4, 4, 4],
+  //   position: position as Triplet,
+  //   rotation: rotation as Triplet,
+  // }));
   return (
     <mesh
       {...props}
-      ref={ref}
+      // ref={ref}
       castShadow
       receiveShadow
       material={materials.Dice_material_0}

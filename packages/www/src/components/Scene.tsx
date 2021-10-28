@@ -1,10 +1,75 @@
+import { useState } from 'react';
+import { Quaternion } from 'three';
+import { useFrame } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import niceColors from 'nice-color-palettes';
 
 import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
 
+import dice5 from './dice_5.json';
+
+type Transform = {
+  position: [number, number, number];
+  quaternion: [number, number, number, number];
+};
+
+const ZERO_TRANSFORM: Transform = {
+  position: [0, 0, 0],
+  quaternion: [0, 0, 0, 1],
+};
+
+type Timestamp = {
+  elapsed: number;
+  index: number;
+  transforms: Transform[];
+};
+
 const Scene = () => {
+  const [timestamp, setTimestamp] = useState<Timestamp>({
+    elapsed: 0,
+    index: 0,
+    transforms: [
+      ZERO_TRANSFORM,
+      ZERO_TRANSFORM,
+      ZERO_TRANSFORM,
+      ZERO_TRANSFORM,
+      ZERO_TRANSFORM,
+    ],
+  });
+  useFrame((s, delta) => {
+    const offset0 = dice5.offsets[0][0];
+    const offset1 = dice5.offsets[1][0];
+    const offsetRot0 = new Quaternion(
+      offset0.qx,
+      offset0.qy,
+      offset0.qz,
+      offset0.qw
+    );
+    const offsetRot1 = new Quaternion(
+      offset1.qx,
+      offset1.qy,
+      offset1.qz,
+      offset1.qw
+    );
+
+    const elapsed = timestamp.elapsed + delta;
+    for (let i = timestamp.index; i < dice5.timestamps.length; i++) {
+      if (elapsed > dice5.timestamps[i].time) {
+        continue;
+      }
+      setTimestamp({
+        elapsed,
+        index: i,
+        transforms: dice5.timestamps[i].tf.map((tf) => ({
+          position: [tf.x * -4, tf.y * 4, tf.z * 4],
+          quaternion: [tf.qx, tf.qz, tf.qy, tf.qw],
+        })),
+      });
+      break;
+    }
+  });
+
   return (
     <>
       <hemisphereLight intensity={0.35} />
@@ -19,7 +84,7 @@ const Scene = () => {
       />
       <pointLight position={[-30, 0, -30]} intensity={0.5} />
       <Physics gravity={[0, 0, -30]}>
-        <Plane color={niceColors[17][4]} />
+        <Plane color={niceColors[17][4]} position={[0, 0, -2]} />
         <Plane
           color={niceColors[17][1]}
           position={[-10, 0, 0]}
@@ -44,11 +109,26 @@ const Scene = () => {
           rotation={[-0.9, 0, 0]}
           size={[30, 10]}
         />
-        <Dice position={[0, 0, 32]} rotation={[0.15, 1.6, 0]} />
-        <Dice position={[-4, 4, 32]} rotation={[1.15, 1, 0]} />
-        <Dice position={[4, 4, 32]} rotation={[3, 1.2, 2]} />
-        <Dice position={[-4, -4, 32]} rotation={[2, 1.7, 1.5]} />
-        <Dice position={[4, -4, 32]} rotation={[1.1, 3, 2.1]} />
+        <Dice
+          position={timestamp.transforms[0].position}
+          quaternion={timestamp.transforms[0].quaternion}
+        />
+        <Dice
+          position={timestamp.transforms[1].position}
+          quaternion={timestamp.transforms[1].quaternion}
+        />
+        <Dice
+          position={timestamp.transforms[2].position}
+          quaternion={timestamp.transforms[2].quaternion}
+        />
+        <Dice
+          position={timestamp.transforms[3].position}
+          quaternion={timestamp.transforms[3].quaternion}
+        />
+        <Dice
+          position={timestamp.transforms[4].position}
+          quaternion={timestamp.transforms[4].quaternion}
+        />
       </Physics>
     </>
   );
