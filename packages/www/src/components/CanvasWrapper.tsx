@@ -24,7 +24,7 @@ const CanvasWrapper = forwardRef<
             mode="concurrent"
             shadows
             gl={{ alpha: false, antialias: true }}
-            camera={{ position: [0, 0, 64], fov: 45 }}
+            camera={{ position: [0, 0, 96], fov: 45 }}
             dpr={isSSR ? 1 : dpr}
           >
             <Scene />
