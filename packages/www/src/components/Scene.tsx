@@ -8,16 +8,17 @@ import Board from '~meshes/Board';
 import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
 
-import dice5 from './dice_5.json';
+import dice4 from '~data/dice_4.json';
+import dice5 from '~data/dice_5.json';
 
 type Transform = {
   position: [number, number, number];
-  quaternion: [number, number, number, number];
+  quaternion: Quaternion;
 };
 
 const ZERO_TRANSFORM: Transform = {
   position: [0, 0, 0],
-  quaternion: [0, 0, 0, 1],
+  quaternion: new Quaternion(0, 0, 0, 1),
 };
 
 type Timestamp = {
@@ -25,6 +26,18 @@ type Timestamp = {
   index: number;
   transforms: Transform[];
 };
+
+const offsetToQuaternion = ({
+  qx,
+  qy,
+  qz,
+  qw,
+}: {
+  qx: number;
+  qy: number;
+  qz: number;
+  qw: number;
+}) => new Quaternion(qx, qy, qz, qw);
 
 const Scene = () => {
   const [timestamp, setTimestamp] = useState<Timestamp>({
@@ -39,21 +52,6 @@ const Scene = () => {
     ],
   });
   useFrame((s, delta) => {
-    const offset0 = dice5.offsets[0][0];
-    const offset1 = dice5.offsets[1][0];
-    const offsetRot0 = new Quaternion(
-      offset0.qx,
-      offset0.qy,
-      offset0.qz,
-      offset0.qw
-    );
-    const offsetRot1 = new Quaternion(
-      offset1.qx,
-      offset1.qy,
-      offset1.qz,
-      offset1.qw
-    );
-
     const elapsed = timestamp.elapsed + delta;
     for (let i = timestamp.index; i < dice5.timestamps.length; i++) {
       if (elapsed > dice5.timestamps[i].time) {
@@ -62,9 +60,11 @@ const Scene = () => {
       setTimestamp({
         elapsed,
         index: i,
-        transforms: dice5.timestamps[i].tf.map((tf) => ({
-          position: [tf.x * -4, tf.y * 4, tf.z * 4],
-          quaternion: [tf.qx, tf.qz, tf.qy, tf.qw],
+        transforms: dice5.timestamps[i].tf.map((tf, i) => ({
+          position: [tf.x, tf.y, tf.z],
+          quaternion: offsetToQuaternion(dice5.offsets[i][5]).multiply(
+            new Quaternion(tf.qx, tf.qy, tf.qz, tf.qw)
+          ),
         })),
       });
       break;
