@@ -13,7 +13,9 @@
       "~audios": ["src/audios"],
       "~components/*": ["src/components/*"],
       "~contexts/*": ["src/contexts/*"],
+      "~data/*": ["src/data/*"],
       "~hooks/*": ["src/hooks/*"],
+      "~locale/*": ["src/locale/*"],
       "~meshes/*": ["src/meshes/*"],
       "~utils/*": ["src/utils/*"]
     },
