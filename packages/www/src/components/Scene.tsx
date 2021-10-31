@@ -1,30 +1,36 @@
-import { useState } from 'react';
-import { Quaternion } from 'three';
+import { useEffect, useRef } from 'react';
+import { Quaternion, Mesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import niceColors from 'nice-color-palettes';
+import { DiceValue, Dice as DiceType } from 'shared';
 
 import Board from '~meshes/Board';
 import Dice from '~meshes/Dice';
 import Plane from '~meshes/Plane';
 
+import dice1 from '~data/dice_1.json';
+import dice2 from '~data/dice_2.json';
+import dice3 from '~data/dice_3.json';
 import dice4 from '~data/dice_4.json';
 import dice5 from '~data/dice_5.json';
 
-type Transform = {
-  position: [number, number, number];
-  quaternion: Quaternion;
-};
+const dice = [dice1, dice2, dice3, dice4, dice5];
 
-const ZERO_TRANSFORM: Transform = {
-  position: [0, 0, 0],
-  quaternion: new Quaternion(0, 0, 0, 1),
-};
-
-type Timestamp = {
-  elapsed: number;
-  index: number;
-  transforms: Transform[];
+const eyeToIndex = (eye: DiceValue) => {
+  if (eye === 1) {
+    return 1;
+  }
+  if (eye === 2) {
+    return 0;
+  }
+  if (eye === 5) {
+    return 5;
+  }
+  if (eye === 6) {
+    return 4;
+  }
+  return eye - 1;
 };
 
 const offsetToQuaternion = ({
@@ -39,33 +45,59 @@ const offsetToQuaternion = ({
   qw: number;
 }) => new Quaternion(qx, qy, qz, qw);
 
-const Scene = () => {
-  const [timestamp, setTimestamp] = useState<Timestamp>({
-    elapsed: 0,
-    index: 0,
-    transforms: [
-      ZERO_TRANSFORM,
-      ZERO_TRANSFORM,
-      ZERO_TRANSFORM,
-      ZERO_TRANSFORM,
-      ZERO_TRANSFORM,
-    ],
-  });
+const Scene = ({
+  rollIndex,
+  boardDice,
+  savedDice,
+}: {
+  rollIndex: number;
+  boardDice: DiceType[];
+  savedDice: DiceType[];
+}) => {
+  const timestamp = useRef({ elapsed: 99, index: 0 });
+
+  const ref1 = useRef<Mesh>(null);
+  const ref2 = useRef<Mesh>(null);
+  const ref3 = useRef<Mesh>(null);
+  const ref4 = useRef<Mesh>(null);
+  const ref5 = useRef<Mesh>(null);
+
+  useEffect(() => {
+    timestamp.current = { elapsed: 0, index: 0 };
+  }, [rollIndex]);
+
   useFrame((s, delta) => {
-    const elapsed = timestamp.elapsed + delta;
-    for (let i = timestamp.index; i < dice5.timestamps.length; i++) {
-      if (elapsed > dice5.timestamps[i].time) {
+    const elapsed = timestamp.current.elapsed + delta;
+    timestamp.current.elapsed = elapsed;
+    const num = boardDice.length;
+    for (
+      let i = timestamp.current.index;
+      i < dice[num - 1].timestamps.length;
+      i++
+    ) {
+      if (elapsed > dice[num - 1].timestamps[i].time) {
         continue;
       }
-      setTimestamp({
-        elapsed,
-        index: i,
-        transforms: dice5.timestamps[i].tf.map((tf, i) => ({
-          position: [tf.x, tf.y, tf.z],
-          quaternion: offsetToQuaternion(dice5.offsets[i][5]).multiply(
-            new Quaternion(tf.qx, tf.qy, tf.qz, tf.qw)
-          ),
-        })),
+      timestamp.current.index = i;
+      const refs = [ref1, ref2, ref3, ref4, ref5];
+      boardDice.forEach((d, idx) => {
+        const ref = refs[d.id - 1].current;
+        if (ref) {
+          ref.visible = true;
+          const tf = dice[num - 1].timestamps[i].tf[idx];
+          ref.position.set(tf.x, tf.y, tf.z);
+          ref.quaternion.copy(
+            offsetToQuaternion(
+              dice[num - 1].offsets[idx][eyeToIndex(d.value)]
+            ).multiply(new Quaternion(tf.qx, tf.qy, tf.qz, tf.qw))
+          );
+        }
+      });
+      savedDice.forEach((d) => {
+        const ref = refs[d.id - 1].current;
+        if (ref) {
+          ref.visible = false;
+        }
       });
       break;
     }
@@ -75,37 +107,24 @@ const Scene = () => {
     <>
       <hemisphereLight intensity={0.35} />
       <spotLight
-        position={[30, 0, 50]}
-        angle={0.3}
+        position={[30, 0, 40]}
+        angle={0.6}
         penumbra={1}
-        intensity={2}
+        intensity={1.5}
         castShadow
         shadow-mapSize-width={256}
         shadow-mapSize-height={256}
       />
-      <pointLight position={[-30, 0, 50]} intensity={0.5} />
+      <ambientLight intensity={0.7} />
       <Physics gravity={[0, 0, -30]}>
         <Plane color={niceColors[17][4]} position={[0, 0, -2]} />
-        <Dice
-          position={timestamp.transforms[0].position}
-          quaternion={timestamp.transforms[0].quaternion}
-        />
-        <Dice
-          position={timestamp.transforms[1].position}
-          quaternion={timestamp.transforms[1].quaternion}
-        />
-        <Dice
-          position={timestamp.transforms[2].position}
-          quaternion={timestamp.transforms[2].quaternion}
-        />
-        <Dice
-          position={timestamp.transforms[3].position}
-          quaternion={timestamp.transforms[3].quaternion}
-        />
-        <Dice
-          position={timestamp.transforms[4].position}
-          quaternion={timestamp.transforms[4].quaternion}
-        />
+
+        <Dice ref={ref1} />
+        <Dice ref={ref2} />
+        <Dice ref={ref3} />
+        <Dice ref={ref4} />
+        <Dice ref={ref5} />
+
         <Board rotation={[Math.PI / 2, 0, 0]} scale={1.5} />
       </Physics>
     </>

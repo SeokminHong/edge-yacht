@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { css, Global } from '@emotion/react';
 
-import CanvasWrapper from './CanvasWrapper';
-
 interface Props {
   children: ReactNode;
 }
@@ -10,7 +8,7 @@ interface Props {
 const Page = ({ children }: Props) => (
   <>
     <Global styles={globalStyles} />
-    <CanvasWrapper>{children}</CanvasWrapper>
+    {children}
   </>
 );
 

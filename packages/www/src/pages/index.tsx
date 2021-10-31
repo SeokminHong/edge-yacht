@@ -19,7 +19,6 @@ const IndexPage = () => {
             fetch('/api/create')
               .then((res) => res.json())
               .then((body) => {
-                console.log(body);
                 return navigate(`/waiting?id=${body.id}`);
               });
           }}

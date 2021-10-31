@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
-const CanvasContext = createContext({ dpr: 1 });
+const CanvasContext = createContext<{
+  dpr: number;
+}>({ dpr: 1 });
 
 export default CanvasContext;
 
