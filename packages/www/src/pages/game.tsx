@@ -41,7 +41,7 @@ const GamePage = () => {
         </IconButton>
       )}
       <Drawer onClose={onClose} isOpen={isOpen} size="full" placement="left">
-        <DrawerContent bg="transparent">
+        <DrawerContent bg="transparent" h="100%" py="4">
           <DrawerCloseButton color="gray.500" />
           <ScoreCard />
         </DrawerContent>

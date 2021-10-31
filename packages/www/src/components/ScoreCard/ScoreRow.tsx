@@ -16,7 +16,7 @@ const ScoreRow = ({ section, idx }: { section: Sections; idx: number }) => {
     <>
       <Tooltip label={localization.score[section]} aria-label="tooltip">
         <GridItem gridColumn={1} bg={headerColor}>
-          <Center>{section}</Center>
+          <Center h="100%">{section}</Center>
         </GridItem>
       </Tooltip>
       <GridItem

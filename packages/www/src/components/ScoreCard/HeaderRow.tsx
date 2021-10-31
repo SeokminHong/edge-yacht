@@ -14,11 +14,11 @@ const HeaderRow = () => {
       <GridItem
         gridColumn={1}
         minW={[100, 100, 200]}
-        fontSize={isLargerThan480 ? '3xl' : 'xl'}
+        fontSize={isLargerThan480 ? '3xl' : 'lg'}
       >
         <Center h="100%">Turn</Center>
       </GridItem>
-      <GridItem gridColumn={1} fontSize={isLargerThan480 ? '4xl' : '2xl'}>
+      <GridItem gridColumn={1} fontSize={isLargerThan480 ? '4xl' : 'xl'}>
         <Center h="100%">{turn}/12</Center>
       </GridItem>
       <GridItem bg="gray.400" gridColumn={1}>

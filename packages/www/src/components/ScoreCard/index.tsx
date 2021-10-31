@@ -15,7 +15,7 @@ const ScoreCard = () => {
       maxW="480px"
       fontSize={isLargerThan480 ? 'xl' : 'md'}
       h="100%"
-      overflow="auto"
+      overflowY="auto"
     >
       <HeaderRow />
       {UPPER_SECTION.map((s, idx) => (
