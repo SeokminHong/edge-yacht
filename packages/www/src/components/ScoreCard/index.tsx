@@ -8,7 +8,14 @@ import TotalRow from './TotalRow';
 
 const ScoreCard = () => {
   return (
-    <Grid gap={0} bg="gray.100" maxW="480px" fontSize="xl" h="100%">
+    <Grid
+      gap={0}
+      bg="gray.100"
+      maxW="480px"
+      fontSize="xl"
+      h="100%"
+      overflow="auto"
+    >
       <HeaderRow />
       {UPPER_SECTION.map((s, idx) => (
         <ScoreRow key={`${s}-row`} section={s} idx={idx} />
