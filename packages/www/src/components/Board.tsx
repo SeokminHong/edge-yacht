@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Box, Button, Center, Divider } from '@chakra-ui/react';
+import { Button, Center, Grid, GridItem } from '@chakra-ui/react';
 
 import GameContext from '~contexts/GameContext';
 
@@ -11,44 +11,57 @@ const Board = () => {
   const isCurrentPlayer = playerIndex === currentPlayer;
 
   return (
-    <Box bg="gray.100">
+    <Grid bg="gray.100">
       {boardDice.map(({ id, value }) => {
         return (
-          <Box key={`dice-${id}`} bg="gray.200">
-            <Center p="2" display="inline-block">
-              {value}
-            </Center>
-            <Button
-              p="2"
-              disabled={!isCurrentPlayer || rollCount === 0}
-              onClick={() => saveDice(id)}
-            >
-              Save
-            </Button>
-          </Box>
+          <>
+            <GridItem key={`dice-${id}`} bg="gray.200" gridRow="1">
+              <Center py="2">{value}</Center>
+            </GridItem>
+            <GridItem gridRow="2">
+              <Button
+                p="2"
+                minW="8ch"
+                disabled={!isCurrentPlayer || rollCount === 0}
+                onClick={() => saveDice(id)}
+              >
+                Save
+              </Button>
+            </GridItem>
+          </>
         );
       })}
-      <Divider />
       {savedDice.map(({ id, value }) => {
         return (
-          <Box key={`saved-${id}`} bg="gray.400">
-            <Center p="2" display="inline-block">
-              {value}
-            </Center>
-            <Button
-              p="2"
-              disabled={!isCurrentPlayer || rollCount === 0}
-              onClick={() => loadDice(id)}
-            >
-              Unsave
-            </Button>
-          </Box>
+          <>
+            <GridItem key={`saved-${id}`} bg="gray.400" gridRow="1">
+              <Center py="2">{value}</Center>
+            </GridItem>
+            <GridItem gridRow="2">
+              <Button
+                p="2"
+                minW="8ch"
+                disabled={!isCurrentPlayer || rollCount === 0}
+                onClick={() => loadDice(id)}
+              >
+                Unsave
+              </Button>
+            </GridItem>
+          </>
         );
       })}
-      <Button disabled={!isCurrentPlayer || rollCount === 3} onClick={rollDice}>
-        Roll
-      </Button>
-    </Box>
+      <GridItem bg="gray.400" rowStart={1} rowSpan={2}>
+        <Button
+          disabled={!isCurrentPlayer || rollCount === 3}
+          onClick={rollDice}
+          border="none"
+          h="100%"
+          bg="orange.500"
+        >
+          Roll
+        </Button>
+      </GridItem>
+    </Grid>
   );
 };
 

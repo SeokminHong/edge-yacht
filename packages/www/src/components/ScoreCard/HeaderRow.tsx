@@ -33,7 +33,7 @@ const PlayerInfo = ({ column, user }: { column: number; user?: User }) => {
           <PlayerInfoIcon user={user} size="lg" />
         </Center>
       </GridItem>
-      <GridItem w="128px" bg="green.300" gridRow="3" gridColumn={column}>
+      <GridItem minW="128px" bg="green.300" gridRow="3" gridColumn={column}>
         <Center h="100%">{user ? user.nickname : 'Guest'}</Center>
       </GridItem>
     </>
