@@ -30,7 +30,7 @@ const Board = () => {
                 p="2"
                 disabled={!isCurrentPlayer || rollCount === 0}
                 onClick={() => saveDice(id)}
-                {...{ fontSize: isLargerThan480 ? 'lg' : 'sm' }}
+                fontSize={isLargerThan480 ? 'lg' : 'sm'}
               >
                 Save
               </Button>
@@ -49,7 +49,7 @@ const Board = () => {
                 p="2"
                 disabled={!isCurrentPlayer || rollCount === 0}
                 onClick={() => loadDice(id)}
-                {...{ fontSize: isLargerThan480 ? 'lg' : 'sm' }}
+                fontSize={isLargerThan480 ? 'lg' : 'sm'}
               >
                 Unsave
               </Button>
@@ -71,6 +71,7 @@ const Board = () => {
           w="100%"
           h="100%"
           bg="orange.500"
+          verticalAlign="none"
         >
           Roll
         </Button>
