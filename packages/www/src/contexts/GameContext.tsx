@@ -51,7 +51,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     setWebsocket(ws);
     ws.addEventListener('close', (e) => {
       if (e.code === 1006) {
-        alert(`ws closed abruptly: ${e.reason}`);
+        //alert(`ws closed abruptly: ${e.reason}`);
       }
     });
     ws.addEventListener('message', (msg) => {

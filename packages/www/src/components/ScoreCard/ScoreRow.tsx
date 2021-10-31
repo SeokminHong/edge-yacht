@@ -9,7 +9,7 @@ import localization from '../../locale/en.json';
 const ScoreRow = ({ section, idx }: { section: Sections; idx: number }) => {
   const headerColor = idx % 2 === 1 ? 'gray.400' : 'gray.300';
   const currentColor = idx % 2 === 1 ? 'yellow.300' : 'yellow.100';
-  const defaultColor = idx % 2 === 1 ? 'gray.300' : undefined;
+  const defaultColor = idx % 2 === 1 ? 'gray.300' : 'gray.100';
   const { game } = useContext(GameContext);
   const { currentPlayer } = game;
   return (

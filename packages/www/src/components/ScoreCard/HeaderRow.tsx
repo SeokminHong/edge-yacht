@@ -28,7 +28,7 @@ const HeaderRow = () => {
 const PlayerInfo = ({ column, user }: { column: number; user?: User }) => {
   return (
     <>
-      <GridItem gridRow="1/3" gridColumn={column}>
+      <GridItem gridRow="1/3" gridColumn={column} bg="gray.100">
         <Center h="100%">
           <PlayerInfoIcon user={user} size="lg" />
         </Center>

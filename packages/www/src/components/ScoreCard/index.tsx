@@ -13,9 +13,9 @@ const ScoreCard = () => {
       {UPPER_SECTION.map((s, idx) => (
         <ScoreRow key={`${s}-row`} section={s} idx={idx} />
       ))}
-      <GridItem colSpan={3} h="2" />
+      <GridItem colSpan={3} h="2" bg="gray.100" />
       <BonusRow />
-      <GridItem colSpan={3} h="2" />
+      <GridItem colSpan={3} h="2" bg="gray.100" />
       {LOWER_SECTION.map((s, idx) => (
         <ScoreRow key={`${s}-row`} section={s} idx={idx + 1} />
       ))}

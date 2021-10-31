@@ -1,5 +1,11 @@
 import { useContext } from 'react';
-import { Button, Center, Grid, GridItem } from '@chakra-ui/react';
+import {
+  Button,
+  Center,
+  Grid,
+  GridItem,
+  useMediaQuery,
+} from '@chakra-ui/react';
 
 import GameContext from '~contexts/GameContext';
 
@@ -7,8 +13,9 @@ const Board = () => {
   const { game, saveDice, loadDice, rollDice, playerIndex } =
     useContext(GameContext);
   const { boardDice, savedDice, rollCount, currentPlayer } = game;
-
   const isCurrentPlayer = playerIndex === currentPlayer;
+
+  const [isLargerThan480] = useMediaQuery('(min-width: 480px)');
 
   return (
     <Grid bg="gray.100">
@@ -21,9 +28,9 @@ const Board = () => {
             <GridItem gridRow="2">
               <Button
                 p="2"
-                minW="8ch"
                 disabled={!isCurrentPlayer || rollCount === 0}
                 onClick={() => saveDice(id)}
+                {...{ fontSize: isLargerThan480 ? 'lg' : 'sm' }}
               >
                 Save
               </Button>
@@ -40,9 +47,9 @@ const Board = () => {
             <GridItem gridRow="2">
               <Button
                 p="2"
-                minW="8ch"
                 disabled={!isCurrentPlayer || rollCount === 0}
                 onClick={() => loadDice(id)}
+                {...{ fontSize: isLargerThan480 ? 'lg' : 'sm' }}
               >
                 Unsave
               </Button>
@@ -50,11 +57,18 @@ const Board = () => {
           </>
         );
       })}
-      <GridItem bg="gray.400" rowStart={1} rowSpan={2}>
+      <GridItem
+        bg="gray.400"
+        {...(isLargerThan480
+          ? { rowStart: 1, rowSpan: 2 }
+          : { colStart: 1, colSpan: 5, w: '100%' })}
+      >
         <Button
           disabled={!isCurrentPlayer || rollCount === 3}
           onClick={rollDice}
           border="none"
+          borderRadius="0"
+          w="100%"
           h="100%"
           bg="orange.500"
         >

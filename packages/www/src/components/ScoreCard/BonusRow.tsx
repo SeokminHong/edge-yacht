@@ -30,7 +30,7 @@ const BonusRow = () => {
       <GridItem gridColumn={2} fontSize="md" color="gray.500">
         <Center>{subtotal1}/63</Center>
       </GridItem>
-      <GridItem gridColumn={3} fontSize="md" color="gray.500">
+      <GridItem gridColumn={3} fontSize="md" color="gray.500" bg="gray.100">
         <Center>{subtotal2}/63</Center>
       </GridItem>
       <GridItem gridColumn={1}>
@@ -38,10 +38,10 @@ const BonusRow = () => {
           <Center>+35 Bonus</Center>
         </Tooltip>
       </GridItem>
-      <GridItem gridColumn={2}>
+      <GridItem gridColumn={2} bg="gray.100">
         <Center>{bonus1 !== null ? `+${bonus1}` : ''}</Center>
       </GridItem>
-      <GridItem gridColumn={3}>
+      <GridItem gridColumn={3} bg="gray.100">
         <Center>{bonus2 !== null ? `+${bonus2}` : ''}</Center>
       </GridItem>
     </>
