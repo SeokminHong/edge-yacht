@@ -67,6 +67,12 @@ const Scene = ({
   }, [rollIndex]);
 
   useFrame((s, delta) => {
+    if (window.innerWidth > 960) {
+      s.camera.position.set(-10 - (window.innerWidth - 240) / 96, 0, 96);
+    } else {
+      s.camera.position.set(0, 0, 64 + (1280 - window.innerWidth) / 16);
+    }
+
     const elapsed = timestamp.current.elapsed + delta;
     timestamp.current.elapsed = elapsed;
     const num = boardDice.length;

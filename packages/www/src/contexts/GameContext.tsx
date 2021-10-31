@@ -9,6 +9,7 @@ import {
   isHealth,
   isStart,
   isUpdate,
+  isEnd,
   Sections,
   User,
 } from 'shared';
@@ -19,7 +20,7 @@ const GameContext = createContext<{
   joinSession: (url: string) => Promise<boolean>;
   closeSession: (code?: number, reason?: string) => void;
   playerIndex: PlayerIndex | null;
-  users: User[];
+  users: (User | undefined)[];
   game: IGame;
   saveDice: (diceId: number) => void;
   loadDice: (diceId: number) => void;
@@ -42,7 +43,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [webSocket, setWebsocket] = useState<WebSocket>();
   const [playerIndex, setPlayerIndex] = useState<PlayerIndex | null>(null);
   const [game, setGame] = useState(DEFAULT_GAME);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<(User | undefined)[]>([]);
 
   const joinSession = async (url: string) => {
     const u = toWebsocketUrl(url);
@@ -73,6 +74,16 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         navigate('/game');
       } else if (isUpdate(data)) {
         setGame(data.payload.game);
+      } else if (isEnd(data)) {
+        if (data.payload.result === 'win') {
+          alert('You win!');
+        } else if (data.payload.result === 'lose') {
+          alert('You lose!');
+        } else {
+          alert('Draw!');
+        }
+        ws.close();
+        navigate('/');
       }
     });
     ws.addEventListener('error', (e) => {

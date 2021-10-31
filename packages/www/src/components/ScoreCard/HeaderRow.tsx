@@ -10,7 +10,7 @@ const HeaderRow = () => {
   const { turn } = game;
   return (
     <>
-      <GridItem gridColumn={1} minW="200px" fontSize="3xl">
+      <GridItem gridColumn={1} minW={[100, 100, 200]} fontSize="3xl">
         <Center h="100%">Turn</Center>
       </GridItem>
       <GridItem gridColumn={1} fontSize="4xl">

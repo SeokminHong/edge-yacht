@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { PlayerIndex, getOpponent, User } from 'shared';
+import { PlayerIndex, getOpponent, Message, Payload, User } from 'shared';
 
 import { authorize } from './auth0';
 import { Env } from './env';
@@ -12,6 +12,7 @@ type Session = {
   receivedIndex: number;
   tid: number | null;
   user?: User;
+  sub?: string;
 };
 
 async function handleErrors(request: Request, func: () => Promise<Response>) {
@@ -68,19 +69,69 @@ export class YachtGame implements DurableObject {
   }
 
   updateGame(): void {
-    this.sendAll(
-      JSON.stringify({
-        type: 'update',
-        payload: { game: this.game },
-      })
-    );
+    this.sendAll('update', { game: this.game });
   }
 
-  endGame(): void {}
+  endGame(disconnectedPlayer?: PlayerIndex): void {
+    let winner: PlayerIndex | null = null;
+    if (disconnectedPlayer) {
+      winner = getOpponent(disconnectedPlayer);
+    } else {
+      const score1 = Object.values(this.game.players[0].score).reduce<number>(
+        (sum, v) => sum + (v ?? 0),
+        0
+      );
+      const score2 = Object.values(this.game.players[1].score).reduce<number>(
+        (sum, v) => sum + (v ?? 0),
+        0
+      );
+      winner = score1 > score2 ? 1 : score1 === score2 ? null : 2;
+    }
+    this.send(1, 'end', {
+      result: winner === 1 ? 'win' : winner === 2 ? 'lose' : 'draw',
+    });
+    this.send(2, 'end', {
+      result: winner === 2 ? 'win' : winner === 1 ? 'lose' : 'draw',
+    });
+    if (this.sessions.player1?.sub && this.sessions.player1.user) {
+      this.env.YACHT_USERS.put(
+        this.sessions.player1.sub,
+        JSON.stringify({
+          ...this.sessions.player1.user,
+          wins: this.sessions.player1.user.wins + (winner === 1 ? 1 : 0),
+          playCount: this.sessions.player1.user.playCount + 1,
+        })
+      );
+    }
+    if (this.sessions.player2?.sub && this.sessions.player2.user) {
+      this.env.YACHT_USERS.put(
+        this.sessions.player2.sub,
+        JSON.stringify({
+          ...this.sessions.player2.user,
+          wins: this.sessions.player2.user.wins + (winner === 2 ? 1 : 0),
+          playCount: this.sessions.player2.user.playCount + 1,
+        })
+      );
+    }
+  }
 
-  sendAll(msg: string): void {
+  sendAll<T extends Message>(type: T, payload: Payload[T]): void {
+    const msg = JSON.stringify({ type, payload });
     this.sessions.player1?.webSocket?.send(msg);
     this.sessions.player2?.webSocket?.send(msg);
+  }
+
+  send<T extends Message>(
+    playerIndex: PlayerIndex,
+    type: T,
+    payload: Payload[T]
+  ): void {
+    const session = this.sessions[`player${playerIndex}`];
+    if (typeof session === 'undefined') {
+      throw Error('Invalid session');
+    }
+    const { webSocket } = session;
+    webSocket.send(JSON.stringify({ type, payload }));
   }
 
   healthCheck(playerIndex: PlayerIndex): void {
@@ -95,14 +146,7 @@ export class YachtGame implements DurableObject {
         return;
       }
       console.log(`Player ${playerIndex}: Sending Health ${sentIndex + 1}`);
-      webSocket.send(
-        JSON.stringify({
-          type: 'health',
-          payload: {
-            index: ++session.sentIndex,
-          },
-        })
-      );
+      this.send(playerIndex, 'health', { index: ++session.sentIndex });
       this.healthCheck(playerIndex);
     }, 5000);
   }
@@ -127,7 +171,9 @@ export class YachtGame implements DurableObject {
 
     const authorization = await authorize(request, this.env);
     let user: User | undefined = undefined;
+    let sub: string | undefined = undefined;
     if (authorization[0]) {
+      sub = authorization[1].authorization.userInfo.sub;
       const kvUser = await this.env.YACHT_USERS.get(
         authorization[1].authorization.userInfo.sub
       );
@@ -150,6 +196,7 @@ export class YachtGame implements DurableObject {
       receivedIndex: 0,
       tid: null,
       user,
+      sub,
     };
     this.sessions[`player${playerIndex}`] = session;
 
@@ -157,26 +204,16 @@ export class YachtGame implements DurableObject {
 
     if (this.sessions.player1 && this.sessions.player2) {
       const users = [this.sessions.player1.user, this.sessions.player2.user];
-      this.sessions.player1.webSocket.send(
-        JSON.stringify({
-          type: 'start',
-          payload: {
-            playerIndex: 1,
-            game: this.game,
-            users,
-          },
-        })
-      );
-      this.sessions.player2.webSocket.send(
-        JSON.stringify({
-          type: 'start',
-          payload: {
-            playerIndex: 2,
-            game: this.game,
-            users,
-          },
-        })
-      );
+      this.send(1, 'start', {
+        playerIndex: 1,
+        game: this.game,
+        users,
+      });
+      this.send(2, 'start', {
+        playerIndex: 2,
+        game: this.game,
+        users,
+      });
       this.game.start();
     }
 
@@ -200,6 +237,7 @@ export class YachtGame implements DurableObject {
     webSocket.addEventListener('close', async () => {
       const session = this.sessions[`player${playerIndex}`];
       clearTimeout(session?.tid || null);
+      this.endGame(playerIndex);
       this.sessions[`player${playerIndex}`] = undefined;
     });
     webSocket.addEventListener('message', async (msg) => {

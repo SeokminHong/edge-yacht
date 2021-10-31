@@ -1,26 +1,18 @@
-import styled from '@emotion/styled';
+import { Box, Flex } from '@chakra-ui/react';
 
 import Board from '~components/Board';
 import CanvasWrapper from '~components/CanvasWrapper';
-import Layout from '~components/Layout';
 import ScoreCard from '~components/ScoreCard';
 
 const GamePage = () => {
   return (
     <CanvasWrapper>
-      <Layout>
-        <Wrapper>
-          <ScoreCard />
-          <Board />
-        </Wrapper>
-      </Layout>
+      <Flex p="4" pos="absolute" top="0" left="0">
+        <ScoreCard />
+        <Board />
+      </Flex>
     </CanvasWrapper>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  padding: 16px;
-`;
 
 export default GamePage;

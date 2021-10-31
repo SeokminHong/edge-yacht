@@ -28,7 +28,8 @@ const globalStyles = css`
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  [class*='header-'] {
     font-family: 'Black Han Sans', sans-serif;
   }
 `;

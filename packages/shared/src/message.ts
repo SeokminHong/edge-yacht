@@ -2,28 +2,31 @@ import { PlayerIndex } from './player';
 import { IGame } from './game';
 import { User } from './user';
 
-export type PayloadTypes = {
+export type Payload = {
   error: {
     message: string;
   };
   health: {
-    index: PlayerIndex;
+    index: number;
   };
   start: {
     playerIndex: PlayerIndex;
     game: IGame;
-    users: User[];
+    users: (User | undefined)[];
   };
   update: {
     game: IGame;
   };
+  end: {
+    result: 'win' | 'lose' | 'draw';
+  };
 };
 
-export type ActionTypes = keyof PayloadTypes;
+export type Message = keyof Payload;
 
-export type DataType<T extends keyof PayloadTypes = keyof PayloadTypes> = {
+export type DataType<T extends keyof Payload = keyof Payload> = {
   type: T;
-  payload: PayloadTypes[T];
+  payload: Payload[T];
 };
 
 export const isError = (data: DataType): data is DataType<'error'> =>
@@ -37,3 +40,6 @@ export const isStart = (data: DataType): data is DataType<'start'> =>
 
 export const isUpdate = (data: DataType): data is DataType<'update'> =>
   data.type === 'update';
+
+export const isEnd = (data: DataType): data is DataType<'end'> =>
+  data.type === 'end';

@@ -1,18 +1,18 @@
 import { ReactNode } from 'react';
+import { Box } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { Button } from '@chakra-ui/button';
-import { navigate } from 'gatsby';
+
+import Header from './Header';
 
 interface Props {
   children: ReactNode;
+  showHeader?: boolean;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children, showHeader = true }: Props) => {
   return (
-    <Wrapper>
-      <div>
-        <Button onClick={() => navigate('/')}>Go to home</Button>
-      </div>
+    <Wrapper px="8" py="4">
+      {showHeader && <Header />}
       <Content>{children}</Content>
       <Footer>
         Built with Gatsby
@@ -25,7 +25,7 @@ const Layout = ({ children }: Props) => {
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
@@ -33,6 +33,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  background-image: url('/images/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Content = styled.div`
@@ -41,8 +45,6 @@ const Content = styled.div`
 
 const Footer = styled.footer`
   color: #cfcfcf;
-  margin: 0 32px;
-  padding: 8px 0;
 `;
 
 const GatsbyLogo = styled.img`
