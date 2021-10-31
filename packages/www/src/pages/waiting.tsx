@@ -17,8 +17,10 @@ const Waiting = ({ location }: PageProps) => {
 
   return (
     <Layout>
-      <Box color="gray.500">Share link:</Box>
-      <Box color="gray.500">{link}</Box>
+      <Box color="white" bg="gray.600" p="4" borderRadius="4">
+        Share link:
+        <Box>{link}</Box>
+      </Box>
       <Button
         onClick={() => {
           copy(link);
@@ -38,6 +40,7 @@ const Waiting = ({ location }: PageProps) => {
           closeSession();
           navigate('/');
         }}
+        m="4"
       >
         Cancel
       </Button>

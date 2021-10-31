@@ -41,6 +41,8 @@ const Wrapper = styled(Box)`
 
 const Content = styled.div`
   flex: 1;
+  max-width: 960px;
+  margin: auto;
 `;
 
 const Footer = styled.footer`
