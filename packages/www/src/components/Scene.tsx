@@ -76,6 +76,9 @@ const Scene = ({
     const elapsed = timestamp.current.elapsed + delta;
     timestamp.current.elapsed = elapsed;
     const num = boardDice.length;
+    if (num === 0) {
+      return;
+    }
     for (
       let i = timestamp.current.index;
       i < dice[num - 1].timestamps.length;
