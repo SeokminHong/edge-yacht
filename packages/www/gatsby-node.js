@@ -8,6 +8,12 @@ exports.onCreateBabelConfig = ({ actions }) => {
       runtime: 'automatic',
     },
   });
+  actions.setBabelPreset({
+    name: 'babel-preset-gatsby',
+    options: {
+      reactRuntime: 'automatic',
+    },
+  });
 };
 
 /** @type {import('gatsby').GatsbyNode['onCreateWebpackConfig']} */
