@@ -13,7 +13,7 @@ kv_namespaces = [
 [vars]
 AUTH0_DOMAIN = "https://dev-seokmin.us.auth0.com"
 AUTH0_CLIENT_ID = "oEKdGffuHxeSYn9aj68hNIDBBABBgX9w"
-ROUTE_DOMAIN = "https://yacht.seokmin.dev"
+ROUTE_DOMAIN = "https://yacht.seokmin.me"
 
 [durable_objects]
 bindings = [
